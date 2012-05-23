@@ -6,14 +6,16 @@
 		"48":"images/icon_48.png",
 		"128":"images/icon_128.png"
 	},
-	//"background_page":"background.html",
 	"permissions":[
-		"experimental"
+		"experimental",
+		"tabs"
 	],
 	
 	"browser_action": {
 		"default_icon":"images/icon_19.png",
 		"default_title":"Voice Actions",
 		"default_popup":"popup.html"
-	}
+	},
+	
+	"options_page":"options.html"
 }

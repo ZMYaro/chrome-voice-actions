@@ -1,0 +1,206 @@
+<html>
+	<head>
+		<script type="text/javascript" src="defaults.js"></script>
+		<script type="text/javascript">
+			var icon;
+			var text;
+			var subtext;
+			
+			var baseURLs = {
+				"search":{
+					"ask":"http://www.ask.com/web?q=%s",
+					"bing":"http://www.bing.com/search?q=%s",
+					"google":"https://www.google.com/search?q=%s",
+					"yahoo":"http://search.yahoo.com/search?p=%s"
+				},
+				"map":{
+					"google":"https://maps.google.com/maps?q=%s",
+					"bing":"http://www.bing.com/maps/?q=%s",
+					"yahoo":"http://maps.yahoo.com/#q=%s"
+				},
+				"directions":{
+					"google":"http://maps.google.com/maps?daddr=%s"
+				},
+				"web":{
+					"google":"https://www.google.com/search?btnI=745&q=%s"
+				}
+			}
+			
+			function init() {
+				document.getElementById("cancelBtn").blur();
+				
+				icon = document.getElementById("icon");
+				text = document.getElementById("text");
+				subtext = document.getElementById("subtext");
+				
+				if(!chrome.experimental.speechInput) {
+					displayError("Speech input not available");
+				}
+				
+				chrome.experimental.speechInput.onSoundEnd.addListener(recognitionFinished);
+				chrome.experimental.speechInput.onError.addListener(recognitionFailed);
+				chrome.experimental.speechInput.onResult.addListener(recognitionSucceeded);
+				chrome.experimental.speechInput.start({"language":"en"}, function() {
+					document.getElementById("cancelBtn").blur();
+					if (chrome.extension.lastError) {
+						displayError();
+						closePopup();
+					} else {
+						icon.src = "images/mic.png";
+						text.innerHTML = "Speak now";
+					}
+				});
+			}
+			function recognitionFinished() {
+				icon.src = "images/loading.png";
+				text.innerHTML = "Processing...";
+			}
+			function recognitionFailed(error) {
+				displayError("An error occurred :(", error.code);
+				closePopup();
+			}
+			function recognitionSucceeded(result) {
+				if(result.hypotheses[0].confidence > 0.3) {
+					processResult(result.hypotheses[0].utterance);
+				} else {
+					displayError("Could not understand you D:");
+					closePopup();
+				}
+			}
+			function processResult(query) {
+				
+				var type = "search";
+				
+				if(query.indexOf("map of") == 0 && query.replace("map of", "")) {
+					openResult("map", query.replace("map of", "<b>map of</b>"), query.replace("map of ", ""));
+				} else if(query.indexOf("directions to") == 0 && query.replace("directions to", "") != "") {
+					openResult("directions", query.replace("directions to", "<b>directions to</b>"), query.replace("directions to ", ""));
+				} else if((query.indexOf("go to") == 0 & query.replace("go to", "") != "") || (query.indexOf("goto") == 0 && query.replace("goto", "") != "") || (query.indexOf("open") == 0 && query.replace("open", "") != "")) {
+					/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
+						icon.src = "images/web.png";
+						text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
+						document.body.className = "loading";
+						setTimeout(function() {
+							if(results.length > 0) {
+								openURL(results[0].url);
+							} else {
+								openURL("https://www.google.com/search?btnI=745&q=" + query);
+							}
+						}, 2050);
+					});*/
+					openResult("web", query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>"), query.replace(/^go ?to/, "").replace(/^open/, ""));
+				} else {
+					openResult("search", query, query);
+				}
+			}
+			function openResult(type, disp, query) {
+				icon.src = "images/" + type + ".png";
+				text.innerHTML = disp;
+				
+				document.body.className = "loading";
+				setTimeout(function() {
+					openURL(baseURLs[type][(localStorage[type + "Setting"] || defaultSettings[type])].replace("%s", encodeURIComponent(query)));
+				}, 2050);
+			}
+			function openURL(url) {
+				if((localStorage.openLocationSetting || defaultSettings.openLocation) == "current") {
+					chrome.tabs.update({"url":url});
+				} else {
+					chrome.tabs.create({"url":url});
+				}
+			}
+			function displayError(errtext, errsubtext) {
+				icon.src = "images/error.png";
+				if(!errtext) {
+					text.innerHTML = "An error occurred :(";
+				} else {
+					text.innerHTML = errtext;
+				}
+				if(!errsubtext) {
+					subtext.innerHTML = "";
+				} else {
+					subtext.innerText = errsubtext;
+				}
+			}
+			function closePopup(delay) {
+				if(!delay) {
+					delay = 2000;
+				}
+				setTimeout(function() {
+					window.close();
+				}, delay);
+			}
+			
+			// http://code.google.com/chrome/extensions/experimental.speechInput.html
+		</script>
+		<style type="text/css">
+			body {
+				margin:0px;
+				padding:0px;
+				
+				background-color:white;
+				
+				text-align:center;
+				font-family:"Open Sans", Arial, Helvetica, Roboto, "Droid Sans", sans-serif;
+				font-size:12px;
+				
+				-webkit-transition-duration:2s;
+				        transition-duration:2s;
+				-webkit-transition-timing-function:linear;
+				        transition-timing-function:linear;
+				box-shadow:inset 0px 0px 0px 0px #F8F8F8;
+			}
+			body.loading {
+				box-shadow:inset 165px 0px 0px 0px #F8F8F8;
+			}
+			#main {
+				width:160px;
+				min-height:140px;
+				padding:16px;
+				-webkit-box-sizing:border-box;
+				        box-sizing:border-box;
+				
+				z-index:2;
+			}
+			#cancelBtn {
+				width:100%;
+				padding:4px;
+				background-color:transparent;
+				border-style:none;
+				border-width:0px;
+				border-top-style:solid;
+				border-top-width:1px;
+				border-top-color:#E0E0E0;
+				outline-width:0px;
+				
+				cursor:pointer;
+				
+				z-index:2;
+			}
+			#cancelBtn:hover, #cancelBtn:focus {
+				/*background-image:-webkit-linear-gradient(white, #F2F2F2);*/
+				background-color:#F8F8F8;
+			}
+			#cancelBtn:active {
+				background-image:-webkit-linear-gradient(#F0F0F0, #F8F8F8);
+			}
+			#text {
+				font-size:14px;
+				margin-bottom:0px;
+			}
+			#subtext {
+				font-size:10px;
+				opacity:0.9;
+				margin:0px;
+			}
+		</style>
+	</head>
+	<body onload="init();">
+		<div id="main">
+			<img src="images/loading.png" alt="" id="icon" />
+			<p id="text">Loading...</p>
+			<p id="subtext"></p>
+		</div>
+		<button id="cancelBtn" onclick="window.close();">Cancel</button>
+	</body>
+</html>
