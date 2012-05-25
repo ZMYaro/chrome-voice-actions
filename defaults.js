@@ -3,6 +3,7 @@ var defaultSettings = {
 	"map":"google",
 	"directions":"google",
 	"web":"google",
+	"music":"google",
 	
-	"openLocation":"new"
+	"openLocation":"smart"
 }

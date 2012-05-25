@@ -35,6 +35,7 @@
 			}
 			h1 {
 				font-size:40px;
+				margin-top:0.5em;
 			}
 			h3 {
 				margin-bottom:0.5em;
@@ -45,11 +46,13 @@
 			}
 			#actionExamples {
 				margin-top:4px;
+				white-space:nowrap;
 			}
 			#actionExamples > div {
 				display:inline-block;
 				text-align:center;
 				vertical-align:top;
+				white-space:normal;
 				width:128px;
 				height:120px;
 				padding:0px 4px;
@@ -64,7 +67,7 @@
 		</style>
 	</head>
 	<body onload="loadSettings();">
-		<h1><img src="images/icon_72.png" alt="" style="float:left;margin-right:16px;margin-top:-14px;" /> Voice Actions Settings</h1>
+		<h1><img src="images/icon_72.png" alt="" style="float:left;margin-right:0.4em;margin-top:-0.15em;" /> Voice Actions Settings</h1>
 		<hr />
 		<h3>Help</h3>
 		<h4>Try these different types of actions:</h4>
@@ -80,6 +83,10 @@
 			<div>
 				<img src="images/web.png" alt="Website" />
 				<p>&ldquo;<b>Go to</b> Wikipedia.&rdquo;</p>
+			</div>
+			<div>
+				<img src="images/music.png" alt="Music" />
+				<p>&ldquo;<b>Listen to</b> Life's A Happy Song&rdquo;</p>
 			</div>
 			<div>
 				<img src="images/search.png" alt="Search" />
@@ -105,14 +112,24 @@
 		<select id="directionsSetting">
 			<option value="google">Google (Default)</option>
 		</select>
+		<h4>Music</h4>
+		<select id="musicSetting">
+			<option value="amazon">Amazon Cloud Player</option>
+			<option value="google">Google Play Music (Default)</option>
+			<option value="grooveshark">Grooveshark</option>
+			<option value="lastfm">Last.fm</option>
+			<option value="pandora">Pandora</option>
+			<option value="youtube">YouTube</option>
+		</select>
 		<select id="webSetting" style="display:none;">
 			<option value="google">Google (Default)</option>
 		</select>
 		<h3>Other settings</h3>
 		<h4>Open pages in</h4>
 		<select id="openLocationSetting">
-			<option value="new">New tab</option>
-			<option value="current">Current tab</option>
+			<option value="current">Current tab, always</option>
+			<option value="new">New tab, always</option>
+			<!--<option value="smart">New tab, except on the new tab page (Default)</option>-->
 		</select>
 		<hr />
 		<p style="font-size:smaller;">Note: This extension uses the experimental speech API; your mileage may vary.</p>

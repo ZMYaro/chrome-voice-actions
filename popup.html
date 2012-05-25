@@ -23,6 +23,14 @@
 				},
 				"web":{
 					"google":"https://www.google.com/search?btnI=745&q=%s"
+				},
+				"music":{
+					"amazon":"https://www.amazon.com/gp/dmusic/mp3/player#searchSongs/searchTerm=%s",
+					"google":"https://play.google.com/music/listen?u=0#%s_sr",
+					"grooveshark":"http://grooveshark.com/#!/search?q=%s",
+					"lastfm":"http://www.last.fm/search?q=%s",
+					"pandora":"http://www.pandora.com/search/%s",
+					"youtube":"http://www.youtube.com/results?search_query=%s"
 				}
 			}
 			
@@ -56,25 +64,34 @@
 				text.innerHTML = "Processing...";
 			}
 			function recognitionFailed(error) {
-				displayError("An error occurred :(", error.code);
+				displayError("An error occurred", error.code);
 				closePopup();
 			}
 			function recognitionSucceeded(result) {
 				if(result.hypotheses[0].confidence > 0.3) {
 					processResult(result.hypotheses[0].utterance);
 				} else {
-					displayError("Could not understand you D:");
+					displayError("Could not understand you");
 					closePopup();
 				}
 			}
 			function processResult(query) {
-				
+				console.log(query);
 				var type = "search";
-				
-				if(query.indexOf("map of") == 0 && query.replace("map of", "")) {
+				if(query == "make me a sandwich" || query == "sudo make me a sandwich" || query == "pseudo make me a sandwich") {
+					query = query.replace("pseudo", "sudo");
+					icon.src = "images/pan.png";
+					text.innerHTML = query.replace("make", "<b>make</b>");
+					document.body.className = "loading";
+					setTimeout(function() {
+						openURL("http://xkcd.com/149");
+					}, 2050);
+				} else if(query.indexOf("map of") == 0 && query.replace("map of", "")) {
 					openResult("map", query.replace("map of", "<b>map of</b>"), query.replace("map of ", ""));
 				} else if(query.indexOf("directions to") == 0 && query.replace("directions to", "") != "") {
 					openResult("directions", query.replace("directions to", "<b>directions to</b>"), query.replace("directions to ", ""));
+				} else if((query.indexOf("listen to") == 0 && query.replace("listen to", "") != "") || (query.indexOf("play") == 0 && query.replace("play", "") != "")) {
+					openResult("music", query.replace(/^listen to/, "<b>listen to</b>").replace(/^play/, "<b>play</b>"), query.replace(/^listen to/, "").replace(/^play/, ""));
 				} else if((query.indexOf("go to") == 0 & query.replace("go to", "") != "") || (query.indexOf("goto") == 0 && query.replace("goto", "") != "") || (query.indexOf("open") == 0 && query.replace("open", "") != "")) {
 					/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
 						icon.src = "images/web.png";
@@ -112,7 +129,7 @@
 			function displayError(errtext, errsubtext) {
 				icon.src = "images/error.png";
 				if(!errtext) {
-					text.innerHTML = "An error occurred :(";
+					text.innerHTML = "An error occurred";
 				} else {
 					text.innerHTML = errtext;
 				}
