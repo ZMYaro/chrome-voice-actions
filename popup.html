@@ -86,11 +86,11 @@
 					setTimeout(function() {
 						openURL("http://xkcd.com/149");
 					}, 2050);
-				} else if(query.indexOf("map of") == 0 && query.replace("map of", "")) {
+				} else if(query.indexOf("map of ") == 0) {
 					openResult("map", query.replace("map of", "<b>map of</b>"), query.replace("map of ", ""));
-				} else if(query.indexOf("directions to") == 0 && query.replace("directions to", "") != "") {
+				} else if(query.indexOf("directions to ") == 0) {
 					openResult("directions", query.replace("directions to", "<b>directions to</b>"), query.replace("directions to ", ""));
-				} else if((query.indexOf("listen to") == 0 && query.replace("listen to", "") != "") || (query.indexOf("play") == 0 && query.replace("play", "") != "")) {
+				} else if(query.indexOf("listen to ") == 0 || query.indexOf("play ") == 0) {
 					var action = "listen to";
 					if(query.indexOf("play") == 0) {
 						action = "play";
@@ -100,7 +100,7 @@
 					query = query.replace(/dead mouse/g, "deadmau5");
 					
 					openResult("music", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
-				} else if((query.indexOf("go to") == 0 & query.replace("go to", "") != "") || (query.indexOf("goto") == 0 && query.replace("goto", "") != "") || (query.indexOf("open") == 0 && query.replace("open", "") != "")) {
+				} else if(query.indexOf("go to ") == 0 || query.indexOf("goto ") == 0 || query.indexOf("open ") == 0) {
 					/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
 						icon.src = "images/web.png";
 						text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
