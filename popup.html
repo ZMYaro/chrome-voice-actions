@@ -91,7 +91,15 @@
 				} else if(query.indexOf("directions to") == 0 && query.replace("directions to", "") != "") {
 					openResult("directions", query.replace("directions to", "<b>directions to</b>"), query.replace("directions to ", ""));
 				} else if((query.indexOf("listen to") == 0 && query.replace("listen to", "") != "") || (query.indexOf("play") == 0 && query.replace("play", "") != "")) {
-					openResult("music", query.replace(/^listen to/, "<b>listen to</b>").replace(/^play/, "<b>play</b>"), query.replace(/^listen to/, "").replace(/^play/, ""));
+					var action = "listen to";
+					if(query.indexOf("play") == 0) {
+						action = "play";
+					}
+					
+					//if(query.replace(action + " ", "") == "dead mouse");
+					query = query.replace(/dead mouse/g, "deadmau5");
+					
+					openResult("music", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 				} else if((query.indexOf("go to") == 0 & query.replace("go to", "") != "") || (query.indexOf("goto") == 0 && query.replace("goto", "") != "") || (query.indexOf("open") == 0 && query.replace("open", "") != "")) {
 					/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
 						icon.src = "images/web.png";
@@ -105,7 +113,13 @@
 							}
 						}, 2050);
 					});*/
-					openResult("web", query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>"), query.replace(/^go ?to/, "").replace(/^open/, ""));
+					var action = "go to";
+					if(query.indexOf("goto") == 0) {
+						action = "goto";
+					} else if(query.indexOf("open") == 0) {
+						action = "open";
+					}
+					openResult("web", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 				} else {
 					openResult("search", query, query);
 				}
@@ -122,9 +136,9 @@
 			function openURL(url) {
 				if((localStorage.openLocationSetting || defaultSettings.openLocation) == "current") {
 					chrome.tabs.update({"url":url});
+					window.close();
 				} else if((localStorage.openLocationSetting || defaultSettings.openLocation) == "new") {
 					chrome.tabs.create({"url":url});
-					window.close();
 				} else {
 					chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
 						if(tabs[0].url.substring(0,15) == "chrome://newtab") {
