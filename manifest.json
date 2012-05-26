@@ -1,7 +1,7 @@
 {
 	"name":"Voice Actions for Chrome (Beta)",
 	"description":"Control your browser just by talking to it.",
-	"version":"1.0.1",
+	"version":"2.0",
 	"icons": {
 		"48":"images/icon_48.png",
 		"128":"images/icon_128.png"
