@@ -97,7 +97,7 @@
 					}
 					
 					//if(query.replace(action + " ", "") == "dead mouse");
-					query = query.replace(/dead mouse/g, "deadmau5");
+					query = query.replace(/dead mouse|dead mau 5/g, "deadmau5");
 					
 					openResult("music", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 				} else if(query.indexOf("go to ") == 0 || query.indexOf("goto ") == 0 || query.indexOf("open ") == 0) {
