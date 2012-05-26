@@ -136,18 +136,19 @@
 			function openURL(url) {
 				if((localStorage.openLocationSetting || defaultSettings.openLocation) == "current") {
 					chrome.tabs.update({"url":url});
+					window.close();
 				} else if((localStorage.openLocationSetting || defaultSettings.openLocation) == "new") {
 					chrome.tabs.create({"url":url});
 				} else {
 					chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
 						if(tabs[0].url.substring(0,15) == "chrome://newtab") {
 							chrome.tabs.update({"url":url});
+							window.close();
 						} else {
 							chrome.tabs.create({"url":url});
 						}
 					});
 				}
-				window.close();
 			}
 			function displayError(errtext, errsubtext) {
 				icon.src = "images/error.png";
