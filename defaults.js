@@ -4,6 +4,7 @@ var defaultSettings = {
 	"directions":"google",
 	"web":"google",
 	"music":"google",
+	"calc":"wolframalpha",
 	
 	"openLocation":"smart"
 }

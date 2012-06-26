@@ -31,6 +31,10 @@
 					"lastfm":"http://www.last.fm/search?q=%s",
 					"pandora":"http://www.pandora.com/search/%s",
 					"youtube":"http://www.youtube.com/results?search_query=%s"
+				},
+				"calc":{
+					"google":"https://www.google.com/search?q=%s",
+					"wolframalpha":"http://www.wolframalpha.com/input/?i=%s"
 				}
 			}
 			
@@ -77,9 +81,10 @@
 			}
 			function processResult(query) {
 				console.log(query);
-				var type = "search";
+				
 				if(query == "make me a sandwich" || query == "sudo make me a sandwich" || query == "pseudo make me a sandwich") {
-					query = query.replace("pseudo", "sudo");
+					// XKCD sudo easter egg
+					query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
 					icon.src = "images/pan.png";
 					text.innerHTML = query.replace("make", "<b>make</b>");
 					document.body.className = "loading";
@@ -87,20 +92,39 @@
 						openURL("http://xkcd.com/149");
 					}, 2050);
 				} else if(query.indexOf("map of ") == 0) {
+					// Map
 					openResult("map", query.replace("map of", "<b>map of</b>"), query.replace("map of ", ""));
 				} else if(query.indexOf("directions to ") == 0) {
+					// Directions
 					openResult("directions", query.replace("directions to", "<b>directions to</b>"), query.replace("directions to ", ""));
+				} else if(query.indexOf("calculate ") == 0) {
+					// Calculator
+					
+					// If operators get captured as words, replace them (this
+					// does not cover phrases like “the sum of ~ and ~”, but
+					// it at least avoids the most basic issues).
+					query = query.replace(/plus/g, "+").replace(/minus/g, "-").replace(/times/g, "*").replace(/divided by/g, "/").replace(/over/g, "/");
+					
+					openResult("calc", query.replace("calculate", "<b>calculate</b>"), query.replace("calculate ", ""));
 				} else if(query.indexOf("listen to ") == 0 || query.indexOf("play ") == 0) {
+					// Music
 					var action = "listen to";
 					if(query.indexOf("play") == 0) {
 						action = "play";
 					}
 					
-					//if(query.replace(action + " ", "") == "dead mouse");
+					// A music search for "dead mouse" is almost certainly meant to be "Deadmau5"
 					query = query.replace(/dead mouse|dead mau 5/g, "deadmau5");
 					
 					openResult("music", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 				} else if(query.indexOf("go to ") == 0 || query.indexOf("goto ") == 0 || query.indexOf("open ") == 0) {
+					// Load web page
+					
+					// This part searches the user's bookmarks for the page name.
+					// It has been commented out because it does not consistently
+					// return the correct page since it depends on the user having
+					// the page in his/her bookmarks.  A better idea would be to
+					// search the user's history (a feature I intend to add later).
 					/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
 						icon.src = "images/web.png";
 						text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
@@ -121,6 +145,7 @@
 					}
 					openResult("web", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 				} else {
+					// Default to simple search
 					openResult("search", query, query);
 				}
 			}
