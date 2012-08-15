@@ -22,8 +22,8 @@ This is a Chrom* extension that functions similarly to the Google Voice Search a
 
 1. Download the extension from http://goo.gl/5AFmA.  It should either download a file, chrome-voice-actions.crx, to your default Downloads folder or ask you where to save it.
 
-2. Open a new tab and navigate to chrome://extensions
+2. Open a new tab and navigate to chrome://extensions.
 
-3. Drag the chrome-voice-actions.crx from the download bar (or the folder you saved it to) onto the Extensions page you just opened
+3. Drag the chrome-voice-actions.crx from the download bar (or the folder you saved it to) onto the Extensions page you just opened.
 
 4. Confirm that you would like to install the extension in the dialog that appears.
