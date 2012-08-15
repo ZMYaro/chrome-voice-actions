@@ -1,5 +1,6 @@
 var defaultSettings = {
 	"search":"google",
+	"images":"google",
 	"map":"google",
 	"directions":"google",
 	"web":"google",
