@@ -1,26 +1,26 @@
 {
-	"manifest_version":2,
+	"manifest_version": 2,
 	
-	"name":"Voice Actions for Chrome (Beta)",
-	"description":"Control your browser just by talking to it.",
-	"version":"3.1",
+	"name": "Voice Actions for Chrome (Beta)",
+	"description": "Control your browser just by talking to it.",
+	"version": "3.1",
 	
 	"icons": {
-		"48":"images/icon_48.png",
-		"128":"images/icon_128.png"
+		"48": "images/icon_48.png",
+		"128": "images/icon_128.png"
 	},
-	"permissions":[
+	"permissions": [
 		"experimental",
 		"tabs"
 	],
 	
 	"browser_action": {
-		"default_icon":"images/icon_19.png",
-		"default_title":"Voice Actions",
-		"default_popup":"popup.html"
+		"default_icon": "images/icon_19.png",
+		"default_title": "Voice Actions",
+		"default_popup": "popup.html"
 	},
 	
-	"options_page":"options.html",
+	"options_page": "options.html",
 	
-	"update_url":"https://raw.github.com/zmyaro/chrome-voice-actions/master/update.xml"
+	"update_url": "https://raw.github.com/zmyaro/chrome-voice-actions/master/update.xml"
 }
