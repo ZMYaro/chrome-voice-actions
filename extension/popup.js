@@ -1,3 +1,6 @@
+/** {String} The origin of the page being used to access the Web Speech API */
+var srMsgOrigin = "https://googledrive.com";
+
 /** {HTMLImageElement} The icon in the pop-up */
 var icon;
 
@@ -55,64 +58,32 @@ window.addEventListener("load", function() {
 	icon = document.getElementById("icon");
 	text = document.getElementById("text");
 	subtext = document.getElementById("subtext");
-	
-	if(!chrome.experimental.speechInput) {
-		displayError("Speech input not available", "Have you enabled experimental extensions?");
-	}
-	
-	// Set speech API event listeners
-	chrome.experimental.speechInput.onSoundEnd.addListener(recognitionFinished);
-	chrome.experimental.speechInput.onError.addListener(recognitionFailed);
-	chrome.experimental.speechInput.onResult.addListener(recognitionSucceeded);
-	chrome.experimental.speechInput.start({"language":"en"}, function() {
-		// This is here because the blur() immediately onload does not seem to work
-		document.getElementById("cancelBtn").blur();
-		
-		if (chrome.extension.lastError) {
-			// If there is an error, notify the user and then exit
-			displayError();
-			closePopup();
-		} else {
-			// If speech capturing is ready, prompt the user to speak
-			icon.src = "images/mic.png";
-			text.innerHTML = "Speak now";
-		}
-	});
 }, false);
 
-/**
- * Called when the user has finished speaking and the audio is going to be processed
- */
-function recognitionFinished() {
-	icon.src = "images/loading.png";
-	text.innerHTML = "Processing...";
-}
-
-/**
- * Callback for unsuccessful speech recognition
- * @param error
- */
-function recognitionFailed(error) {
-	// Display error information and then exit
-	displayError("An error occurred", error.code);
-	closePopup();
-}
-
-/**
- * Callback for successful speech recognition
- * @param result
- */
-function recognitionSucceeded(result) {
-	// This can be tweaked to either allow more (potentially
-	// incorrect) queries through or less (more accurate) ones.
-	if(result.hypotheses[0].confidence > 0.3) {
-		processResult(result.hypotheses[0].utterance);
-	} else {
-		// If confidence is too low, display an error and then exit
-		displayError("Could not understand you");
-		closePopup();
+window.addEventListener("message", function(e) {
+	if(e.origin !== srMsgOrigin) {
+		msgBox.innerHTML = "Error: Wrong origin - " + e.origin;
+		return;
 	}
-}
+	var data = e.data.split("|");
+	switch(data[0]) {
+		case "ready":
+			icon.src = "images/mic.png";
+			text.innerHTML = "Speak now";
+		break;
+		case "error":
+			displayError("An error occurred", data[1]);
+		break;
+		case "result":
+			processResult(data[1]);
+		break;
+		default:
+			displayError("Something unexpected happened", e.data);
+		break;
+	}
+}, false);
+
+
 function processResult(query) {
 	//console.log(query); // for debugging
 	
