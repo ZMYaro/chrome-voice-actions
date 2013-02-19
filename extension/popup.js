@@ -49,70 +49,82 @@ var baseURLs = {
 }
 
 window.addEventListener("load", function() {
-	document.getElementById("cancelBtn").addEventListener("click", function() {window.close();}, false);
+	document.getElementById("cancelBtn").addEventListener("click", function() { window.close(); }, false);
 	
 	// Get references to DOM elements
 	icon = document.getElementById("icon");
 	text = document.getElementById("text");
 	subtext = document.getElementById("subtext");
 	
-	if(!chrome.experimental.speechInput) {
-		displayError("Speech input not available", "Have you enabled experimental extensions?");
+	if(!("webkitSpeechRecognition" in window)) {
+		displayError("Speech input not available", "You must be using Chrome 25 or later.");
+		return;
 	}
 	
+	// Create speech recognition object
+	var speechInput = new webkitSpeechRecognition();
+	speechInput.continuous = false;
+	speechInput.interimResults = false;
+	
 	// Set speech API event listeners
-	chrome.experimental.speechInput.onSoundEnd.addListener(recognitionFinished);
-	chrome.experimental.speechInput.onError.addListener(recognitionFailed);
-	chrome.experimental.speechInput.onResult.addListener(recognitionSucceeded);
-	chrome.experimental.speechInput.start({"language":"en"}, function() {
-		// This is here because the blur() immediately onload does not seem to work
-		document.getElementById("cancelBtn").blur();
-		
-		if (chrome.extension.lastError) {
-			// If there is an error, notify the user and then exit
-			displayError();
-			closePopup();
-		} else {
-			// If speech capturing is ready, prompt the user to speak
-			icon.src = "images/mic.png";
-			text.innerHTML = "Speak now";
-		}
-	});
+	speechInput.onstart = recognitionStarted;
+	speechInput.onerror = recognitionFailed;
+	speechInput.onresult = recognitionSucceeded;
+	
+	//speechInput.lang = ;
+	
+	// Start speech recognition
+	speechInput.start();
 }, false);
 
 /**
- * Called when the user has finished speaking and the audio is going to be processed
+ * Called when speech recoginition has begun
  */
-function recognitionFinished() {
-	icon.src = "images/loading.png";
-	text.innerHTML = "Processing...";
+function recognitionStarted() {
+	// This is here because the blur() immediately onload does not seem to work
+	document.getElementById("cancelBtn").blur();
+	
+	if (chrome.extension.lastError) {
+		// If there is an error, notify the user and then exit
+		displayError();
+		closePopup();
+	} else {
+		// If speech capturing is ready, prompt the user to speak
+		icon.src = "images/mic.png";
+		text.innerHTML = "Speak now";
+	}
 }
 
 /**
  * Callback for unsuccessful speech recognition
- * @param error
+ * @param {SpeechRecognitionError} e - The recognition error
  */
-function recognitionFailed(error) {
+function recognitionFailed(e) {
 	// Display error information and then exit
-	displayError("An error occurred", error.code);
+	displayError("An error occurred", e.error);
 	closePopup();
 }
 
 /**
  * Callback for successful speech recognition
- * @param result
+ * @param {SpeechRecognitionEvent} e - The speech recognition result event
  */
-function recognitionSucceeded(result) {
-	// This can be tweaked to either allow more (potentially
-	// incorrect) queries through or less (more accurate) ones.
-	if(result.hypotheses[0].confidence > 0.3) {
-		processResult(result.hypotheses[0].utterance);
-	} else {
-		// If confidence is too low, display an error and then exit
-		displayError("Could not understand you");
+function recognitionSucceeded(e) {
+	// If no result was returned, display an error and then exit
+	if(e.results.length === 0) {
+		displayError("Nothing was heard.");
 		closePopup();
+		return;
 	}
+	
+	// Process the most accurate interpretation of the speech
+	processResult(e.results[e.resultIndex][0].transcript);
 }
+
+/**
+ * Process the speech recognition result
+ * @param {String} query - The query string to process
+ */
 function processResult(query) {
 	//console.log(query); // for debugging
 	
