@@ -56,70 +56,26 @@ window.addEventListener("load", function() {
 	text = document.getElementById("text");
 	subtext = document.getElementById("subtext");
 	
-	if(!("webkitSpeechRecognition" in window)) {
-		displayError("Speech input not available", "You must be using Chrome 25 or later.");
-		return;
-	}
-	
-	// Create speech recognition object
-	var speechInput = new webkitSpeechRecognition();
-	speechInput.continuous = false;
-	speechInput.interimResults = false;
-	
-	// Set speech API event listeners
-	speechInput.onstart = recognitionStarted;
-	speechInput.onerror = recognitionFailed;
-	speechInput.onresult = recognitionSucceeded;
-	
-	//speechInput.lang = ;
-	
-	// Start speech recognition
-	speechInput.start();
+	chrome.extension.sendMessage({type: "start"});
 }, false);
 
-/**
- * Called when speech recoginition has begun
- */
-function recognitionStarted() {
-	// This is here because the blur() immediately onload does not seem to work
-	document.getElementById("cancelBtn").blur();
-	
-	if (chrome.extension.lastError) {
-		// If there is an error, notify the user and then exit
-		displayError();
-		closePopup();
-	} else {
-		// If speech capturing is ready, prompt the user to speak
-		icon.src = "images/mic.png";
-		text.innerHTML = "Speak now";
+chrome.extension.onMessage.addListener(function(message) {
+	switch(message.type) {
+		case "ready":
+			// Prompt the user to speak.
+			icon.src = "images/mic.png";
+			text.innerHTML = "Speak now";
+			break;
+		case "result":
+			processResult(message.text);
+			break;
+		case "error":
+			// Display error information, and then exit.
+			displayError(message.text, message.subtext);
+			closePopup();
+			break;
 	}
-}
-
-/**
- * Callback for unsuccessful speech recognition
- * @param {SpeechRecognitionError} e - The recognition error
- */
-function recognitionFailed(e) {
-	// Display error information and then exit
-	displayError("An error occurred", e.error);
-	closePopup();
-}
-
-/**
- * Callback for successful speech recognition
- * @param {SpeechRecognitionEvent} e - The speech recognition result event
- */
-function recognitionSucceeded(e) {
-	// If no result was returned, display an error and then exit
-	if(e.results.length === 0) {
-		displayError("Nothing was heard.");
-		closePopup();
-		return;
-	}
-	
-	// Process the most accurate interpretation of the speech
-	processResult(e.results[e.resultIndex][0].transcript);
-}
+});
 
 /**
  * Process the speech recognition result
