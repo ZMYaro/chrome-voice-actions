@@ -56,7 +56,10 @@ window.addEventListener("load", function() {
 	text = document.getElementById("text");
 	subtext = document.getElementById("subtext");
 	
-	chrome.extension.sendMessage({type: "start"});
+	// Get the current tab.
+	chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
+		chrome.tabs.sendMessage(tabs[0].id, {type: "start"});
+	});
 }, false);
 
 chrome.extension.onMessage.addListener(function(message) {

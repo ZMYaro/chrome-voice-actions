@@ -1,5 +1,5 @@
-chrome.extension.onMessage.addListener(function(message) {
-	if(message.type === "start") {
+chrome.runtime.onMessage.addListener(function(message, sender) {
+	if(!sender.tab && message.type === "start") {
 		setUpRecognition();
 	}
 });
