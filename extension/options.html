@@ -1,100 +1,118 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 	<head>
-		<title>Voice Actions Settings</title>
-		
-		<script type="text/javascript" src="defaults.js"></script>
-		<script type="text/javascript" src="options.js"></script>
-		<link rel="stylesheet" type="text/css" href="options.css" />
+		<title>Options - Voice Actions for Chrome</title>
+		<link rel="stylesheet" type="text/css" href="styles/options.css" />
+		<script type="text/javascript" src="scripts/defaults.js"></script>
+		<script type="text/javascript" src="scripts/options.js"></script>
 	</head>
 	<body>
-		<h1><img src="images/icon_72.png" alt="" style="float:left;margin-right:0.4em;margin-top:-0.15em;" /> Voice Actions Settings</h1>
-		<hr />
-		<h3>Help</h3>
-		<h4>Try these different types of actions:</h4>
-		<div id="actionExamples">
-			<div>
-				<img src="images/images.png" alt="Pictures" />
-				<p>&ldquo;<b>Pictures of</b> Cats</p>
-			</div>
-			<div>
-				<img src="images/map.png" alt="Map" />
-				<p>&ldquo;<b>Map of</b> Washington, DC.&rdquo;</p>
-			</div>
-			<div>
-				<img src="images/directions.png" alt="Directions" />
-				<p>&ldquo;<b>Directions to</b> The White House.&rdquo;</p>
-			</div>
-			<div>
-				<img src="images/web.png" alt="Website" />
-				<p>&ldquo;<b>Go to</b> Wikipedia.&rdquo;</p>
-			</div>
-			<div>
-				<img src="images/music.png" alt="Music" />
-				<p>&ldquo;<b>Listen to</b> Deadmau5&rdquo;</p>
-			</div>
-			<div>
-				<img src="images/calc.png" alt="Calculate" />
-				<p>&ldquo;<b>Calculate</b> 1 + 1&rdquo;</p>
-			</div>
-			<div>
-				<img src="images/search.png" alt="Search" />
-				<p>Or just search for anything</p>
-			</div>
-		</div>
-		<hr />
-		<h3>Services</h3>
-		<h4>Search</h4>
-		<select id="searchSetting">
-			<option value="ask">Ask</option>
-			<option value="bing">Bing</option>
-			<option value="google">Google (Default)</option>
-			<option value="yahoo">Yahoo</option>
-		</select>
-		<h4>Image Search</h4>
-		<select id="imagesSetting">
-			<option value="ask">Ask</option>
-			<option value="bing">Bing</option>
-			<option value="flickr">Flickr</option>
-			<option value="google">Google (Default)</option>
-			<option value="imgur">imgur</option>
-			<option value="yahoo">Yahoo</option>
-		</select>
-		<h4>Maps</h4>
-		<select id="mapSetting">
-			<option value="bing">Bing</option>
-			<option value="google">Google (Default)</option>
-			<option value="yahoo">Yahoo</option>
-		</select>
-		<h4>Directions</h4>
-		<select id="directionsSetting">
-			<option value="google">Google (Default)</option>
-		</select>
-		<h4>Music</h4>
-		<select id="musicSetting">
-			<option value="amazon">Amazon Cloud Player</option>
-			<option value="google">Google Play Music (Default)</option>
-			<option value="grooveshark">Grooveshark</option>
-			<option value="lastfm">Last.fm</option>
-			<option value="pandora">Pandora</option>
-			<option value="youtube">YouTube</option>
-		</select>
-		<h4>Calculator</h4>
-		<select id="calcSetting">
-			<option value="google">Google</option>
-			<option value="wolframalpha">Wolfram|Alpha (Default)</option>
-		</select>
-		<select id="webSetting" style="display:none;">
-			<option value="google">Google (Default)</option>
-		</select>
-		<h3>Other settings</h3>
-		<h4>Open pages in</h4>
-		<select id="openLocationSetting">
-			<option value="current">Current tab, always</option>
-			<option value="new">New tab, always</option>
-			<option value="smart">New tab, except on the new tab page (Default)</option>
-		</select>
-		<hr />
-		<p style="font-size:smaller;">Note: This extension uses the experimental speech API; your mileage may vary.</p>
+		<nav class="sideBar">
+			<h1>Chrome</h1>
+			<ul>
+				<li><a href="chrome://history" target="_blank">History</a></li>
+				<li>
+					<a href="chrome://extensions">Extensions</a>
+					<ul>
+						<li>Voice Actions for Chrome</li>
+					</ul>
+				</li>
+				<li><a href="chrome://settings">Settings</a></li>
+				<li><a href="chrome://help">Help</a></li>
+			</ul>
+		</nav>
+		<header>
+			<h1>Voice Actions for Chrome (beta)</h1>
+		</header>
+		<section>
+			<h3>Help</h3>
+			<p>Try these different types of actions:</p>
+			<ul id="actionExamples">
+				<li>
+					<img src="images/images.png" alt="Pictures" />
+					<p>&ldquo;<b>Pictures of</b> cats&rdquo;</p>
+				</li>
+				<li>
+					<img src="images/map.png" alt="Map" />
+					<p>&ldquo;<b>Map of</b> Washington, DC.&rdquo;</p>
+				</li>
+				<li>
+					<img src="images/directions.png" alt="Directions" />
+					<p>&ldquo;<b>Directions to</b> The White House.&rdquo;</p>
+				</li>
+				<li>
+					<img src="images/web.png" alt="Website" />
+					<p>&ldquo;<b>Go to</b> Wikipedia.&rdquo;</p>
+				</li>
+				<li>
+					<img src="images/music.png" alt="Music" />
+					<p>&ldquo;<b>Listen to</b> Deadmau5&rdquo;</p>
+				</li>
+				<li>
+					<img src="images/calc.png" alt="Calculate" />
+					<p>&ldquo;<b>Calculate</b> 1 + 1&rdquo;</p>
+				</li>
+				<li>
+					<img src="images/search.png" alt="Search" />
+					<p>Or just search for anything</p>
+				</li>
+			</ul>
+		</section>
+		<section>
+			<h3>Services</h3>
+			<p>Search</p>
+			<select id="searchSetting">
+				<option value="ask">Ask</option>
+				<option value="bing">Bing</option>
+				<option value="google">Google (Default)</option>
+				<option value="yahoo">Yahoo</option>
+			</select>
+			<p>Image Search</p>
+			<select id="imagesSetting">
+				<option value="ask">Ask</option>
+				<option value="bing">Bing</option>
+				<option value="flickr">Flickr</option>
+				<option value="google">Google (Default)</option>
+				<option value="imgur">imgur</option>
+				<option value="yahoo">Yahoo</option>
+			</select>
+			<p>Maps</p>
+			<select id="mapSetting">
+				<option value="bing">Bing</option>
+				<option value="google">Google (Default)</option>
+				<option value="yahoo">Yahoo</option>
+			</select>
+			<p>Directions</p>
+			<select id="directionsSetting">
+				<option value="google">Google (Default)</option>
+			</select>
+			<p>Music</p>
+			<select id="musicSetting">
+				<option value="amazon">Amazon Cloud Player</option>
+				<option value="google">Google Play Music (Default)</option>
+				<option value="grooveshark">Grooveshark</option>
+				<option value="lastfm">Last.fm</option>
+				<option value="pandora">Pandora</option>
+				<option value="youtube">YouTube</option>
+			</select>
+			<p>Calculator</p>
+			<select id="calcSetting">
+				<option value="google">Google</option>
+				<option value="wolframalpha">Wolfram|Alpha (Default)</option>
+			</select>
+			<select id="webSetting" style="display:none;">
+				<option value="google">Google (Default)</option>
+			</select>
+		</section>
+		<section>
+			<h3>Other options</h3>
+			<p>Open pages in</p>
+			<select id="openLocationSetting">
+				<option value="current">Current tab, always</option>
+				<option value="new">New tab, always</option>
+				<option value="smart">New tab, except on the new tab page (Default)</option>
+			</select>
+		</section>
+		<p>Note: This extension is still in beta.  Your mileage may vary.</p>
 	</body>
 </html>
