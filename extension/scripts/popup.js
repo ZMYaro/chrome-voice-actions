@@ -58,7 +58,12 @@ window.addEventListener("load", function() {
 	
 	// Get the current tab.
 	chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
-		chrome.tabs.sendMessage(tabs[0].id, {type: "start"});
+		// Only attempt to do speech recognition if current page is HTTPS.
+		if((/^https:\/\//).test(tabs[0].url)) {
+			chrome.tabs.sendMessage(tabs[0].id, {type: "start"});
+		} else { // Otherwise display an error.
+			displayError("Please switch to an HTTPS tab", "For now, voice actions only work on HTTPS pages.");
+		}
 	});
 }, false);
 
