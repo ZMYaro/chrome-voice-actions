@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	
-	"name": "Voice Actions for Chrome (Beta)",
+	"name": "Voice Actions for Chrome (beta)",
 	"description": "Control your browser just by talking to it.",
 	"version": "4",
 	
@@ -25,7 +25,5 @@
 		"default_popup": "popup.html"
 	},
 	
-	"options_page": "options.html",
-	
-	"update_url": "https://raw.github.com/zmyaro/chrome-voice-actions/master/update.xml"
+	"options_page": "options.html"
 }
