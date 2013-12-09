@@ -58,11 +58,13 @@ window.addEventListener("load", function() {
 	
 	// Get the current tab.
 	chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
-		// Only attempt to do speech recognition if current page is HTTPS.
-		if((/^https:\/\//).test(tabs[0].url)) {
+		// Display an error if the current page is a Chrome page.
+		if(tabs[0].url.indexOf("chrome://") === 0 ||
+				tabs[0].url.indexOf("chrome-extension://") === 0 &&
+				tabs[0].url.indexOf(chrome.extension.getURL("")) !== 0) {
+			displayError("Please switch to a different tab", "Voice actions do not work on Chrome pages yet.");
+		} else { // Otherwise attempt to do speech recognition.
 			chrome.tabs.sendMessage(tabs[0].id, {type: "start"});
-		} else { // Otherwise display an error.
-			displayError("Please switch to an HTTPS tab", "For now, voice actions only work on HTTPS pages.");
 		}
 	});
 }, false);
@@ -242,6 +244,3 @@ function closePopup(delay) {
 		window.close();
 	}, delay);
 }
-
-// Information about the Chrom* speech API can be found at:
-// http://code.google.com/chrome/extensions/experimental.speechInput.html

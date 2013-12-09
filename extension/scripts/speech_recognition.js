@@ -76,5 +76,3 @@ function recognitionSucceeded(e) {
 		text: e.results[e.resultIndex][0].transcript
 	});
 }
-
-console.log("----==== CONTENT SCRIPT LOADED ====----");
