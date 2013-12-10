@@ -13,6 +13,11 @@
 		"tabs"
 	],
 	
+	"background": {
+		"scripts": ["scripts/background.js"],
+		"persistent": false
+	},
+	
 	"content_scripts": [{
 		"matches": ["*://*/*"],
 		"js": ["scripts/iframe_adder.js"]
