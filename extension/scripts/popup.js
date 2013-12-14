@@ -95,11 +95,11 @@ chrome.extension.onMessage.addListener(function(message) {
 function processResult(query) {
 	//console.log(query); // for debugging
 	
-	if(query == "make me a sandwich") {
+	if(query === "make me a sandwich") {
 		icon.src = "images/pan.png";
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		subtext.innerHTML = "What?  Make it yourself.";
-	} else if(query == "sudo make me a sandwich" || query == "pseudo make me a sandwich") {
+	} else if(query === "sudo make me a sandwich" || query === "pseudo make me a sandwich") {
 		// XKCD sudo easter egg
 		query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
 		icon.src = "images/pan.png";
@@ -108,13 +108,13 @@ function processResult(query) {
 		setTimeout(function() {
 			openURL("http://xkcd.com/149");
 		}, 2050);
-	} else if(query.indexOf("map of ") == 0) {
+	} else if(query.indexOf("map of ") === 0) {
 		// Map
 		openResult("map", query.replace("map of", "<b>map of</b>"), query.replace("map of ", ""));
-	} else if(query.indexOf("directions to ") == 0) {
+	} else if(query.indexOf("directions to ") === 0) {
 		// Directions
 		openResult("directions", query.replace("directions to", "<b>directions to</b>"), query.replace("directions to ", ""));
-	} else if(query.indexOf("calculate ") == 0) {
+	} else if(query.indexOf("calculate ") === 0) {
 		// Calculator
 		
 		// If operators get captured as words, replace them (this
@@ -123,22 +123,22 @@ function processResult(query) {
 		query = query.replace(/plus/g, "+").replace(/minus/g, "-").replace(/times/g, "*").replace(/divided by/g, "/").replace(/over/g, "/");
 		
 		openResult("calc", query.replace("calculate", "<b>calculate</b>"), query.replace("calculate ", ""));
-	} else if(query.indexOf("images of ") == 0 || query.indexOf("pictures of ") == 0 ||
-			query.indexOf("photos of ") == 0 || query.indexOf("pics of ") == 0) {
+	} else if(query.indexOf("images of ") === 0 || query.indexOf("pictures of ") === 0 ||
+			query.indexOf("photos of ") === 0 || query.indexOf("pics of ") === 0) {
 		// Pictures
 		var action = "images of";
-		if(query.indexOf("pictures of") == 0) {
+		if(query.indexOf("pictures of") === 0) {
 			action = "pictures of";
-		} else if(query.indexOf("photos of") == 0) {
+		} else if(query.indexOf("photos of") === 0) {
 			action = "photos of";
-		} else if(query.indexOf("pics of") == 0) {
+		} else if(query.indexOf("pics of") === 0) {
 			action = "pics of";
 		}
 		openResult("images", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
-	} else if(query.indexOf("listen to ") == 0 || query.indexOf("play ") == 0) {
+	} else if(query.indexOf("listen to ") === 0 || query.indexOf("play ") === 0) {
 		// Music
 		var action = "listen to";
-		if(query.indexOf("play") == 0) {
+		if(query.indexOf("play") === 0) {
 			action = "play";
 		}
 		
@@ -146,7 +146,7 @@ function processResult(query) {
 		query = query.replace(/dead mouse|dead mau 5/g, "deadmau5");
 		
 		openResult("music", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
-	} else if(query.indexOf("go to ") == 0 || query.indexOf("goto ") == 0 || query.indexOf("open ") == 0) {
+	} else if(query.indexOf("go to ") === 0 || query.indexOf("goto ") === 0 || query.indexOf("open ") === 0) {
 		// Load web page
 		
 		// This part searches the user's bookmarks for the page name.
@@ -167,9 +167,9 @@ function processResult(query) {
 			}, 2050);
 		});*/
 		var action = "go to";
-		if(query.indexOf("goto") == 0) {
+		if(query.indexOf("goto") === 0) {
 			action = "goto";
-		} else if(query.indexOf("open") == 0) {
+		} else if(query.indexOf("open") === 0) {
 			action = "open";
 		}
 		openResult("web", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
@@ -200,14 +200,14 @@ function openResult(type, disp, query) {
  * @param {String} url - The URL to open
  */
 function openURL(url) {
-	if((localStorage.openLocationSetting || defaultSettings.openLocation) == "current") {
+	if((localStorage.openLocationSetting || defaultSettings.openLocation) === "current") {
 		chrome.tabs.update(null, {"url":url});
 		window.close();
-	} else if((localStorage.openLocationSetting || defaultSettings.openLocation) == "new") {
+	} else if((localStorage.openLocationSetting || defaultSettings.openLocation) === "new") {
 		chrome.tabs.create({"url":url});
 	} else {
 		chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
-			if(tabs[0].url.substring(0,15) == "chrome://newtab") {
+			if(tabs[0].url.substring(0,15) === "chrome://newtab") {
 				chrome.tabs.update(null, {"url":url});
 				window.close();
 			} else {
