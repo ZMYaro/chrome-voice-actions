@@ -108,6 +108,20 @@ function processResult(query) {
 		setTimeout(function() {
 			openURL("http://xkcd.com/149");
 		}, 2050);
+	} else if((/^close( this|( the)? current)? tab$/).test(query)) {
+		// Close current tab
+		icon.src = "images/tabs.png";
+		text.innerHTML = "<b>" + query + "</b>";
+		document.body.className = "loading";
+		setTimeout(function() {
+			chrome.tabs.query({
+				active: true,
+				currentWindow: true
+			}, function(tabs) {
+				chrome.tabs.remove(tabs[0].id);
+				window.close();
+			});
+		}, 2050);
 	} else if(query.indexOf("switch to ") === 0) {
 		// Switch to tab
 		switchToTab(query.replace("switch to", "<b>switch to</b>"), query.replace("switch to ", ""));S
