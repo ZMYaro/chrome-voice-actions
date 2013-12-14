@@ -108,6 +108,9 @@ function processResult(query) {
 		setTimeout(function() {
 			openURL("http://xkcd.com/149");
 		}, 2050);
+	} else if(query.indexOf("switch to ") === 0) {
+		// Switch to tab
+		switchToTab(query.replace("switch to", "<b>switch to</b>"), query.replace("switch to ", ""));S
 	} else if(query.indexOf("map of ") === 0) {
 		// Map
 		openResult("map", query.replace("map of", "<b>map of</b>"), query.replace("map of ", ""));
@@ -215,6 +218,64 @@ function openURL(url) {
 			}
 		});
 	}
+}
+
+/**
+ * Switches to a given tab
+ * @param {String} disp - The text to display in the pop-up
+ * @param {String} query - The query to insert into the URL
+ */
+function switchToTab(disp, query) {
+	icon.src = "images/tabs.png";
+	text.innerHTML = disp;
+	
+	chrome.windows.getAll({populate: true}, function(windows) {
+		// Combine all the windows' tab arrays into one array.
+		var tabs = windows.reduce(function(tabsArr, currentWin) {
+			return tabsArr.concat(currentWin.tabs);
+		}, []);
+		// Create a variable to hold the id of the best tab.
+		var topMatchTab;
+		// Create a variable to hold the top number of matches.
+		var topMatches = -1;
+		// Create a variable to hold the earliest index of a match.
+		var topEarliestMatch = 9999;
+		// Create a regEx that checks for each word in the query.
+		var regEx = new RegExp("(" + query.split(/s+/g).join(")|(") + ")", "ig");
+		for(var i = 0; i < tabs.length; i++) {
+			// Create a variable to count the number of matches for this tab.
+			var matches = 0;
+			// Create a variable to hold the earliest index of a match for this tab.
+			var earliestMatch = 9999;
+			// Reset the regEx.
+			regEx.lastIndex = 0;
+			while(regEx.exec(tabs[i].title)) {
+				// Increase the match count.
+				if(matches++ === 0) {
+					// If this is the first match, store its index.
+					earliestMatch = regEx.lastIndex;
+				}
+			}
+			if(matches > topMatches ||
+					(matches === topMatches && earliestMatch < topEarliestMatch)) {
+				topMatches = matches;
+				topEarliestMatch = earliestMatch;
+				topMatchTab = tabs[i];
+			}
+		}
+		
+		// If a match was found,
+		if(topMatchTab) {
+			// Display a loading message, and open the tab after a delay.
+			document.body.className = "loading";
+			setTimeout(function() {
+				chrome.tabs.update(topMatchTab.id, {active: true});
+				chrome.windows.update(topMatchTab.windowId, {focused: true});
+			}, 2050);
+		} else { // Otherwise, display an error.
+			displayError(disp, "No tab with that title could be found.");
+		}
+	});
 }
 
 /**
