@@ -123,13 +123,16 @@ function processResult(query) {
 		query = query.replace(/plus/g, "+").replace(/minus/g, "-").replace(/times/g, "*").replace(/divided by/g, "/").replace(/over/g, "/");
 		
 		openResult("calc", query.replace("calculate", "<b>calculate</b>"), query.replace("calculate ", ""));
-	} else if(query.indexOf("images of ") == 0 || query.indexOf("pictures of ") == 0 || query.indexOf("photos of ") == 0) {
+	} else if(query.indexOf("images of ") == 0 || query.indexOf("pictures of ") == 0 ||
+			query.indexOf("photos of ") == 0 || query.indexOf("pics of ") == 0) {
 		// Pictures
 		var action = "images of";
 		if(query.indexOf("pictures of") == 0) {
 			action = "pictures of";
 		} else if(query.indexOf("photos of") == 0) {
 			action = "photos of";
+		} else if(query.indexOf("pics of") == 0) {
+			action = "pics of";
 		}
 		openResult("images", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 	} else if(query.indexOf("listen to ") == 0 || query.indexOf("play ") == 0) {
