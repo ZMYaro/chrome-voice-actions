@@ -23,6 +23,12 @@ var baseURLs = {
 		"imgur":"http://imgur.com/gallery?q=%s",
 		"yahoo":"http://images.search.yahoo.com/search/images?p=%s"
 	},
+	"videos": {
+		"ask": "http://www.ask.com/youtube?q=%s",
+		"bing": "http://www.bing.com/videos/search?q=%s",
+		"google": "https://www.google.com/search?tbm=vid&q=%s",
+		"youtube":"http://www.youtube.com/results?search_query=%s"
+	},
 	"map":{
 		"google":"https://maps.google.com/maps?q=%s",
 		"bing":"http://www.bing.com/maps/?q=%s",
@@ -152,6 +158,18 @@ function processResult(query) {
 			action = "pics of";
 		}
 		openResult("images", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
+	} else if(query.indexOf("video of ") === 0 || query.indexOf("videos of ") === 0 ||
+			query.indexOf("movie of ") === 0 || query.indexOf("movies of ") === 0) {
+		// Videos
+		var action = "video of";
+		if(query.indexOf("videos of") === 0) {
+			action = "videos of";
+		} else if(query.indexOf("movie of") === 0) {
+			action = "movie of";
+		} else if(query.indexOf("movies of") === 0) {
+			action = "movies of";
+		}
+		openResult("videos", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 	} else if(query.indexOf("listen to ") === 0 || query.indexOf("play ") === 0) {
 		// Music
 		var action = "listen to";
