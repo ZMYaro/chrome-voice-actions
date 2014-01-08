@@ -55,6 +55,13 @@ var baseURLs = {
 }
 
 window.addEventListener("load", function() {
+	chrome.storage.sync.get({
+		actionDelayTime: defaultSettings.actionDelayTime
+	}, function(settings) {
+		document.body.style.WebkitTransitionDuration =
+			document.body.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
+	});
+		
 	document.getElementById("cancelBtn").addEventListener("click", function() { window.close(); }, false);
 	
 	// Get references to DOM elements
@@ -89,7 +96,7 @@ chrome.extension.onMessage.addListener(function(message) {
 		case "error":
 			// Display error information, and then exit.
 			displayError(message.text, message.subtext);
-			closePopup();
+			delayAction(window.close);
 			break;
 	}
 });
@@ -111,15 +118,15 @@ function processResult(query) {
 		icon.src = "images/pan.png";
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		document.body.className = "loading";
-		setTimeout(function() {
+		delayAction(function() {
 			openURL("http://xkcd.com/149");
-		}, 2050);
+		});
 	} else if((/^close( this|( the)? current)? tab$/).test(query)) {
 		// Close current tab
 		icon.src = "images/tabs.png";
 		text.innerHTML = "<b>" + query + "</b>";
 		document.body.className = "loading";
-		setTimeout(function() {
+		delayAction(function() {
 			chrome.tabs.query({
 				active: true,
 				currentWindow: true
@@ -127,7 +134,7 @@ function processResult(query) {
 				chrome.tabs.remove(tabs[0].id);
 				window.close();
 			});
-		}, 2050);
+		});
 	} else if(query.indexOf("switch to ") === 0) {
 		// Switch to tab
 		switchToTab(query.replace("switch to", "<b>switch to</b>"), query.replace("switch to ", ""));S
@@ -193,13 +200,13 @@ function processResult(query) {
 			icon.src = "images/web.png";
 			text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
 			document.body.className = "loading";
-			setTimeout(function() {
+			delayAction(function() {
 				if(results.length > 0) {
 					openURL(results[0].url);
 				} else {
 					openURL("https://www.google.com/search?btnI=745&q=" + query);
 				}
-			}, 2050);
+			});
 		});*/
 		var action = "go to";
 		if(query.indexOf("goto") === 0) {
@@ -225,13 +232,13 @@ function openResult(type, disp, query) {
 	text.innerHTML = disp;
 	
 	document.body.className = "loading";
-	setTimeout(function() {
+	delayAction(function() {
 		var defaultSetting = {};
 		defaultSetting[type] = defaultSettings[type];
 		chrome.storage.sync.get(defaultSetting, function(settings) {
 			openURL(baseURLs[type][settings[type]].replace("%s", encodeURIComponent(query)));
 		});
-	}, 2050);
+	});
 }
 
 /**
@@ -308,10 +315,10 @@ function switchToTab(disp, query) {
 		if(topMatchTab) {
 			// Display a loading message, and open the tab after a delay.
 			document.body.className = "loading";
-			setTimeout(function() {
+			delayAction(function() {
 				chrome.tabs.update(topMatchTab.id, {active: true});
 				chrome.windows.update(topMatchTab.windowId, {focused: true});
-			}, 2050);
+			});
 		} else { // Otherwise, display an error.
 			displayError(disp, "No tab with that title could be found.");
 		}
@@ -338,14 +345,16 @@ function displayError(errtext, errsubtext) {
 }
 
 /**
- * Closes the pop-up after a delay (this basically saves a bunch of setTimeouts in the rest of the code)
- * @param {Number} delay - The number of milliseconds to wait before closing the pop-up (defaults to 2000 if null)
+ * Performs an action after a delay (this basically saves a bunch of setting fetches and setTimeouts in the rest of the code)
+ * @param {Function} callback - The function to call after the delay
+ * @param {Number} delay - A custom delay (if undefined, uses the user's set delay or the default setting)
  */
-function closePopup(delay) {
-	if(!delay) {
-		delay = 2000;
+function delayAction(callback, delay) {
+	var defaultSetting = {actionDelayTime: defaultSettings.actionDelayTime};
+	if(delay && typeof delay === "number") {
+		defaultSetting.actionDelayTime = delay;
 	}
-	setTimeout(function() {
-		window.close();
-	}, delay);
+	chrome.storage.sync.get(defaultSetting, function(settings) {
+		setTimeout(callback, settings.actionDelayTime);
+	});
 }

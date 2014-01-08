@@ -8,6 +8,7 @@ var defaultSettings = {
 	"music":"google",
 	"calc":"wolframalpha",
 	
+	"actionDelayTime": 2050,
 	"openLocation":"smart"
 }
 
