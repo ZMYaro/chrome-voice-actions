@@ -46,6 +46,7 @@ var baseURLs = {
 		"grooveshark":"http://grooveshark.com/#!/search?q=%s",
 		"lastfm":"http://www.last.fm/search?q=%s",
 		"pandora":"http://www.pandora.com/search/%s",
+		"soundcloud": "https://soundcloud.com/search?q=%s",
 		"youtube":"http://www.youtube.com/results?search_query=%s"
 	},
 	"calc":{
