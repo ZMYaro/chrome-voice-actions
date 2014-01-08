@@ -268,6 +268,7 @@ function openURL(url) {
 			window.close();
 		} else if(settings.openLocation === "new") {
 			chrome.tabs.create({"url":url});
+			window.close();
 		} else {
 			chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
 				if(tabs[0].url.substring(0,15) === "chrome://newtab") {
@@ -275,6 +276,7 @@ function openURL(url) {
 					window.close();
 				} else {
 					chrome.tabs.create({"url":url});
+					window.close();
 				}
 			});
 		}
