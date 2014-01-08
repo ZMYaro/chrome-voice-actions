@@ -26,8 +26,14 @@ var baseURLs = {
 	"videos": {
 		"ask": "http://www.ask.com/youtube?q=%s",
 		"bing": "http://www.bing.com/videos/search?q=%s",
+		"dailymotion": "http://www.dailymotion.com/relevance/search/%s",
 		"google": "https://www.google.com/search?tbm=vid&q=%s",
-		"youtube":"http://www.youtube.com/results?search_query=%s"
+		"hulu": "http://www.hulu.com/search?q=%s",
+		"metacafe": "http://www.metacafe.com/topics/%s",
+		"netflix": "http://dvd.netflix.com/Search?v1=%s",
+		"twitch": "http://www.twitch.tv/search?query=%s",
+		"vimeo": "http://vimeo.com/search?q=%s",
+		"youtube": "https://www.youtube.com/results?search_query=%s"
 	},
 	"map":{
 		"google":"https://maps.google.com/maps?q=%s",
