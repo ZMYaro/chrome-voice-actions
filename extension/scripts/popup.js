@@ -226,7 +226,11 @@ function openResult(type, disp, query) {
 	
 	document.body.className = "loading";
 	setTimeout(function() {
-		openURL(baseURLs[type][(localStorage[type + "Setting"] || defaultSettings[type])].replace("%s", encodeURIComponent(query)));
+		var defaultSetting = {};
+		defaultSetting[type] = defaultSettings[type];
+		chrome.storage.sync.get(defaultSetting, function(settings) {
+			openURL(baseURLs[type][settings[type]].replace("%s", encodeURIComponent(query)));
+		});
 	}, 2050);
 }
 
@@ -235,21 +239,25 @@ function openResult(type, disp, query) {
  * @param {String} url - The URL to open
  */
 function openURL(url) {
-	if((localStorage.openLocationSetting || defaultSettings.openLocation) === "current") {
-		chrome.tabs.update(null, {"url":url});
-		window.close();
-	} else if((localStorage.openLocationSetting || defaultSettings.openLocation) === "new") {
-		chrome.tabs.create({"url":url});
-	} else {
-		chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
-			if(tabs[0].url.substring(0,15) === "chrome://newtab") {
-				chrome.tabs.update(null, {"url":url});
-				window.close();
-			} else {
-				chrome.tabs.create({"url":url});
-			}
-		});
-	}
+	chrome.storage.sync.get({
+		openLocation: defaultSettings.openLocation
+	}, function(settings) {
+		if(settings.openLocation === "current") {
+			chrome.tabs.update(null, {"url":url});
+			window.close();
+		} else if(settings.openLocation === "new") {
+			chrome.tabs.create({"url":url});
+		} else {
+			chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
+				if(tabs[0].url.substring(0,15) === "chrome://newtab") {
+					chrome.tabs.update(null, {"url":url});
+					window.close();
+				} else {
+					chrome.tabs.create({"url":url});
+				}
+			});
+		}
+	});
 }
 
 /**

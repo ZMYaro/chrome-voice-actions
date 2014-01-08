@@ -1,17 +1,24 @@
 window.addEventListener("load", function() {
+	// Attempt to copy settings from localStorage to synced storage.
+	copySettings();
+	
 	// Load OS styles and set up chrome:// links when the page loads.
 	loadOSStyles();
 	setUpChromeLinks();
 	
-	for(setting in defaultSettings) {
-		// Set all the drop-downs.
-		document.getElementById(setting + "Setting").value = (localStorage[setting + "Setting"] || defaultSettings[setting]);
-		
-		// Add event listeners to all the drop-downs.
-		document.getElementById(setting + "Setting").addEventListener("change", function(e) {
-			setSetting(e.target.id.replace("Setting", ""), e.target.value);
-		}, false);
-	}
+	// Fetch all settings.
+	chrome.storage.sync.get(defaultSettings, function(settings) {
+		// For each setting,
+		for(setting in settings) {
+			// Set its drop-down.
+			document.getElementById(setting + "Setting").value = settings[setting];
+			
+			// Add an event listener to its drop-down.
+			document.getElementById(setting + "Setting").addEventListener("change", function(e) {
+				setSetting(e.target.id.replace("Setting", ""), e.target.value);
+			}, false);
+		}
+	});
 	
 	// Create a speech recognition instance.
 	var speechInput = new webkitSpeechRecognition();
@@ -23,13 +30,18 @@ window.addEventListener("load", function() {
 		// no need for speech recognition to continue, so abort it.
 		e.target.abort();
 	};
-	
 	// Attempt to start speech recognition (and, as a result, display the omnibox media icon).
 	speechInput.start();
 }, false);
 
 function setSetting(setting, value) {
-	localStorage[setting + "Setting"] = value;
+	var newSettingObj = {};
+	newSettingObj[setting] = value;
+	chrome.storage.sync.set(newSettingObj, function() {
+		if(chrome.runtime.lastError) {
+			alert("Something went wrong: " + chrome.runtime.lastError);
+		}
+	});
 }
 
 /**

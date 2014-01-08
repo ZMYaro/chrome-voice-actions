@@ -10,11 +10,15 @@
 		"128": "images/icon_128.png"
 	},
 	"permissions": [
+		"storage",
 		"tabs"
 	],
 	
 	"background": {
-		"scripts": ["scripts/background.js"],
+		"scripts": [
+			"scripts/defaults.js",
+			"scripts/background.js"
+		],
 		"persistent": false
 	},
 	
