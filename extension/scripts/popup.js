@@ -174,7 +174,8 @@ function processResult(query) {
 		}
 		openResult("images", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 	} else if(query.indexOf("video of ") === 0 || query.indexOf("videos of ") === 0 ||
-			query.indexOf("movie of ") === 0 || query.indexOf("movies of ") === 0) {
+			query.indexOf("movie of ") === 0 || query.indexOf("movies of ") === 0 ||
+			query.indexOf("watch ") === 0) {
 		// Videos
 		var action = "video of";
 		if(query.indexOf("videos of") === 0) {
@@ -183,6 +184,8 @@ function processResult(query) {
 			action = "movie of";
 		} else if(query.indexOf("movies of") === 0) {
 			action = "movies of";
+		} else if(query.indexOf("watch") === 0) {
+			action = "watch";
 		}
 		openResult("videos", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 	} else if(query.indexOf("listen to ") === 0 || query.indexOf("play ") === 0) {
