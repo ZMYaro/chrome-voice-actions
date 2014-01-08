@@ -162,7 +162,8 @@ function processResult(query) {
 		
 		openResult("calc", query.replace("calculate", "<b>calculate</b>"), query.replace("calculate ", ""));
 	} else if(query.indexOf("images of ") === 0 || query.indexOf("pictures of ") === 0 ||
-			query.indexOf("photos of ") === 0 || query.indexOf("pics of ") === 0) {
+			query.indexOf("photos of ") === 0 || query.indexOf("pics of ") === 0 ||
+			query.indexOf("show me ") === 0) {
 		// Pictures
 		var action = "images of";
 		if(query.indexOf("pictures of") === 0) {
@@ -171,6 +172,8 @@ function processResult(query) {
 			action = "photos of";
 		} else if(query.indexOf("pics of") === 0) {
 			action = "pics of";
+		} else if(query.indexOf("show me") === 0) {
+			action = "show me";
 		}
 		openResult("images", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 	} else if(query.indexOf("video of ") === 0 || query.indexOf("videos of ") === 0 ||
