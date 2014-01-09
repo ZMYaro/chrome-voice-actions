@@ -1,25 +1,35 @@
 {
 	"manifest_version": 2,
 	
-	"name": "Voice Actions for Chrome (Beta)",
+	"name": "Voice Actions for Chrome (beta)",
 	"description": "Control your browser just by talking to it.",
-	"version": "3.2",
+	"version": "4.4",
 	
 	"icons": {
 		"48": "images/icon_48.png",
 		"128": "images/icon_128.png"
 	},
 	"permissions": [
+		"storage",
 		"tabs"
 	],
 	
+	"background": {
+		"scripts": [
+			"scripts/defaults.js",
+			"scripts/background.js"
+		],
+		"persistent": false
+	},
+	
 	"browser_action": {
-		"default_icon": "images/icon_19.png",
+		"default_icon": {
+			"19": "images/icon_19.png",
+			"38": "images/icon_38.png"
+		},
 		"default_title": "Voice Actions",
 		"default_popup": "popup.html"
 	},
 	
-	"options_page": "options.html",
-	
-	"update_url": "http://clients2.google.com/service/update2/crx"
+	"options_page": "options.html"
 }
