@@ -1,8 +1,9 @@
-chrome.runtime.onMessage.addListener(function(message, sender) {
+/*chrome.runtime.onMessage.addListener(function(message, sender) {
 	if(!sender.tab && message.type === "start") {
 		setUpRecognition();
 	}
-});
+});*/
+window.addEventListener("load", setUpRecognition, false);
 
 /**
  * Checks if speech recognition is supported, creates an instance, and starts listening

@@ -7,6 +7,9 @@ var text;
 /** {HTMLParagraphElement} The secondary text in the pop-up */
 var subtext;
 
+/** {Number} The id of the speech recognition tab */
+var speechRecTabId;
+
 /** {Object} Base URLs for the different web services */
 var baseURLs = {
 	"search":{
@@ -70,13 +73,24 @@ window.addEventListener("load", function() {
 			document.body.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
 	});
 		
-	document.getElementById("cancelBtn").addEventListener("click", function() { window.close(); }, false);
+	document.getElementById("cancelBtn").addEventListener("click", function() { closePopup(); }, false);
 	
 	// Get references to DOM elements
 	icon = document.getElementById("icon");
 	text = document.getElementById("text");
 	subtext = document.getElementById("subtext");
 	
+	// Create a tab in which to do speech recognition.
+	chrome.tabs.create({
+		url: chrome.extension.getURL("speech_recognition.html"),
+		active: false,
+		index: 999999 // Big number to force the tab to the end of the row
+	}, function(newTab) {
+		speechRecTabId = newTab.id;
+		chrome.tabs.sendMessage(newTab.id, {type: "start"});
+	});
+	
+	/*
 	// Get the current tab.
 	chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
 		// Display an error if the current page is a Chrome page.
@@ -88,7 +102,7 @@ window.addEventListener("load", function() {
 		} else { // Otherwise attempt to do speech recognition.
 			chrome.tabs.sendMessage(tabs[0].id, {type: "start"});
 		}
-	});
+	});*/
 }, false);
 
 chrome.extension.onMessage.addListener(function(message) {
@@ -104,7 +118,7 @@ chrome.extension.onMessage.addListener(function(message) {
 		case "error":
 			// Display error information, and then exit.
 			displayError(message.text, message.subtext);
-			delayAction(window.close);
+			delayAction(closePopup);
 			break;
 	}
 });
@@ -140,7 +154,7 @@ function processResult(query) {
 				currentWindow: true
 			}, function(tabs) {
 				chrome.tabs.remove(tabs[0].id);
-				window.close();
+				closePopup();
 			});
 		});
 	} else if(query.indexOf("switch to ") === 0) {
@@ -265,18 +279,18 @@ function openURL(url) {
 	}, function(settings) {
 		if(settings.openLocation === "current") {
 			chrome.tabs.update(null, {"url":url});
-			window.close();
+			closePopup();
 		} else if(settings.openLocation === "new") {
 			chrome.tabs.create({"url":url});
-			window.close();
+			closePopup();
 		} else {
 			chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
 				if(tabs[0].url.substring(0,15) === "chrome://newtab") {
 					chrome.tabs.update(null, {"url":url});
-					window.close();
+					closePopup();
 				} else {
 					chrome.tabs.create({"url":url});
-					window.close();
+					closePopup();
 				}
 			});
 		}
@@ -373,4 +387,14 @@ function delayAction(callback, delay) {
 	chrome.storage.sync.get(defaultSetting, function(settings) {
 		setTimeout(callback, settings.actionDelayTime);
 	});
+}
+
+/**
+ * Closes the speech recognition tab, if any, and then closes the pop-up.
+ */
+function closePopup() {
+	if(speechRecTabId) {
+		chrome.tabs.remove(speechRecTabId);
+	}
+	window.close();
 }
