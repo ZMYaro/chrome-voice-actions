@@ -6,4 +6,4 @@ This is a Chrom* extension that functions similarly to the Google Voice Search a
 
 ####A version of this extension is now available [in the Chrome Web Store](https://chrome.google.com/webstore/detail/hhpjefokaphndbbidpehikcjhldaklje).
 
-Previously, a Chrome extension file was hosted with this repository.  If you installed that version of the extension, it should automatically upgrade to the Chrome Web Store version, but you can also go to the Web Store and install the latest version manually.
+Previously, an up-to-date Chrome extension file was hosted with this repository.  If you installed that version of the extension, it should automatically upgrade to the Chrome Web Store version, but you can also go to the Web Store and install the latest version manually.
