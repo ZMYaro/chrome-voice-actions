@@ -1,6 +1,8 @@
 {
 	"manifest_version": 2,
 	
+	"minimum_chrome_version": "30",
+	
 	"name": "Voice Actions for Chrome (beta)",
 	"description": "Control your browser just by talking to it.",
 	"version": "4.4",
