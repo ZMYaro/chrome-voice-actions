@@ -20,6 +20,14 @@ window.addEventListener("load", function() {
 		}
 	});
 	
+	// Add reset button event listener.
+	document.getElementById("resetButton").addEventListener("click", function(e) {
+		if(confirm("Are you sure you want to reset all your settings?  This cannot be undone!")) {
+			chrome.storage.sync.clear();
+			location.reload();
+		}
+	});
+	
 	// Create a speech recognition instance.
 	var speechInput = new webkitSpeechRecognition();
 	speechInput.continuous = false;
