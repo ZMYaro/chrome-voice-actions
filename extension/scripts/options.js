@@ -15,17 +15,32 @@ window.addEventListener("load", function() {
 	chrome.storage.sync.get(defaultSettings, function(settings) {
 		// For each setting,
 		for(setting in settings) {
-			var dropDown = document.getElementById(setting + "Setting");
-			// Set its drop-down.
-			dropDown.value = settings[setting];
+			// Get its form element.
+			var formElem = document.getElementById(setting + "Setting");
 			
-			// Add an event listener to its drop-down.
-			dropDown.addEventListener("change", function(e) {
-				setSetting(e.target.id.replace("Setting", ""), e.target.value);
+			// Set its form element.
+			if(formElem.tagName.toLowerCase() === "input" &&
+					formElem.type.toLowerCase() === "checkbox") {
+				formElem.checked = settings[setting];
+			} else {
+				formElem.value = settings[setting];
+			}
+			
+			// Add an event listener to its form element.
+			formElem.addEventListener("change", function(e) {
+				// Set the corresponding setting based on
+				if(e.target.tagName.toLowerCase() === "input" &&
+						e.target.type.toLowerCase() === "checkbox") {
+					// Whether the element is checked (if it is a checkbox).
+					setSetting(e.target.id.replace("Setting", ""), e.target.checked);
+				} else {
+					// The element's value (if it is a normal form element).
+					setSetting(e.target.id.replace("Setting", ""), e.target.value);
+				}
 			}, false);
 			
-			// Enable its drop-down.
-			dropDown.disabled = false;
+			// Enable its form element.
+			formElem.disabled = false;
 		}
 	});
 	
