@@ -18,7 +18,7 @@ window.addEventListener("load", function() {
 			document.body.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
 	});
 		
-	document.getElementById("cancelBtn").addEventListener("click", function() { closePopup(); }, false);
+	document.getElementById("cancelBtn").addEventListener("click", cancel, false);
 	
 	// Get references to DOM elements
 	icon = document.getElementById("icon");
@@ -53,9 +53,7 @@ window.addEventListener("load", function() {
 chrome.extension.onMessage.addListener(function(message) {
 	switch(message.type) {
 		case "ready":
-			// Prompt the user to speak.
-			icon.src = "images/mic.png";
-			text.innerHTML = "Speak now";
+			promptSpeech();
 			break;
 		case "result":
 			processResult(message.text);
@@ -67,6 +65,23 @@ chrome.extension.onMessage.addListener(function(message) {
 			break;
 	}
 });
+
+/**
+ * Indicate that speech recognition is ready and listening
+ */
+function promptSpeech() {
+	// Prompt the user to speak.
+	icon.src = "images/mic.png";
+	text.innerHTML = "Speak now";
+	// If enabled, play a sound.
+	chrome.storage.sync.get({
+		sounds: defaultSettings.sounds
+	}, function(settings) {
+		if(settings.sounds) {
+			document.getElementById("startSound").play();
+		}
+	});
+}
 
 /**
  * Process the speech recognition result
@@ -82,11 +97,30 @@ function processResult(query) {
 		icon.src = "images/pan.png";
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		subtext.innerHTML = "What?  Make it yourself.";
+		
+		// If enabled, play an error sound.
+		chrome.storage.sync.get({
+			sounds: defaultSettings.sounds
+		}, function(settings) {
+			if(settings.sounds) {
+				document.getElementById("errorSound").play();
+			}
+		});
 	} else if(query === "sudo make me a sandwich" || query === "pseudo make me a sandwich") {
 		// XKCD sudo easter egg
 		query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
 		icon.src = "images/pan.png";
 		text.innerHTML = query.replace("make", "<b>make</b>");
+		
+		// If enabled, play a sound.
+		chrome.storage.sync.get({
+			sounds: defaultSettings.sounds
+		}, function(settings) {
+			if(settings.sounds) {
+				document.getElementById("endSound").play();
+			}
+		});
+		
 		document.body.className = "loading";
 		delayAction(function() {
 			openURL("http://xkcd.com/149");
@@ -95,6 +129,16 @@ function processResult(query) {
 		// Close current tab
 		icon.src = "images/tabs.png";
 		text.innerHTML = "<b>" + query + "</b>";
+		
+		// If enabled, play a sound.
+		chrome.storage.sync.get({
+			sounds: defaultSettings.sounds
+		}, function(settings) {
+			if(settings.sounds) {
+				document.getElementById("endSound").play();
+			}
+		});
+		
 		document.body.className = "loading";
 		delayAction(function() {
 			chrome.tabs.query({
@@ -227,6 +271,15 @@ function openResult(type, disp, query) {
 	icon.src = "images/" + type + ".png";
 	text.innerHTML = disp;
 	
+	// If enabled, play a sound.
+	chrome.storage.sync.get({
+		sounds: defaultSettings.sounds
+	}, function(settings) {
+		if(settings.sounds) {
+			document.getElementById("endSound").play();
+		}
+	});
+	
 	document.body.className = "loading";
 	delayAction(function() {
 		var defaultSetting = {};
@@ -277,6 +330,15 @@ function imFeelingLucky(disp, query) {
 	text.innerHTML = disp;
 	
 	var IM_FEELING_LUCKY_URL = "https://www.google.com/search?btnI=745&q=%s";
+	
+	// If enabled, play a sound.
+	chrome.storage.sync.get({
+		sounds: defaultSettings.sounds
+	}, function(settings) {
+		if(settings.sounds) {
+			document.getElementById("endSound").play();
+		}
+	});
 	
 	// Display a loading message and open the site after a delay.
 	document.body.className = "loading";
@@ -336,6 +398,14 @@ function launchApp(disp, query, errorCallback) {
 		
 		// If an app was found,
 		if(topMatchApp) {
+			// If enabled, play a sound.
+			chrome.storage.sync.get({
+				sounds: defaultSettings.sounds
+			}, function(settings) {
+				if(settings.sounds) {
+					document.getElementById("endSound").play();
+				}
+			});
 			// Display a loading message, and open the app after a delay.
 			document.body.className = "loading";
 			delayAction(function() {
@@ -396,6 +466,14 @@ function switchToTab(disp, query) {
 		
 		// If a match was found,
 		if(topMatchTab) {
+			// If enabled, play a sound.
+			chrome.storage.sync.get({
+				sounds: defaultSettings.sounds
+			}, function(settings) {
+				if(settings.sounds) {
+					document.getElementById("endSound").play();
+				}
+			});
 			// Display a loading message, and open the tab after a delay.
 			document.body.className = "loading";
 			delayAction(function() {
@@ -426,6 +504,15 @@ function displayError(errtext, errsubtext) {
 	} else {
 		subtext.innerText = errsubtext;
 	}
+	
+	// If enabled, play a sound.
+	chrome.storage.sync.get({
+		sounds: defaultSettings.sounds
+	}, function(settings) {
+		if(settings.sounds) {
+			document.getElementById("errorSound").play();
+		}
+	});
 }
 
 /**
@@ -441,6 +528,21 @@ function delayAction(callback, delay) {
 	chrome.storage.sync.get(defaultSetting, function(settings) {
 		setTimeout(callback, settings.actionDelayTime);
 	});
+}
+
+/**
+ * Cancels speech recognition and closes the pop-up.
+ */
+function cancel() {
+	// If enabled, play a sound.
+	chrome.storage.sync.get({
+		sounds: defaultSettings.sounds
+	}, function(settings) {
+		if(settings.sounds) {
+			document.getElementById("cancelSound").play();
+		}
+	});
+	closePopup();
 }
 
 /**

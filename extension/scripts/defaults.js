@@ -9,7 +9,8 @@ var defaultSettings = {
 	"calc":"wolframalpha",
 	
 	"actionDelayTime": 2050,
-	"openLocation":"smart"
+	"openLocation":"smart",
+	"sounds": true
 }
 
 /** {Object} Base URLs for the different web services */
