@@ -4,7 +4,7 @@ var defaultSettings = {
 	"videos": "youtube",
 	"map":"google",
 	"directions":"google",
-	"web":"google",
+	"launch": "google",
 	"music":"google",
 	"calc":"wolframalpha",
 	
@@ -47,9 +47,6 @@ var baseURLs = {
 	},
 	"directions": {
 		"google": "http://maps.google.com/maps?daddr=%s"
-	},
-	"web":{
-		"google": "https://www.google.com/search?btnI=745&q=%s"
 	},
 	"music":{
 		"amazon": "https://www.amazon.com/gp/dmusic/mp3/player#searchSongs/searchTerm=%s",

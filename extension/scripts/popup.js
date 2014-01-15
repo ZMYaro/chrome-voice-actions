@@ -73,7 +73,10 @@ chrome.extension.onMessage.addListener(function(message) {
  * @param {String} query - The query string to process
  */
 function processResult(query) {
-	//console.log(query); // for debugging
+	// If it is still open, close the speech recognition tab.
+	if(speechRecTabId) {
+		chrome.tabs.remove(speechRecTabId);
+	}
 	
 	if(query === "make me a sandwich") {
 		icon.src = "images/pan.png";
@@ -104,7 +107,7 @@ function processResult(query) {
 		});
 	} else if(query.indexOf("switch to ") === 0) {
 		// Switch to tab
-		switchToTab(query.replace("switch to", "<b>switch to</b>"), query.replace("switch to ", ""));S
+		switchToTab(query.replace("switch to", "<b>switch to</b>"), query.replace("switch to ", ""));
 	} else if(query.indexOf("map of ") === 0) {
 		// Map
 		openResult("map", query.replace("map of", "<b>map of</b>"), query.replace("map of ", ""));
@@ -190,7 +193,24 @@ function processResult(query) {
 		} else if(query.indexOf("launch") === 0) {
 			action = "launch";
 		}
-		openResult("web", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
+		
+		chrome.storage.sync.get({
+			launch: defaultSettings.launch
+		}, function(settings) {
+			var disp = query.replace(action, "<b>" + action + "</b>");
+			query = query.replace(action + " ", "");
+			if(settings.launch === "chrome") {
+				launchApp(disp, query, function() {
+					displayError(disp, "No app with that title could be found.");
+				});
+			} else if(settings.launch === "google") {
+				imFeelingLucky(disp, query);
+			} else {
+				launchApp(disp, query, function() {
+					imFeelingLucky(disp, query);
+				});
+			}
+		});
 	} else {
 		// Default to simple search
 		openResult("search", query, query);
@@ -246,12 +266,97 @@ function openURL(url) {
 }
 
 /**
+ * Performs a Google “I'm Feeling Lucky” query
+ * @param {String} disp - The text to display in the pop-up
+ * @param {String} query - The query
+ */
+function imFeelingLucky(disp, query) {
+	// Display the web icon.
+	icon.src = "images/web.png";
+	// Display the user's query.
+	text.innerHTML = disp;
+	
+	var IM_FEELING_LUCKY_URL = "https://www.google.com/search?btnI=745&q=%s";
+	
+	// Display a loading message and open the site after a delay.
+	document.body.className = "loading";
+	delayAction(function() {
+		openURL(IM_FEELING_LUCKY_URL.replace("%s", query));
+	});
+}
+
+/**
+ * Launches an installed Chrome app with a given name (if there is one)
+ * @param {String} disp - The text to display in the pop-up
+ * @param {String} query - The query
+ * @param {Function} errorCallback - The function to call if there is no match
+ */
+function launchApp(disp, query, errorCallback) {
+	// Display the web icon.
+	icon.src = "images/web.png";
+	// Display the user's query.
+	text.innerHTML = disp;
+	
+	chrome.management.getAll(function(extensions) {
+		// Create a variable to hold the id of the best app.
+		var topMatchApp;
+		// Create a variable to hold the top number of matches.
+		var topMatches = 0;
+		// Create a variable to hold the earliest index of a match.
+		var topEarliestMatch = 9999;
+		// Create a regEx that checks for each word in the query.
+		var regEx = new RegExp("(" + query.split(/\s+/g).join(")|(") + ")", "ig");
+		
+		// For each installed extension,
+		for(var i = 0; i < extensions.length; i++) {
+			// If the extension is enabled and is an app,
+			if(extensions[i].enabled && extensions[i].type.indexOf("app") !== -1) {
+				// Create a variable to count the number of matches for this app's name.
+				var matches = 0;
+				// Create a variable to hold the earliest index of a match for this extension.
+				var earliestMatch = 9999;
+				// Reset the regEx.
+				regEx.lastIndex = 0;
+				
+				while(regEx.exec(extensions[i].name)) {
+					// Increase the match count.
+					if(matches++ === 0) {
+						// If this is the first match, store its index.
+						earliestMatch = regEx.lastIndex;
+					}
+				}
+				if(matches > 0 && (matches > topMatches ||
+						(matches === topMatches && earliestMatch < topEarliestMatch))) {
+					topMatches = matches;
+					topEarliestMatch = earliestMatch;
+					topMatchApp = extensions[i];
+				}
+			}
+		}
+		
+		// If an app was found,
+		if(topMatchApp) {
+			// Display a loading message, and open the app after a delay.
+			document.body.className = "loading";
+			delayAction(function() {
+				chrome.management.launchApp(topMatchApp.id);
+				closePopup();
+			});
+		} else { // Otherwise, display an error.
+			errorCallback();
+		}
+	});
+}
+
+/**
  * Switches to a given tab
  * @param {String} disp - The text to display in the pop-up
  * @param {String} query - The query to insert into the URL
  */
 function switchToTab(disp, query) {
+	// Display the tabs icon.
 	icon.src = "images/tabs.png";
+	// Display the user's query.
 	text.innerHTML = disp;
 	
 	chrome.windows.getAll({populate: true}, function(windows) {
@@ -262,11 +367,11 @@ function switchToTab(disp, query) {
 		// Create a variable to hold the id of the best tab.
 		var topMatchTab;
 		// Create a variable to hold the top number of matches.
-		var topMatches = -1;
+		var topMatches = 0;
 		// Create a variable to hold the earliest index of a match.
 		var topEarliestMatch = 9999;
 		// Create a regEx that checks for each word in the query.
-		var regEx = new RegExp("(" + query.split(/s+/g).join(")|(") + ")", "ig");
+		var regEx = new RegExp("(" + query.split(/\s+/g).join(")|(") + ")", "ig");
 		for(var i = 0; i < tabs.length; i++) {
 			// Create a variable to count the number of matches for this tab.
 			var matches = 0;
@@ -281,8 +386,8 @@ function switchToTab(disp, query) {
 					earliestMatch = regEx.lastIndex;
 				}
 			}
-			if(matches > topMatches ||
-					(matches === topMatches && earliestMatch < topEarliestMatch)) {
+			if(matches > 0 && (matches > topMatches ||
+					(matches === topMatches && earliestMatch < topEarliestMatch))) {
 				topMatches = matches;
 				topEarliestMatch = earliestMatch;
 				topMatchTab = tabs[i];
@@ -296,6 +401,7 @@ function switchToTab(disp, query) {
 			delayAction(function() {
 				chrome.tabs.update(topMatchTab.id, {active: true});
 				chrome.windows.update(topMatchTab.windowId, {focused: true});
+				closePopup();
 			});
 		} else { // Otherwise, display an error.
 			displayError(disp, "No tab with that title could be found.");
