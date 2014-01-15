@@ -161,7 +161,8 @@ function processResult(query) {
 		query = query.replace(/dead mouse|dead mau 5/g, "deadmau5");
 		
 		openResult("music", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
-	} else if(query.indexOf("go to ") === 0 || query.indexOf("goto ") === 0 || query.indexOf("open ") === 0) {
+	} else if(query.indexOf("go to ") === 0 || query.indexOf("goto ") === 0 ||
+			query.indexOf("open ") === 0 || query.indexOf("launch ") === 0) {
 		// Load web page
 		
 		// This part searches the user's bookmarks for the page name.
@@ -186,6 +187,8 @@ function processResult(query) {
 			action = "goto";
 		} else if(query.indexOf("open") === 0) {
 			action = "open";
+		} else if(query.indexOf("launch") === 0) {
+			action = "launch";
 		}
 		openResult("web", query.replace(action, "<b>" + action + "</b>"), query.replace(action + " ", ""));
 	} else {
