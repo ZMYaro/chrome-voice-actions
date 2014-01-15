@@ -6,6 +6,11 @@ window.addEventListener("load", function() {
 	loadOSStyles();
 	setUpChromeLinks();
 	
+	// Display the extension version number.
+	document.getElementById("versionNumber").innerText =
+		"Version " +
+		chrome.runtime.getManifest().version;
+	
 	// Fetch all settings.
 	chrome.storage.sync.get(defaultSettings, function(settings) {
 		// For each setting,
