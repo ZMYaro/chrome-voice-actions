@@ -10,13 +10,17 @@ window.addEventListener("load", function() {
 	chrome.storage.sync.get(defaultSettings, function(settings) {
 		// For each setting,
 		for(setting in settings) {
+			var dropDown = document.getElementById(setting + "Setting");
 			// Set its drop-down.
-			document.getElementById(setting + "Setting").value = settings[setting];
+			dropDown.value = settings[setting];
 			
 			// Add an event listener to its drop-down.
-			document.getElementById(setting + "Setting").addEventListener("change", function(e) {
+			dropDown.addEventListener("change", function(e) {
 				setSetting(e.target.id.replace("Setting", ""), e.target.value);
 			}, false);
+			
+			// Enable its drop-down.
+			dropDown.disabled = false;
 		}
 	});
 	
@@ -27,6 +31,8 @@ window.addEventListener("load", function() {
 			location.reload();
 		}
 	});
+	// Enable the reset button.
+	document.getElementById("resetButton").disabled = false;
 	
 	// Create a speech recognition instance.
 	var speechInput = new webkitSpeechRecognition();
