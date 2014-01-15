@@ -17,8 +17,15 @@ window.addEventListener("load", function() {
 		document.body.style.WebkitTransitionDuration =
 			document.body.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
 	});
-		
+	
+	// Cancel event listeners.
 	document.getElementById("cancelBtn").addEventListener("click", cancel, false);
+	window.addEventListener("keydown", function(e) {
+		if(e.keyCode === 27) {
+			cancel();
+		}
+	}, false);
+	window.addEventListener("unload", cancel, false);
 	
 	// Get references to DOM elements
 	icon = document.getElementById("icon");
