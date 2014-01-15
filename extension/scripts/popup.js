@@ -100,7 +100,10 @@ function processResult(query) {
 		chrome.tabs.remove(speechRecTabId);
 	}
 	
-	if(query === "make me a sandwich") {
+	if(query === "I\'m feeling lucky") {
+		// “I'm feeling lucky” => open most visited site
+		openTopSite("<b>I'm feeling lucky</b>");
+	} else if(query === "make me a sandwich") {
 		icon.src = "images/pan.png";
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		subtext.innerHTML = "What?  Make it yourself.";
@@ -322,6 +325,42 @@ function openURL(url) {
 				}
 			});
 		}
+	});
+}
+
+/**
+ * Open top site
+ * @param {String} disp - The text to display in the pop-up
+ */
+function openTopSite(disp) {
+	// Display the web icon.
+	icon.src = "images/web.png";
+	// Display the main text.
+	text.innerHTML = disp;
+	
+	chrome.topSites.get(function(sites) {
+		if(sites.length === 0) {
+			displayError("You have no top sites.");
+			return;
+		}
+		
+		// Display the site title.
+		subtext.innerText = subtext.textContent = "Opening " + sites[0].title;
+		
+		// If enabled, play a sound.
+		chrome.storage.sync.get({
+			sounds: defaultSettings.sounds
+		}, function(settings) {
+			if(settings.sounds) {
+				document.getElementById("endSound").play();
+			}
+		});
+		
+		// Display a loading message and open the site after a delay.
+		document.body.className = "loading";
+		delayAction(function() {
+			openURL(sites[0].url);
+		});
 	});
 }
 

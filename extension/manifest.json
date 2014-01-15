@@ -14,7 +14,8 @@
 	"permissions": [
 		"management",
 		"storage",
-		"tabs"
+		"tabs",
+		"topSites"
 	],
 	
 	"background": {
