@@ -20,7 +20,7 @@
 	
 	"background": {
 		"scripts": [
-			"scripts/defaults.js",
+			"scripts/shared.js",
 			"scripts/background.js"
 		],
 		"persistent": false
