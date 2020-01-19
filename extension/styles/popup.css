@@ -1,12 +1,12 @@
 body {
-	margin:0px;
-	padding:0px;
+	margin:0;
+	padding:0;
 	
 	background-color:white;
 	
 	text-align:center;
-	font-family:"Open Sans", Arial, Helvetica, Roboto, "Droid Sans", sans-serif;
-	font-size:12px;
+	font-size:100%;
+	font-family:Roboto, "Droid Sans", Helvetica, Arial, sans-serif;
 	
 	-webkit-transition-property: box-shadow;
 	        transition-property: box-shadow;
@@ -14,15 +14,15 @@ body {
 	        transition-duration:2s;
 	-webkit-transition-timing-function:linear;
 	        transition-timing-function:linear;
-	box-shadow:inset 0px 0px 0px 0px #F8F8F8;
+	box-shadow:inset 0 0 0 0 #F8F8F8;
 }
 body.loading {
-	box-shadow:inset 165px 0px 0px 0px #F8F8F8;
+	box-shadow:inset 11em 0 0 0 #F8F8F8;
 }
 #main {
-	width:160px;
-	min-height:140px;
-	padding:16px;
+	width:10em;
+	min-height:8.75em;
+	padding:1em;
 	-webkit-box-sizing:border-box;
 	        box-sizing:border-box;
 	
@@ -30,39 +30,42 @@ body.loading {
 }
 
 #icon {
-	width:64px;
-	height:64px;
+	width:4em;
+	height:4em;
 	opacity:0.5;
+}
+
+#text {
+	font-size:100%;
+	margin-bottom:0;
+}
+#subtext {
+	font-size:80%;
+	opacity:0.8;
+	margin:0.25em;
 }
 
 #cancelBtn {
 	width:100%;
-	padding:4px;
-	background-color:transparent;
-	border-style:none;
-	border-width:0px;
-	border-top-style:solid;
-	border-top-width:1px;
-	border-top-color:#E0E0E0;
-	outline-width:0px;
+	padding:10px 16px;
+	background:transparent;
+	border:0 none;
+	border-top:1px solid rgba(0, 0, 0, 0.125);
+	outline-width:0;
+	
+	font:inherit;
+	font-size: 87.5%;
+	font-weight:500;
+	text-transform:uppercase;
 	
 	cursor:pointer;
 	
 	z-index:2;
 }
-#cancelBtn:hover, #cancelBtn:focus {
-	/*background-image:-webkit-linear-gradient(white, #F2F2F2);*/
-	background-color:#F8F8F8;
+#cancelBtn:hover,
+#cancelBtn:focus {
+	background:rgba(128, 128, 128, 0.2);
 }
 #cancelBtn:active {
-	background-image:-webkit-linear-gradient(#F0F0F0, #F8F8F8);
-}
-#text {
-	font-size:14px;
-	margin-bottom:0px;
-}
-#subtext {
-	font-size:10px;
-	opacity:0.9;
-	margin:0px;
+	background:rgba(128, 128, 128, 0.4);
 }
