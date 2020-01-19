@@ -35,5 +35,10 @@
 		"default_popup": "popup.html"
 	},
 	
-	"options_page": "options.html"
+	"options_page": "options_page.html",
+	"options_ui": {
+		"page": "options_embedded.html",
+		"open_in_tab": false,
+		"chrome_style": true
+	}
 }

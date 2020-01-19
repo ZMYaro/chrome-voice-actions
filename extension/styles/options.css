@@ -196,22 +196,3 @@ section {
 section h3 {
 	margin-left: -18px;
 }
-
-#actionExamples {
-	margin-top: 4px;
-	padding-left: 0;
-	list-style-type: none;
-}
-#actionExamples > li {
-	display: inline-block;
-	text-align: center;
-	vertical-align: top;
-	width: 128px;
-	height: 120px;
-	padding: 0px 4px;
-}
-#actionExamples > li img {
-	width: 64px;
-	height: 64px;
-	opacity: 0.5;
-}
