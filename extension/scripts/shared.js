@@ -32,52 +32,61 @@ var iconURLs = {
 /** {Object} Base URLs for the different web services */
 var baseURLs = {
 	"search": {
-		"ask": "http://www.ask.com/web?q=%s",
-		"bing": "http://www.bing.com/search?q=%s",
+		"ask": "https://www.ask.com/web?q=%s",
+		"bing": "https://www.bing.com/search?q=%s",
+		"duckduckgo": "https://duckduckgo.com/?q=%s",
 		"google": "https://www.google.com/search?q=%s",
-		"yahoo": "http://search.yahoo.com/search?p=%s"
+		"yahoo": "https://search.yahoo.com/search?p=%s"
 	},
 	"images": {
-		"ask": "http://www.ask.com/pictures?q=%s",
-		"bing": "http://www.bing.com/images/search?q=%s",
-		"flickr": "http://www.flickr.com/search/?q=%s",
+		"ask": "https://www.ask.com/web?q=images%20of%20%s",
+		"bing": "https://www.bing.com/images/search?q=%s",
+		"duckduckgo": "https://duckduckgo.com/?ia=images&iax=images&q=%s",
+		"flickr": "https://www.flickr.com/search/?q=%s",
 		"google": "https://www.google.com/search?tbm=isch&q=%s",
-		"imgur": "http://imgur.com/gallery?q=%s",
-		"yahoo": "http://images.search.yahoo.com/search/images?p=%s"
+		"imgur": "https://imgur.com/gallery?q=%s",
+		"yahoo": "https://images.search.yahoo.com/search/images?p=%s"
 	},
 	"videos": {
-		"ask": "http://www.ask.com/youtube?q=%s",
-		"bing": "http://www.bing.com/videos/search?q=%s",
-		"dailymotion": "http://www.dailymotion.com/relevance/search/%s",
+		"ask": "https://www.ask.com/youtube?q=%s",
+		"bing": "https://www.bing.com/videos/search?q=%s",
+		"dailymotion": "https://www.dailymotion.com/search/%s",
+		"duckduckgo": "https://duckduckgo.com/?iax=videos&ia=videos&q=%s",
 		"google": "https://www.google.com/search?tbm=vid&q=%s",
-		"hulu": "http://www.hulu.com/search?q=%s",
-		"metacafe": "http://www.metacafe.com/topics/%s",
-		"netflix": "http://dvd.netflix.com/Search?v1=%s",
-		"twitch": "http://www.twitch.tv/search?query=%s",
-		"vimeo": "http://vimeo.com/search?q=%s",
+		"hulu": "https://www.hulu.com/search?q=%s",
+		"metacafe": "https://www.metacafe.com/videos_about/%s",
+		"netflix": "https://www.netflix.com/search?q=%s",
+		"twitch": "https://www.twitch.tv/search?term=%s",
+		"vimeo": "https://vimeo.com/search?q=%s",
 		"youtube": "https://www.youtube.com/results?search_query=%s"
 	},
 	"map": {
-		"google": "https://maps.google.com/maps?q=%s",
-		"bing": "http://www.bing.com/maps/?q=%s",
-		"yahoo": "http://maps.yahoo.com/#q=%s"
+		"bing": "https://www.bing.com/maps/?q=%s",
+		"duckduckgo": "https://duckduckgo.com/?iaxm=maps&q=%s",
+		"google": "https://www.google.com/maps?q=%s",
+		"openstreetmap": "https://www.openstreetmap.org/search?query=%s",
+		"yahoo": "https://search.yahoo.com/local/s;?p=%s"
 	},
 	"directions": {
-		"google": "http://maps.google.com/maps?daddr=%s"
+		"bing": "https://www.bing.com/maps?rtp=~adr.%s",
+		"google": "https://maps.google.com/maps?daddr=%s"
 	},
 	"music": {
-		"amazon": "https://www.amazon.com/gp/dmusic/mp3/player#searchSongs/searchTerm=%s",
-		"google": "https://play.google.com/music/listen?u=0#%s_sr",
-		"grooveshark": "http://grooveshark.com/#!/search?q=%s",
-		"lastfm": "http://www.last.fm/search?q=%s",
-		"pandora": "http://www.pandora.com/search/%s",
+		"amazon": "https://music.amazon.com/search/%s",
+		"google": "https://play.google.com/music/listen?u=0#/sr/%s",
+		"grooveshark": "https://groovesharks.org/?s=%s",
+		"lastfm": "https://www.last.fm/search?q=%s",
+		"pandora": "https://www.pandora.com/search/%s",
 		"soundcloud": "https://soundcloud.com/search?q=%s",
-		"spotify": "https://play.spotify.com/search/%s",
-		"youtube": "http://www.youtube.com/results?search_query=%s"
+		"spotify": "https://open.spotify.com/search/%s",
+		"youtube": "https://music.youtube.com/search?q=%s"
 	},
 	"calc": {
+		"bing": "https://www.bing.com/search?q=%s",
+		"duckduckgo": "https://duckduckgo.com/?q=%s",
 		"google": "https://www.google.com/search?q=%s",
-		"wolframalpha": "http://www.wolframalpha.com/input/?i=%s"
+		"wolframalpha": "https://www.wolframalpha.com/input/?i=%s",
+		"yahoo": "https://search.yahoo.com/search?p=%s"
 	},
 	"imFeelingLucky": {
 		
