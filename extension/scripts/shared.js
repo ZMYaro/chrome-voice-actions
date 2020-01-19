@@ -5,7 +5,7 @@ var defaultSettings = {
 	"map":"google",
 	"directions":"google",
 	"launch": "google",
-	"music":"google",
+	"music":"spotify",
 	"calc":"wolframalpha",
 	
 	"actionDelayTime": 2050,
