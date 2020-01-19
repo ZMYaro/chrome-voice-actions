@@ -28,6 +28,13 @@ body.loading {
 	
 	z-index:2;
 }
+
+#icon {
+	width:64px;
+	height:64px;
+	opacity:0.5;
+}
+
 #cancelBtn {
 	width:100%;
 	padding:4px;

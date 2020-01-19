@@ -15,18 +15,18 @@ var defaultSettings = {
 
 /** {Object} URLs for the different action icons */
 var iconURLs = {
-	"calc": "images/calc.png",
-	"directions": "images/directions.png",
-	"error": "images/error.png",
-	"food": "images/pan.png",
-	"images": "images/images.png",
-	"map": "images/map.png",
-	"mic": "images/mic.png",
-	"music": "images/music.png",
-	"search": "images/search.png",
-	"tabs": "images/tabs.png",
-	"videos": "images/videos.png",
-	"web": "images/web.png"
+	"calc": "images/calc.svg",
+	"directions": "images/directions.svg",
+	"error": "images/error.svg",
+	"food": "images/food.svg",
+	"images": "images/images.svg",
+	"map": "images/map.svg",
+	"mic": "images/mic.svg",
+	"music": "images/music.svg",
+	"search": "images/search.svg",
+	"tabs": "images/tabs.svg",
+	"videos": "images/videos.svg",
+	"web": "images/web.svg"
 };
 
 /** {Object} Base URLs for the different web services */

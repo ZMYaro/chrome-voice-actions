@@ -210,3 +210,8 @@ section h3 {
 	height: 120px;
 	padding: 0px 4px;
 }
+#actionExamples > li img {
+	width: 64px;
+	height: 64px;
+	opacity: 0.5;
+}
