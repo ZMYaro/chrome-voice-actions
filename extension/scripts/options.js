@@ -42,10 +42,17 @@ window.addEventListener("load", function() {
 	
 	// Add reset button event listener.
 	document.getElementById("resetButton").addEventListener("click", function(e) {
-		if(confirm("Are you sure you want to reset all your settings?  This cannot be undone!")) {
-			chrome.storage.sync.clear();
-			location.reload();
+		// `confirm` cannot be called from the embedded options page.
+		var resetConfirmed =
+			chrome.extension.getBackgroundPage().confirm(
+				"Are you sure you want to reset all your settings?  This cannot be undone!");
+		
+		if(!resetConfirmed) {
+			return;
 		}
+		
+		chrome.storage.sync.clear();
+		location.reload();
 	});
 	// Enable the reset button.
 	document.getElementById("resetButton").disabled = false;
