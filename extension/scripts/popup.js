@@ -78,7 +78,7 @@ chrome.extension.onMessage.addListener(function(message) {
  */
 function promptSpeech() {
 	// Prompt the user to speak.
-	icon.src = "images/mic.png";
+	icon.src = iconURLs.mic;
 	text.innerHTML = "Speak now";
 	// If enabled, play a sound.
 	playSound("startSound");
@@ -98,7 +98,7 @@ function processResult(query) {
 		// “I'm feeling lucky” => open most visited site
 		openTopSite("<b>I'm feeling lucky</b>");
 	} else if(query === "make me a sandwich") {
-		icon.src = "images/pan.png";
+		icon.src = iconURLs.food;
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		subtext.innerHTML = "What?  Make it yourself.";
 		
@@ -113,7 +113,7 @@ function processResult(query) {
 	} else if(query === "sudo make me a sandwich" || query === "pseudo make me a sandwich") {
 		// XKCD sudo easter egg
 		query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
-		icon.src = "images/pan.png";
+		icon.src = iconURLs.food;
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		
 		// If enabled, play a sound.
@@ -131,7 +131,7 @@ function processResult(query) {
 		});
 	} else if((/^close( this|( the)? current)? tab$/).test(query)) {
 		// Close current tab
-		icon.src = "images/tabs.png";
+		icon.src = iconURLs.tabs;
 		text.innerHTML = "<b>" + query + "</b>";
 		
 		// If enabled, play a sound.
@@ -222,7 +222,7 @@ function processResult(query) {
 		// the page in his/her bookmarks.  A better idea would be to
 		// search the user's history (a feature I intend to add later).
 		/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
-			icon.src = "images/web.png";
+			icon.src = iconURLs.web;
 			text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
 			document.body.className = "loading";
 			delayAction(function() {
@@ -266,29 +266,6 @@ function processResult(query) {
 }
 
 /**
- * Prepares a result to be opened and updates the pop-up UI accordingly
- * @param {String} type - The type of query (the same identifier used in the defaults and baseURLs objects)
- * @param {String} disp - The text to display in the pop-up
- * @param {String} query - The query to insert into the URL
- */
-function openResult(type, disp, query) {
-	icon.src = "images/" + type + ".png";
-	text.innerHTML = disp;
-	
-	// If enabled, play a sound.
-	playSound("endSound");
-	
-	document.body.className = "loading";
-	delayAction(function() {
-		var defaultSetting = {};
-		defaultSetting[type] = defaultSettings[type];
-		chrome.storage.sync.get(defaultSetting, function(settings) {
-			openURL(baseURLs[type][settings[type]].replace("%s", encodeURIComponent(query)));
-		});
-	});
-}
-
-/**
  * Plays a sound if the user has sounds enabled.
  * @param {String} audioElemId - The name of the audio element to play
  */
@@ -308,7 +285,7 @@ function playSound(audioElemId) {
  * @param {String} errsubtext - The secondary error text (this may not be necessary and should only contain supplementary information)
  */
 function displayError(errtext, errsubtext) {
-	icon.src = "images/error.png";
+	icon.src = iconURLs.error;
 	if(!errtext) {
 		text.innerHTML = "An error occurred";
 	} else {

@@ -14,6 +14,29 @@ function delayAction(callback, delay) {
 }
 
 /**
+ * Prepares a result to be opened and updates the pop-up UI accordingly
+ * @param {String} type - The type of query (the same identifier used in the defaults and baseURLs objects)
+ * @param {String} disp - The text to display in the pop-up
+ * @param {String} query - The query to insert into the URL
+ */
+function openResult(type, disp, query) {
+	icon.src = iconURLs[type];
+	text.innerHTML = disp;
+	
+	// If enabled, play a sound.
+	playSound("endSound");
+	
+	document.body.className = "loading";
+	delayAction(function() {
+		var defaultSetting = {};
+		defaultSetting[type] = defaultSettings[type];
+		chrome.storage.sync.get(defaultSetting, function(settings) {
+			openURL(baseURLs[type][settings[type]].replace("%s", encodeURIComponent(query)));
+		});
+	});
+}
+
+/**
  * Opens a new URL
  * @param {String} url - The URL to open
  */
@@ -47,7 +70,7 @@ function openURL(url) {
  */
 function openTopSite(disp) {
 	// Display the web icon.
-	icon.src = "images/web.png";
+	icon.src = iconURLs.web;
 	// Display the main text.
 	text.innerHTML = disp;
 	
@@ -78,7 +101,7 @@ function openTopSite(disp) {
  */
 function imFeelingLucky(disp, query) {
 	// Display the web icon.
-	icon.src = "images/web.png";
+	icon.src = iconURLs.web;
 	// Display the user's query.
 	text.innerHTML = disp;
 	
@@ -102,7 +125,7 @@ function imFeelingLucky(disp, query) {
  */
 function launchApp(disp, query, errorCallback) {
 	// Display the web icon.
-	icon.src = "images/web.png";
+	icon.src = iconURLs.web;
 	// Display the user's query.
 	text.innerHTML = disp;
 	
@@ -166,7 +189,7 @@ function launchApp(disp, query, errorCallback) {
  */
 function switchToTab(disp, query) {
 	// Display the tabs icon.
-	icon.src = "images/tabs.png";
+	icon.src = iconURLs.tabs;
 	// Display the user's query.
 	text.innerHTML = disp;
 	

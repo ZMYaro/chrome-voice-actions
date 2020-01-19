@@ -13,6 +13,22 @@ var defaultSettings = {
 	"sounds": true
 }
 
+/** {Object} URLs for the different action icons */
+var iconURLs = {
+	"calc": "images/calc.png",
+	"directions": "images/directions.png",
+	"error": "images/error.png",
+	"food": "images/pan.png",
+	"images": "images/images.png",
+	"map": "images/map.png",
+	"mic": "images/mic.png",
+	"music": "images/music.png",
+	"search": "images/search.png",
+	"tabs": "images/tabs.png",
+	"videos": "images/videos.png",
+	"web": "images/web.png"
+};
+
 /** {Object} Base URLs for the different web services */
 var baseURLs = {
 	"search": {
@@ -49,7 +65,7 @@ var baseURLs = {
 	"directions": {
 		"google": "http://maps.google.com/maps?daddr=%s"
 	},
-	"music":{
+	"music": {
 		"amazon": "https://www.amazon.com/gp/dmusic/mp3/player#searchSongs/searchTerm=%s",
 		"google": "https://play.google.com/music/listen?u=0#%s_sr",
 		"grooveshark": "http://grooveshark.com/#!/search?q=%s",
@@ -59,9 +75,12 @@ var baseURLs = {
 		"spotify": "https://play.spotify.com/search/%s",
 		"youtube": "http://www.youtube.com/results?search_query=%s"
 	},
-	"calc":{
+	"calc": {
 		"google": "https://www.google.com/search?q=%s",
 		"wolframalpha": "http://www.wolframalpha.com/input/?i=%s"
+	},
+	"imFeelingLucky": {
+		
 	}
 }
 
