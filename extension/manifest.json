@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	
-	"minimum_chrome_version": "30",
+	"minimum_chrome_version": "33",
 	
 	"name": "Voice Actions for Chrome (beta)",
 	"description": "Control your browser just by talking to it.",
@@ -40,5 +40,16 @@
 		"page": "options_embedded.html",
 		"open_in_tab": false,
 		"chrome_style": true
+	},
+	
+	"commands": {
+		"_execute_browser_action": {
+			"suggested_key": {
+				"windows": "Alt+Shift+V",
+				"mac": "Alt+Shift+V",
+				"chromeos": "Alt+Shift+V",
+				"linux": "Alt+Shift+V"
+			}
+		}
 	}
 }
