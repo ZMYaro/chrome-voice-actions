@@ -15,5 +15,9 @@ window.addEventListener("load", function() {
  */
 function recognitionStarted() {
 	// Go to the extension's options page now that permission has been granted.
-	chrome.tabs.update({url: chrome.extension.getURL("options.html")});
+	if (chrome.runtime && chrome.runtime.openOptionsPage) {
+		chrome.runtime.openOptionsPage();
+	} else {
+		chrome.tabs.update({url: chrome.extension.getURL("options_page.html")});
+	}
 }
