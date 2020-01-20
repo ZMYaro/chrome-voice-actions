@@ -1,3 +1,6 @@
+/** {HTMLDivElement} The background fill for the delay when the action can be cancelled */
+var loadIndicator;
+
 /** {HTMLImageElement} The icon in the pop-up */
 var icon;
 
@@ -11,11 +14,17 @@ var subtext;
 var speechRecTabId;
 
 window.addEventListener("load", function() {
+	// Get references to DOM elements
+	loadIndicator = document.getElementById("loadIndicator");
+	icon = document.getElementById("icon");
+	text = document.getElementById("text");
+	subtext = document.getElementById("subtext");
+	
+	// Prepare the load indicator.
 	chrome.storage.sync.get({
 		actionDelayTime: defaultSettings.actionDelayTime
 	}, function(settings) {
-		document.body.style.WebkitTransitionDuration =
-			document.body.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
+		loadIndicator.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
 	});
 	
 	// Cancel event listeners.
@@ -26,11 +35,6 @@ window.addEventListener("load", function() {
 		}
 	}, false);
 	window.addEventListener("unload", cancel, false);
-	
-	// Get references to DOM elements
-	icon = document.getElementById("icon");
-	text = document.getElementById("text");
-	subtext = document.getElementById("subtext");
 	
 	// Create a tab in which to do speech recognition.
 	chrome.tabs.create({

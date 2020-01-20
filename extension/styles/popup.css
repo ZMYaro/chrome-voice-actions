@@ -7,18 +7,30 @@ body {
 	text-align:center;
 	font-size:100%;
 	font-family:Roboto, "Droid Sans", Helvetica, Arial, sans-serif;
+}
+
+#loadIndicator {
+	position:absolute;
+	left:0;
+	top:0;
+	right:0;
+	bottom:0;
 	
-	-webkit-transition-property: box-shadow;
-	        transition-property: box-shadow;
-	-webkit-transition-duration:2s;
-	        transition-duration:2s;
-	-webkit-transition-timing-function:linear;
-	        transition-timing-function:linear;
-	box-shadow:inset 0 0 0 0 #F8F8F8;
+	z-index:-1;
+	pointer-events:none;
+	
+	background:rgba(0, 0, 0, 0.01);
+	transform-origin: left center;
+	transform: scaleX(0);
+	transition-property:background, transform;
+	transition-duration:2s;
+	transition-timing-function:linear;
 }
-body.loading {
-	box-shadow:inset 11em 0 0 0 #F8F8F8;
-}
+	.loading #loadIndicator {
+		background:rgba(0, 0, 0, 0.15);
+		transform: scaleX(1);
+	}
+
 #main {
 	width:10em;
 	min-height:8.75em;
