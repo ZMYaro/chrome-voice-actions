@@ -21,3 +21,7 @@
 #actionExamples > li p {
 	line-height: 1.25;
 }
+
+#currentKeyboardShortcut {
+	font-weight: bold;
+}

@@ -40,6 +40,18 @@ window.addEventListener("load", function() {
 		}
 	});
 	
+	// Show current keyboard shortcut.
+	chrome.commands.getAll(function (commands) {
+		var command = commands.filter(function (el) { return el.name === "_execute_browser_action"; })[0];
+		document.getElementById("currentKeyboardShortcut").textContent = command.shortcut;
+	});
+	
+	// Set up link to keyboard shortcut settings.
+	document.querySelector("a[href=\"chrome://extensions/shortcuts\"]").addEventListener("click", function (e) {
+		e.preventDefault();
+		chrome.tabs.create({ url: e.target.href });
+	});
+	
 	// Add reset button event listener.
 	document.getElementById("resetButton").addEventListener("click", function(e) {
 		// `confirm` cannot be called from the embedded options page.
