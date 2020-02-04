@@ -1,83 +1,83 @@
 body {
-	margin:0;
-	padding:0;
+	margin: 0;
+	padding: 0;
 	
-	background-color:white;
+	background-color: white;
 	
-	text-align:center;
-	font-size:100%;
-	font-family:Roboto, "Droid Sans", Helvetica, Arial, sans-serif;
+	text-align: center;
+	font-size: 100%;
+	font-family: Roboto, "Droid Sans", Helvetica, Arial, sans-serif;
 }
 
 #loadIndicator {
-	position:absolute;
-	left:0;
-	top:0;
-	right:0;
-	bottom:0;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
 	
-	z-index:-1;
-	pointer-events:none;
+	z-index: -1;
+	pointer-events: none;
 	
-	background:rgba(0, 0, 0, 0.01);
+	background: rgba(0, 0, 0, 0.01);
 	transform-origin: left center;
 	transform: scaleX(0);
-	transition-property:background, transform;
-	transition-duration:2s;
-	transition-timing-function:linear;
+	transition-property: background, transform;
+	transition-duration: 2s;
+	transition-timing-function: linear;
 }
 	.loading #loadIndicator {
-		background:rgba(0, 0, 0, 0.15);
+		background: rgba(0, 0, 0, 0.15);
 		transform: scaleX(1);
 	}
 
 #main {
-	width:10em;
-	min-height:8.75em;
-	padding:1em;
-	-webkit-box-sizing:border-box;
-	        box-sizing:border-box;
+	width: 10em;
+	min-height: 8.75em;
+	padding: 1em;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
 	
-	z-index:2;
+	z-index: 2;
 }
 
 #icon {
-	width:4em;
-	height:4em;
-	opacity:0.5;
+	width: 4em;
+	height: 4em;
+	opacity: 0.5;
 }
 
 #text {
-	font-size:100%;
-	margin-bottom:0;
+	font-size: 100%;
+	margin-bottom: 0;
 }
 #subtext {
-	font-size:80%;
-	opacity:0.8;
-	margin:0.25em;
+	font-size: 80%;
+	opacity: 0.8;
+	margin: 0.25em;
 }
 
 #cancelBtn {
-	width:100%;
-	padding:10px 16px;
-	background:transparent;
-	border:0 none;
-	border-top:1px solid rgba(0, 0, 0, 0.125);
-	outline-width:0;
+	width: 100%;
+	padding: 10px 16px;
+	background: transparent;
+	border: 0 none;
+	border-top: 1px solid rgba(0, 0, 0, 0.125);
+	outline-width: 0;
 	
-	font:inherit;
+	font: inherit;
 	font-size: 87.5%;
-	font-weight:500;
-	text-transform:uppercase;
+	font-weight: 500;
+	text-transform: uppercase;
 	
-	cursor:pointer;
+	cursor: pointer;
 	
-	z-index:2;
+	z-index: 2;
 }
-#cancelBtn:hover,
-#cancelBtn:focus {
-	background:rgba(128, 128, 128, 0.2);
-}
-#cancelBtn:active {
-	background:rgba(128, 128, 128, 0.4);
-}
+	#cancelBtn:hover,
+	#cancelBtn:focus {
+		background: rgba(128, 128, 128, 0.2);
+	}
+	#cancelBtn:active {
+		background: rgba(128, 128, 128, 0.4);
+	}
