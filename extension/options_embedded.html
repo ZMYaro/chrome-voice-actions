@@ -3,7 +3,7 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="styles/help.css" />
 		<script type="text/javascript" src="scripts/shared.js"></script>
-		<script type="text/javascript" src="scripts/permission_link_handler.js"></script>
+		<script type="text/javascript" src="scripts/mic_check.js"></script>
 		<script type="text/javascript" src="scripts/options.js"></script>
 	</head>
 	<body>
@@ -150,6 +150,7 @@
 				</label>
 			</p>
 			<p>If speech recognition is not working, you might need to <a href="chrome://settings/content/siteDetails?site=chrome-extension://{{id}}">allow microphone access in Chrome settings</a>.</p>
+			<p id="micCheckMessage" style="display: none;">Also, make sure your microphone is connected and turned on.</p>
 		</section>
 		<section>
 			<h3>Reset</h3>
