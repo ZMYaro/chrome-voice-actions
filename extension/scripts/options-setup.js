@@ -27,7 +27,7 @@
 	 */
 	function setUpChromeLinks() {
 		// Get the list of <a>s.
-		var links = document.getElementsByTagName('a');
+		var links = document.getElementsByTagName('nav')[0].getElementsByTagName('a');
 		// For each link,
 		for(var i = 0; i < links.length; i++) {
 			// if the URL begins with “chrome://”,
