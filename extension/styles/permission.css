@@ -1,4 +1,14 @@
 body {
-	font-family: "Open Sans", Roboto, Arial, Helvetica, Verdana, sans-serif;
+	font-family: Roboto, "Droid Sans", Helvetica, Arial, sans-serif;
 	padding: 1em 3em;
+	
+	background-color: white;
+	color: black;
+}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #212121;
+		color: white;
+	}
 }
