@@ -19,7 +19,7 @@ body {
 	z-index: -1;
 	pointer-events: none;
 	
-	background: rgba(0, 0, 0, 0.01);
+	background: rgba(128, 128, 128, 0.01);
 	transform-origin: left center;
 	transform: scaleX(0);
 	transition-property: background, transform;
@@ -27,7 +27,7 @@ body {
 	transition-timing-function: linear;
 }
 	.loading #loadIndicator {
-		background: rgba(0, 0, 0, 0.15);
+		background: rgba(128, 128, 128, 0.3);
 		transform: scaleX(1);
 	}
 
