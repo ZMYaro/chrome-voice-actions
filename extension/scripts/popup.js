@@ -122,7 +122,6 @@ function processResult(query) {
 			}
 		});
 		
-		document.body.className = "loading";
 		delayAction(function() {
 			openURL("http://xkcd.com/149");
 		});
@@ -140,7 +139,6 @@ function processResult(query) {
 			}
 		});
 		
-		document.body.className = "loading";
 		delayAction(function() {
 			chrome.tabs.query({
 				active: true,
@@ -231,7 +229,6 @@ function processResult(query) {
 		/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
 			icon.src = iconURLs.web;
 			text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
-			document.body.className = "loading";
 			delayAction(function() {
 				if(results.length > 0) {
 					openURL(results[0].url);

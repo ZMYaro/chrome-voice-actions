@@ -12,6 +12,7 @@ function delayAction(callback, delay) {
 		// Prepare the load indicator.
 		loadIndicator.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
 		document.body.className = "loading";
+		
 		// Set the action to fire after the delay.
 		setTimeout(callback, settings.actionDelayTime);
 	});
@@ -90,7 +91,6 @@ function openTopSite(disp) {
 		playSound("endSound");
 		
 		// Display a loading message and open the site after a delay.
-		document.body.className = "loading";
 		delayAction(function() {
 			openURL(sites[0].url);
 		});
@@ -114,7 +114,6 @@ function imFeelingLucky(disp, query) {
 	playSound("endSound");
 	
 	// Display a loading message and open the site after a delay.
-	document.body.className = "loading";
 	delayAction(function() {
 		openURL(IM_FEELING_LUCKY_URL.replace("%s", query));
 	});
@@ -174,7 +173,6 @@ function launchApp(disp, query, errorCallback) {
 			// If enabled, play a sound.
 			playSound("endSound");
 			// Display a loading message, and open the app after a delay.
-			document.body.className = "loading";
 			delayAction(function() {
 				chrome.management.launchApp(topMatchApp.id);
 				closePopup();
@@ -236,7 +234,6 @@ function switchToTab(disp, query) {
 			// If enabled, play a sound.
 			playSound("endSound");
 			// Display a loading message, and open the tab after a delay.
-			document.body.className = "loading";
 			delayAction(function() {
 				chrome.tabs.update(topMatchTab.id, {active: true});
 				chrome.windows.update(topMatchTab.windowId, {focused: true});
