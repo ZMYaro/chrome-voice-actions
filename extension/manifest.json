@@ -45,10 +45,10 @@
 	"commands": {
 		"_execute_browser_action": {
 			"suggested_key": {
-				"windows": "Alt+Shift+V",
-				"mac": "Alt+Shift+V",
-				"chromeos": "Alt+Shift+V",
-				"linux": "Alt+Shift+V"
+				"windows": "Alt+V",
+				"mac": "Alt+V",
+				"chromeos": "Alt+V",
+				"linux": "Alt+V"
 			}
 		}
 	}
