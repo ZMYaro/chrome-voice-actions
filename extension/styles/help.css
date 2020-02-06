@@ -32,3 +32,29 @@
 #currentKeyboardShortcut {
 	font-weight: bold;
 }
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #212121;
+		color: white;
+	}
+	header {
+		background: linear-gradient(#212121, #212121 40%, rgba(33, 33, 33, 0.92))
+	}
+	body,
+	h1,
+	h2,
+	h3 {
+		color: white;
+	}
+	a {
+		color: #8ab4f8;
+	}
+	button,
+	input,
+	select,
+	.small-icon,
+	#actionExamples > li img {
+		filter: invert(1);
+	}
+}
