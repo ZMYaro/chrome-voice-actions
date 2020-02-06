@@ -15,7 +15,18 @@ window.addEventListener('load', function () {
 			
 			if (!foundMicrophone) {
 				// If no microphone was found, display a warning.
-				document.getElementById("micCheckMessage").style.display = "block";
+				document.getElementById("hardwareCheckMessage").style.display = "block";
+			}
+		});
+	}
+	if (navigator.permissions && navigator.permissions.query) {
+		// Check whether the user has granted microphone access.
+		navigator.permissions.query({ name: "microphone" }).then(function (permissionStatus) {
+			if (permissionStatus.state !== "granted") {
+				// If the permission was not granted, display a permission request message.
+				if (document.getElementById("permissionRequestMessage")) {
+					document.getElementById("permissionRequestMessage").style.display = "block";
+				}
 			}
 		});
 	}

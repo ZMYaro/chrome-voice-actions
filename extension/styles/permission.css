@@ -5,6 +5,12 @@ body {
 	background-color: white;
 	color: black;
 }
+.small-icon {
+	width: 16px;
+	height: 16px;
+	margin: -4px 2px;
+	opacity: 0.5;
+}
 
 @media (prefers-color-scheme: dark) {
 	body {
@@ -13,5 +19,8 @@ body {
 	}
 	a {
 		color: #8ab4f8;
+	}
+	.small-icon {
+		filter: invert(1);
 	}
 }
