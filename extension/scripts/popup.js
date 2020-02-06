@@ -20,13 +20,6 @@ window.addEventListener("load", function() {
 	text = document.getElementById("text");
 	subtext = document.getElementById("subtext");
 	
-	// Prepare the load indicator.
-	chrome.storage.sync.get({
-		actionDelayTime: defaultSettings.actionDelayTime
-	}, function(settings) {
-		loadIndicator.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
-	});
-	
 	// Cancel event listeners.
 	document.getElementById("cancelBtn").addEventListener("click", cancel, false);
 	window.addEventListener("keydown", function(e) {

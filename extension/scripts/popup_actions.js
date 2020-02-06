@@ -9,6 +9,10 @@ function delayAction(callback, delay) {
 		defaultSetting.actionDelayTime = delay;
 	}
 	chrome.storage.sync.get(defaultSetting, function(settings) {
+		// Prepare the load indicator.
+		loadIndicator.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
+		document.body.className = "loading";
+		// Set the action to fire after the delay.
 		setTimeout(callback, settings.actionDelayTime);
 	});
 }
@@ -26,7 +30,6 @@ function openResult(type, disp, query) {
 	// If enabled, play a sound.
 	playSound("endSound");
 	
-	document.body.className = "loading";
 	delayAction(function() {
 		var defaultSetting = {};
 		defaultSetting[type] = defaultSettings[type];
