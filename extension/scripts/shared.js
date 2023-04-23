@@ -55,6 +55,7 @@ var baseURLs = {
 		"google": "https://www.google.com/search?tbm=vid&q=%s",
 		"hulu": "https://www.hulu.com/search?q=%s",
 		"metacafe": "https://www.metacafe.com/videos_about/%s",
+		"nebula": "https://nebula.tv/search?q=%s",
 		"netflix": "https://www.netflix.com/search?q=%s",
 		"twitch": "https://www.twitch.tv/search?term=%s",
 		"vimeo": "https://vimeo.com/search?q=%s",
