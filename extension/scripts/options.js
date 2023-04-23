@@ -42,8 +42,9 @@ window.addEventListener("load", function() {
 	
 	// Show current keyboard shortcut.
 	chrome.commands.getAll(function (commands) {
-		var command = commands.filter(function (el) { return el.name === "_execute_browser_action"; })[0];
-		document.getElementById("currentKeyboardShortcut").textContent = command.shortcut;
+		var command = commands.filter(function (el) { return el.name === "_execute_browser_action"; })[0],
+			shortcutText = (!command || !command.shortcut) ? "[no shortcut set]" : command.shortcut;
+		document.getElementById("currentKeyboardShortcut").textContent = shortcutText;
 	});
 	
 	// Set up link to keyboard shortcut settings.
