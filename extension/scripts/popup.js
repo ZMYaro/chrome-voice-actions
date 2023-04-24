@@ -38,20 +38,6 @@ window.addEventListener("load", function() {
 		speechRecTabId = newTab.id;
 		chrome.tabs.sendMessage(newTab.id, {type: "start"});
 	});
-	
-	/*
-	// Get the current tab.
-	chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
-		// Display an error if the current page is a Chrome page.
-		if(tabs[0].url.indexOf("chrome://") === 0 ||
-				(tabs[0].url.indexOf("chrome-extension://") === 0 &&
-				tabs[0].url.indexOf(chrome.extension.getURL("")) !== 0) ||
-				tabs[0].url.indexOf("https://chrome.google.com/webstore") === 0) {
-			displayError("Please switch to a different tab", "Voice actions do not work on Chrome pages yet.");
-		} else { // Otherwise attempt to do speech recognition.
-			chrome.tabs.sendMessage(tabs[0].id, {type: "start"});
-		}
-	});*/
 }, false);
 
 chrome.extension.onMessage.addListener(function(message) {
