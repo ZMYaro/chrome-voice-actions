@@ -75,7 +75,7 @@ chrome.extension.onMessage.addListener(function(message) {
  */
 function promptSpeech() {
 	// Prompt the user to speak.
-	icon.src = iconURLs.mic;
+	icon.src = ICON_URLS.mic;
 	text.innerHTML = "Speak now";
 	// If enabled, play a sound.
 	playSound("startSound");
@@ -95,13 +95,13 @@ function processResult(query) {
 		// “I'm feeling lucky” => open most visited site
 		openTopSite("<b>I'm feeling lucky</b>");
 	} else if(query === "make me a sandwich") {
-		icon.src = iconURLs.food;
+		icon.src = ICON_URLS.food;
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		subtext.innerHTML = "What?  Make it yourself.";
 		
 		// If enabled, play an error sound.
 		chrome.storage.sync.get({
-			sounds: defaultSettings.sounds
+			sounds: DEFAULT_SETTINGS.sounds
 		}, function(settings) {
 			if(settings.sounds) {
 				document.getElementById("errorSound").play();
@@ -110,12 +110,12 @@ function processResult(query) {
 	} else if(query === "sudo make me a sandwich" || query === "pseudo make me a sandwich") {
 		// XKCD sudo easter egg
 		query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
-		icon.src = iconURLs.food;
+		icon.src = ICON_URLS.food;
 		text.innerHTML = query.replace("make", "<b>make</b>");
 		
 		// If enabled, play a sound.
 		chrome.storage.sync.get({
-			sounds: defaultSettings.sounds
+			sounds: DEFAULT_SETTINGS.sounds
 		}, function(settings) {
 			if(settings.sounds) {
 				document.getElementById("endSound").play();
@@ -127,12 +127,12 @@ function processResult(query) {
 		});
 	} else if((/^close( this|( the)? current)? tab$/).test(query)) {
 		// Close current tab
-		icon.src = iconURLs.tabs;
+		icon.src = ICON_URLS.tabs;
 		text.innerHTML = "<b>" + query + "</b>";
 		
 		// If enabled, play a sound.
 		chrome.storage.sync.get({
-			sounds: defaultSettings.sounds
+			sounds: DEFAULT_SETTINGS.sounds
 		}, function(settings) {
 			if(settings.sounds) {
 				document.getElementById("endSound").play();
@@ -227,7 +227,7 @@ function processResult(query) {
 		// the page in his/her bookmarks.  A better idea would be to
 		// search the user's history (a feature I intend to add later).
 		/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
-			icon.src = iconURLs.web;
+			icon.src = ICON_URLS.web;
 			text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
 			delayAction(function() {
 				if(results.length > 0) {
@@ -247,7 +247,7 @@ function processResult(query) {
 		}
 		
 		chrome.storage.sync.get({
-			launch: defaultSettings.launch
+			launch: DEFAULT_SETTINGS.launch
 		}, function(settings) {
 			var disp = query.replace(action, "<b>" + action + "</b>");
 			query = query.replace(action + " ", "");
@@ -275,7 +275,7 @@ function processResult(query) {
  */
 function playSound(audioElemId) {
 	chrome.storage.sync.get({
-		sounds: defaultSettings.sounds
+		sounds: DEFAULT_SETTINGS.sounds
 	}, function(settings) {
 		if(settings.sounds) {
 			document.getElementById(audioElemId).play();
@@ -289,7 +289,7 @@ function playSound(audioElemId) {
  * @param {String} errsubtext - The secondary error text (this may not be necessary and should only contain supplementary information)
  */
 function displayError(errtext, errsubtext) {
-	icon.src = iconURLs.error;
+	icon.src = ICON_URLS.error;
 	if(!errtext) {
 		text.innerHTML = "An error occurred";
 	} else {

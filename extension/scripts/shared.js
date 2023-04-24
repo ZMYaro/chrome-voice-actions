@@ -1,20 +1,21 @@
-var defaultSettings = {
-	"search":"google",
-	"images":"google",
+/** @constant {Object<String,String>} Setting IDs and their default values */
+var DEFAULT_SETTINGS = {
+	"search": "google",
+	"images": "google",
 	"videos": "youtube",
-	"map":"google",
-	"directions":"google",
+	"map": "google",
+	"directions": "google",
 	"launch": "google",
-	"music":"spotify",
-	"calc":"wolframalpha",
+	"music": "spotify",
+	"calc": "wolframalpha",
 	
 	"actionDelayTime": 2050,
-	"openLocation":"smart",
+	"openLocation": "smart",
 	"sounds": true
 }
 
-/** {Object} URLs for the different action icons */
-var iconURLs = {
+/** @constant {Object<String,String>} URLs for the different action icons */
+var ICON_URLS = {
 	"calc": "images/calc.svg",
 	"directions": "images/directions.svg",
 	"error": "images/error.svg",
@@ -29,8 +30,8 @@ var iconURLs = {
 	"web": "images/web.svg"
 };
 
-/** {Object} Base URLs for the different web services */
-var baseURLs = {
+/** @constant {Object<String,Object<String,String>>} Base URLs for the different web services */
+var BASE_URLS = {
 	"search": {
 		"ask": "https://www.ask.com/web?q=%s",
 		"bing": "https://www.bing.com/search?q=%s",
@@ -101,7 +102,7 @@ function copySettings() {
 	// Create an object to hold the settings.
 	var settingsToCopy = {};
 	// For each setting,
-	for(setting in defaultSettings) {
+	for(setting in DEFAULT_SETTINGS) {
 		// If it is set in localStorage,
 		if(localStorage[setting + "Setting"]) {
 			// Copy it to the temporary object.
@@ -115,7 +116,7 @@ function copySettings() {
 			// If nothing went wrong,
 			if(!chrome.runtime.lastError) {
 				// Delete each setting from localStorage.
-				for(setting in defaultSettings) {
+				for(setting in DEFAULT_SETTINGS) {
 					delete localStorage[setting + "Setting"];
 				}
 			}

@@ -4,7 +4,7 @@
  * @param {Number} delay - A custom delay (if undefined, uses the user's set delay or the default setting)
  */
 function delayAction(callback, delay) {
-	var defaultSetting = {actionDelayTime: defaultSettings.actionDelayTime};
+	var defaultSetting = {actionDelayTime: DEFAULT_SETTINGS.actionDelayTime};
 	if(delay && typeof delay === "number") {
 		defaultSetting.actionDelayTime = delay;
 	}
@@ -20,12 +20,12 @@ function delayAction(callback, delay) {
 
 /**
  * Prepares a result to be opened and updates the pop-up UI accordingly
- * @param {String} type - The type of query (the same identifier used in the defaults and baseURLs objects)
+ * @param {String} type - The type of query (the same identifier used in the defaults and BASE_URLS objects)
  * @param {String} disp - The text to display in the pop-up
  * @param {String} query - The query to insert into the URL
  */
 function openResult(type, disp, query) {
-	icon.src = iconURLs[type];
+	icon.src = ICON_URLS[type];
 	text.innerHTML = disp;
 	
 	// If enabled, play a sound.
@@ -33,9 +33,9 @@ function openResult(type, disp, query) {
 	
 	delayAction(function() {
 		var defaultSetting = {};
-		defaultSetting[type] = defaultSettings[type];
+		defaultSetting[type] = DEFAULT_SETTINGS[type];
 		chrome.storage.sync.get(defaultSetting, function(settings) {
-			openURL(baseURLs[type][settings[type]].replace("%s", encodeURIComponent(query)));
+			openURL(BASE_URLS[type][settings[type]].replace("%s", encodeURIComponent(query)));
 		});
 	});
 }
@@ -46,7 +46,7 @@ function openResult(type, disp, query) {
  */
 function openURL(url) {
 	chrome.storage.sync.get({
-		openLocation: defaultSettings.openLocation
+		openLocation: DEFAULT_SETTINGS.openLocation
 	}, function(settings) {
 		if(settings.openLocation === "current") {
 			chrome.tabs.update(null, {"url":url});
@@ -74,7 +74,7 @@ function openURL(url) {
  */
 function openTopSite(disp) {
 	// Display the web icon.
-	icon.src = iconURLs.web;
+	icon.src = ICON_URLS.web;
 	// Display the main text.
 	text.innerHTML = disp;
 	
@@ -104,7 +104,7 @@ function openTopSite(disp) {
  */
 function imFeelingLucky(disp, query) {
 	// Display the web icon.
-	icon.src = iconURLs.web;
+	icon.src = ICON_URLS.web;
 	// Display the user's query.
 	text.innerHTML = disp;
 	
@@ -127,7 +127,7 @@ function imFeelingLucky(disp, query) {
  */
 function launchApp(disp, query, errorCallback) {
 	// Display the web icon.
-	icon.src = iconURLs.web;
+	icon.src = ICON_URLS.web;
 	// Display the user's query.
 	text.innerHTML = disp;
 	
@@ -190,7 +190,7 @@ function launchApp(disp, query, errorCallback) {
  */
 function switchToTab(disp, query) {
 	// Display the tabs icon.
-	icon.src = iconURLs.tabs;
+	icon.src = ICON_URLS.tabs;
 	// Display the user's query.
 	text.innerHTML = disp;
 	

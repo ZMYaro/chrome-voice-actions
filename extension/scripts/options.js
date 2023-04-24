@@ -8,7 +8,7 @@ window.addEventListener("load", function() {
 		chrome.runtime.getManifest().version;
 	
 	// Fetch all settings.
-	chrome.storage.sync.get(defaultSettings, function(settings) {
+	chrome.storage.sync.get(DEFAULT_SETTINGS, function(settings) {
 		// For each setting,
 		for(setting in settings) {
 			// Get its form element.
