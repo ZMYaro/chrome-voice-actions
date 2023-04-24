@@ -2,7 +2,7 @@
 var loadIndicator;
 
 /** {HTMLImageElement} The icon in the pop-up */
-var icon;
+var iconElem;
 
 /** {HTMLParagraphElement} The primary text in the pop-up */
 var textElem;
@@ -16,7 +16,7 @@ var speechRecTabId;
 window.addEventListener("load", function() {
 	// Get references to DOM elements
 	loadIndicator = document.getElementById("loadIndicator");
-	icon = document.getElementById("icon");
+	iconElem = document.getElementById("icon");
 	textElem = document.getElementById("text");
 	subTextElem = document.getElementById("subtext");
 	
@@ -61,7 +61,7 @@ chrome.extension.onMessage.addListener(function(message) {
  */
 function promptSpeech() {
 	// Prompt the user to speak.
-	icon.src = ICON_URLS.mic;
+	iconElem.src = ICON_URLS.mic;
 	textElem.innerHTML = "Speak now";
 	// If enabled, play a sound.
 	playSound("start");
@@ -81,7 +81,7 @@ async function processResult(query) {
 		// “I'm feeling lucky” => open most visited site
 		openTopSite("<b>I'm feeling lucky</b>");
 	} else if(query === "make me a sandwich") {
-		icon.src = ICON_URLS.food;
+		iconElem.src = ICON_URLS.food;
 		textElem.innerHTML = query.replace("make", "<b>make</b>");
 		subTextElem.innerHTML = "What?  Make it yourself.";
 		
@@ -90,7 +90,7 @@ async function processResult(query) {
 	} else if(query === "sudo make me a sandwich" || query === "pseudo make me a sandwich") {
 		// XKCD sudo easter egg
 		query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
-		icon.src = ICON_URLS.food;
+		iconElem.src = ICON_URLS.food;
 		textElem.innerHTML = query.replace("make", "<b>make</b>");
 		
 		// If enabled, play a sound.
@@ -101,7 +101,7 @@ async function processResult(query) {
 		});
 	} else if((/^close( this|( the)? current)? tab$/).test(query)) {
 		// Close current tab
-		icon.src = ICON_URLS.tabs;
+		iconElem.src = ICON_URLS.tabs;
 		textElem.innerHTML = "<b>" + query + "</b>";
 		
 		// If enabled, play a sound.
@@ -195,7 +195,7 @@ async function processResult(query) {
 		// the page in his/her bookmarks.  A better idea would be to
 		// search the user's history (a feature I intend to add later).
 		/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
-			icon.src = ICON_URLS.web;
+			iconElem.src = ICON_URLS.web;
 			textElem.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
 			delayAction(function() {
 				if(results.length > 0) {
@@ -251,7 +251,7 @@ async function playSound(audioID) {
  * @param {String} errSubtext - The secondary error text (this may not be necessary and should only contain supplementary information)
  */
 function displayError(errText, errSubtext) {
-	icon.src = ICON_URLS.error;
+	iconElem.src = ICON_URLS.error;
 	if(!errText) {
 		textElem.innerHTML = "An error occurred";
 	} else {

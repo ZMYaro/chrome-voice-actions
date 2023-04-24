@@ -20,7 +20,7 @@ async function delayAction(callback) {
  * @param {String} query - The query to insert into the URL
  */
 function openResult(type, disp, query) {
-	icon.src = ICON_URLS[type];
+	iconElem.src = ICON_URLS[type];
 	textElem.innerHTML = disp;
 	
 	// If enabled, play a sound.
@@ -63,7 +63,7 @@ async function openURL(url) {
  */
 function openTopSite(disp) {
 	// Display the web icon.
-	icon.src = ICON_URLS.web;
+	iconElem.src = ICON_URLS.web;
 	// Display the main text.
 	textElem.innerHTML = disp;
 	
@@ -93,7 +93,7 @@ function openTopSite(disp) {
  */
 function imFeelingLucky(disp, query) {
 	// Display the web icon.
-	icon.src = ICON_URLS.web;
+	iconElem.src = ICON_URLS.web;
 	// Display the user's query.
 	textElem.innerHTML = disp;
 	
@@ -116,7 +116,7 @@ function imFeelingLucky(disp, query) {
  */
 function launchApp(disp, query, errorCallback) {
 	// Display the web icon.
-	icon.src = ICON_URLS.web;
+	iconElem.src = ICON_URLS.web;
 	// Display the user's query.
 	textElem.innerHTML = disp;
 	
@@ -179,7 +179,7 @@ function launchApp(disp, query, errorCallback) {
  */
 function switchToTab(disp, query) {
 	// Display the tabs icon.
-	icon.src = ICON_URLS.tabs;
+	iconElem.src = ICON_URLS.tabs;
 	// Display the user's query.
 	textElem.innerHTML = disp;
 	
