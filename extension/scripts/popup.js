@@ -64,7 +64,7 @@ function promptSpeech() {
 	icon.src = ICON_URLS.mic;
 	textElem.innerHTML = "Speak now";
 	// If enabled, play a sound.
-	playSound("startSound");
+	playSound("start");
 }
 
 /**
@@ -86,13 +86,7 @@ function processResult(query) {
 		subTextElem.innerHTML = "What?  Make it yourself.";
 		
 		// If enabled, play an error sound.
-		chrome.storage.sync.get({
-			sounds: DEFAULT_SETTINGS.sounds
-		}, function(settings) {
-			if(settings.sounds) {
-				document.getElementById("errorSound").play();
-			}
-		});
+		playSound("error");
 	} else if(query === "sudo make me a sandwich" || query === "pseudo make me a sandwich") {
 		// XKCD sudo easter egg
 		query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
@@ -100,13 +94,7 @@ function processResult(query) {
 		textElem.innerHTML = query.replace("make", "<b>make</b>");
 		
 		// If enabled, play a sound.
-		chrome.storage.sync.get({
-			sounds: DEFAULT_SETTINGS.sounds
-		}, function(settings) {
-			if(settings.sounds) {
-				document.getElementById("endSound").play();
-			}
-		});
+		playSound("end");
 		
 		delayAction(function() {
 			openURL("http://xkcd.com/149");
@@ -117,13 +105,7 @@ function processResult(query) {
 		textElem.innerHTML = "<b>" + query + "</b>";
 		
 		// If enabled, play a sound.
-		chrome.storage.sync.get({
-			sounds: DEFAULT_SETTINGS.sounds
-		}, function(settings) {
-			if(settings.sounds) {
-				document.getElementById("endSound").play();
-			}
-		});
+		playSound("end");
 		
 		delayAction(function() {
 			chrome.tabs.query({
@@ -257,14 +239,14 @@ function processResult(query) {
 
 /**
  * Plays a sound if the user has sounds enabled.
- * @param {String} audioElemId - The name of the audio element to play
+ * @param {String} audioID - The ID of the audio element to play, minus the "Sound" suffix
  */
-function playSound(audioElemId) {
+function playSound(audioID) {
 	chrome.storage.sync.get({
 		sounds: DEFAULT_SETTINGS.sounds
 	}, function(settings) {
 		if(settings.sounds) {
-			document.getElementById(audioElemId).play();
+			document.getElementById(audioID + "Sound").play();
 		}
 	});
 }
@@ -288,7 +270,7 @@ function displayError(errText, errSubtext) {
 	}
 	
 	// If enabled, play a sound.
-	playSound("errorSound");
+	playSound("error");
 }
 
 /**
@@ -296,7 +278,7 @@ function displayError(errText, errSubtext) {
  */
 function cancel() {
 	// If enabled, play a sound.
-	playSound("cancelSound");
+	playSound("cancel");
 	closePopup();
 }
 

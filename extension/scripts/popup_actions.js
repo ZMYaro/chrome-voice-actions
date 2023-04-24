@@ -29,7 +29,7 @@ function openResult(type, disp, query) {
 	textElem.innerHTML = disp;
 	
 	// If enabled, play a sound.
-	playSound("endSound");
+	playSound("end");
 	
 	delayAction(function() {
 		var defaultSetting = {};
@@ -88,7 +88,7 @@ function openTopSite(disp) {
 		subTextElem.textContent = "Opening " + sites[0].title;
 		
 		// If enabled, play a sound.
-		playSound("endSound");
+		playSound("end");
 		
 		// Display a loading message and open the site after a delay.
 		delayAction(function() {
@@ -111,7 +111,7 @@ function imFeelingLucky(disp, query) {
 	var IM_FEELING_LUCKY_URL = "https://www.google.com/search?btnI=745&q=%s";
 	
 	// If enabled, play a sound.
-	playSound("endSound");
+	playSound("end");
 	
 	// Display a loading message and open the site after a delay.
 	delayAction(function() {
@@ -171,7 +171,7 @@ function launchApp(disp, query, errorCallback) {
 		// If an app was found,
 		if(topMatchApp) {
 			// If enabled, play a sound.
-			playSound("endSound");
+			playSound("end");
 			// Display a loading message, and open the app after a delay.
 			delayAction(function() {
 				chrome.management.launchApp(topMatchApp.id);
@@ -232,7 +232,7 @@ function switchToTab(disp, query) {
 		// If a match was found,
 		if(topMatchTab) {
 			// If enabled, play a sound.
-			playSound("endSound");
+			playSound("end");
 			// Display a loading message, and open the tab after a delay.
 			delayAction(function() {
 				chrome.tabs.update(topMatchTab.id, {active: true});
