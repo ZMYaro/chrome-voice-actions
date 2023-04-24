@@ -2,16 +2,15 @@
  * Show the indicator and then perform an action after the user's preferred delay
  * @param {Function} callback - The function to call after the delay
  */
-function delayAction(callback) {
-	var defaultSetting = {actionDelayTime: DEFAULT_SETTINGS.actionDelayTime};
-	chrome.storage.sync.get(defaultSetting, function(settings) {
-		// Prepare the load indicator.
-		loadIndicator.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
-		document.body.className = "loading";
-		
-		// Set the action to fire after the delay.
-		setTimeout(callback, settings.actionDelayTime);
-	});
+async function delayAction(callback) {
+	var actionDelayTimeSetting = await getSetting('actionDelayTime');
+	
+	// Prepare the load indicator.
+	loadIndicator.style.transitionDuration = Math.floor(actionDelayTimeSetting / 1000) + "s";
+	document.body.className = "loading";
+	
+	// Set the action to fire after the delay.
+	setTimeout(callback, actionDelayTimeSetting);
 }
 
 /**
@@ -27,12 +26,9 @@ function openResult(type, disp, query) {
 	// If enabled, play a sound.
 	playSound("end");
 	
-	delayAction(function() {
-		var defaultSetting = {};
-		defaultSetting[type] = DEFAULT_SETTINGS[type];
-		chrome.storage.sync.get(defaultSetting, function(settings) {
-			openURL(BASE_URLS[type][settings[type]].replace("%s", encodeURIComponent(query)));
-		});
+	delayAction(async function() {
+		var typeServiceSetting = await getSetting(type);
+		openURL(BASE_URLS[type][typeServiceSetting].replace("%s", encodeURIComponent(query)));
 	});
 }
 
@@ -40,28 +36,25 @@ function openResult(type, disp, query) {
  * Opens a new URL
  * @param {String} url - The URL to open
  */
-function openURL(url) {
-	chrome.storage.sync.get({
-		openLocation: DEFAULT_SETTINGS.openLocation
-	}, function(settings) {
-		if(settings.openLocation === "current") {
-			chrome.tabs.update(null, {"url":url});
-			closePopup();
-		} else if(settings.openLocation === "new") {
-			chrome.tabs.create({"url":url});
-			closePopup();
-		} else {
-			chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
-				if(tabs[0].url.substring(0,15) === "chrome://newtab") {
-					chrome.tabs.update(null, {"url":url});
-					closePopup();
-				} else {
-					chrome.tabs.create({"url":url});
-					closePopup();
-				}
-			});
-		}
-	});
+async function openURL(url) {
+	var openLocationSetting = await getSetting('openLocation');
+	if(openLocationSetting === "current") {
+		chrome.tabs.update(null, {"url":url});
+		closePopup();
+	} else if(openLocationSetting === "new") {
+		chrome.tabs.create({"url":url});
+		closePopup();
+	} else {
+		chrome.tabs.query({"currentWindow":true, "active":true}, function(tabs) {
+			if(tabs[0].url.substring(0,15) === "chrome://newtab") {
+				chrome.tabs.update(null, {"url":url});
+				closePopup();
+			} else {
+				chrome.tabs.create({"url":url});
+				closePopup();
+			}
+		});
+	}
 }
 
 /**

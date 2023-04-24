@@ -71,7 +71,7 @@ function promptSpeech() {
  * Process the speech recognition result
  * @param {String} query - The query string to process
  */
-function processResult(query) {
+async function processResult(query) {
 	// If it is still open, close the speech recognition tab.
 	if(speechRecTabId) {
 		chrome.tabs.remove(speechRecTabId);
@@ -214,23 +214,20 @@ function processResult(query) {
 			action = "launch";
 		}
 		
-		chrome.storage.sync.get({
-			launch: DEFAULT_SETTINGS.launch
-		}, function(settings) {
-			var disp = query.replace(action, "<b>" + action + "</b>");
-			query = query.replace(action + " ", "");
-			if(settings.launch === "chrome") {
-				launchApp(disp, query, function() {
-					displayError(disp, "No app with that title could be found.");
-				});
-			} else if(settings.launch === "google") {
+		var launchSetting = await getSetting('launch'),
+			disp = query.replace(action, "<b>" + action + "</b>");
+		query = query.replace(action + " ", "");
+		if(launchSetting === "chrome") {
+			launchApp(disp, query, function() {
+				displayError(disp, "No app with that title could be found.");
+			});
+		} else if(launchSetting === "google") {
+			imFeelingLucky(disp, query);
+		} else {
+			launchApp(disp, query, function() {
 				imFeelingLucky(disp, query);
-			} else {
-				launchApp(disp, query, function() {
-					imFeelingLucky(disp, query);
-				});
-			}
-		});
+			});
+		}
 	} else {
 		// Default to simple search
 		openResult("search", query, query);
@@ -241,14 +238,11 @@ function processResult(query) {
  * Plays a sound if the user has sounds enabled.
  * @param {String} audioID - The ID of the audio element to play, minus the "Sound" suffix
  */
-function playSound(audioID) {
-	chrome.storage.sync.get({
-		sounds: DEFAULT_SETTINGS.sounds
-	}, function(settings) {
-		if(settings.sounds) {
-			document.getElementById(audioID + "Sound").play();
-		}
-	});
+async function playSound(audioID) {
+	var soundsSetting = await getSetting('sounds');
+	if(soundsSetting) {
+		document.getElementById(audioID + "Sound").play();
+	}
 }
 
 /**

@@ -123,3 +123,18 @@ function copySettings() {
 		});
 	}
 }
+
+/**
+ * Get a setting from synced storage.
+ * @param {String} settingName - The name of the setting
+ * @returns {Promise<Boolean|Number|String>} The setting's value, once retrieved, if any
+ */
+function getSetting(settingName) {
+	return new Promise(function (resolve, reject) {
+		var apiQuery = {};
+		apiQuery[settingName] = DEFAULT_SETTINGS[settingName];
+		chrome.storage.sync.get(apiQuery, function (settings) {
+			resolve(settings[settingName]);
+		});
+	});
+}
