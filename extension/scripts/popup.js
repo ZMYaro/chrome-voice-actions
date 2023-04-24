@@ -5,10 +5,10 @@ var loadIndicator;
 var icon;
 
 /** {HTMLParagraphElement} The primary text in the pop-up */
-var text;
+var textElem;
 
 /** {HTMLParagraphElement} The secondary text in the pop-up */
-var subtext;
+var subTextElem;
 
 /** {Number} The id of the speech recognition tab */
 var speechRecTabId;
@@ -17,8 +17,8 @@ window.addEventListener("load", function() {
 	// Get references to DOM elements
 	loadIndicator = document.getElementById("loadIndicator");
 	icon = document.getElementById("icon");
-	text = document.getElementById("text");
-	subtext = document.getElementById("subtext");
+	textElem = document.getElementById("text");
+	subTextElem = document.getElementById("subtext");
 	
 	// Cancel event listeners.
 	document.getElementById("cancelBtn").addEventListener("click", cancel, false);
@@ -62,7 +62,7 @@ chrome.extension.onMessage.addListener(function(message) {
 function promptSpeech() {
 	// Prompt the user to speak.
 	icon.src = ICON_URLS.mic;
-	text.innerHTML = "Speak now";
+	textElem.innerHTML = "Speak now";
 	// If enabled, play a sound.
 	playSound("startSound");
 }
@@ -82,8 +82,8 @@ function processResult(query) {
 		openTopSite("<b>I'm feeling lucky</b>");
 	} else if(query === "make me a sandwich") {
 		icon.src = ICON_URLS.food;
-		text.innerHTML = query.replace("make", "<b>make</b>");
-		subtext.innerHTML = "What?  Make it yourself.";
+		textElem.innerHTML = query.replace("make", "<b>make</b>");
+		subTextElem.innerHTML = "What?  Make it yourself.";
 		
 		// If enabled, play an error sound.
 		chrome.storage.sync.get({
@@ -97,7 +97,7 @@ function processResult(query) {
 		// XKCD sudo easter egg
 		query = query.replace("pseudo", "sudo"); // "sudo" gets recognized as "pseudo"; fix that
 		icon.src = ICON_URLS.food;
-		text.innerHTML = query.replace("make", "<b>make</b>");
+		textElem.innerHTML = query.replace("make", "<b>make</b>");
 		
 		// If enabled, play a sound.
 		chrome.storage.sync.get({
@@ -114,7 +114,7 @@ function processResult(query) {
 	} else if((/^close( this|( the)? current)? tab$/).test(query)) {
 		// Close current tab
 		icon.src = ICON_URLS.tabs;
-		text.innerHTML = "<b>" + query + "</b>";
+		textElem.innerHTML = "<b>" + query + "</b>";
 		
 		// If enabled, play a sound.
 		chrome.storage.sync.get({
@@ -214,7 +214,7 @@ function processResult(query) {
 		// search the user's history (a feature I intend to add later).
 		/*chrome.bookmarks.search(query.replace("go to ", "").replace("goto ", ""), function(results) {
 			icon.src = ICON_URLS.web;
-			text.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
+			textElem.innerHTML = query.replace(/^go ?to/, "<b>go to</b>").replace(/^open/, "<b>open</b>");
 			delayAction(function() {
 				if(results.length > 0) {
 					openURL(results[0].url);
@@ -271,20 +271,20 @@ function playSound(audioElemId) {
 
 /**
  * Displays error text in the pop-up
- * @param {String} errtext - The primary error text
- * @param {String} errsubtext - The secondary error text (this may not be necessary and should only contain supplementary information)
+ * @param {String} errText - The primary error text
+ * @param {String} errSubtext - The secondary error text (this may not be necessary and should only contain supplementary information)
  */
-function displayError(errtext, errsubtext) {
+function displayError(errText, errSubtext) {
 	icon.src = ICON_URLS.error;
-	if(!errtext) {
-		text.innerHTML = "An error occurred";
+	if(!errText) {
+		textElem.innerHTML = "An error occurred";
 	} else {
-		text.innerHTML = errtext;
+		textElem.innerHTML = errText;
 	}
-	if(!errsubtext) {
-		subtext.innerHTML = "";
+	if(!errSubtext) {
+		subTextElem.innerHTML = "";
 	} else {
-		subtext.innerText = errsubtext;
+		subTextElem.textContent = errSubtext;
 	}
 	
 	// If enabled, play a sound.

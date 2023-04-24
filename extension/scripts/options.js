@@ -3,7 +3,7 @@ window.addEventListener("load", function() {
 	copySettings();
 	
 	// Display the extension version number.
-	document.getElementById("versionNumber").innerText =
+	document.getElementById("versionNumber").textContent =
 		"Version " +
 		chrome.runtime.getManifest().version;
 	

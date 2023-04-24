@@ -26,7 +26,7 @@ function delayAction(callback, delay) {
  */
 function openResult(type, disp, query) {
 	icon.src = ICON_URLS[type];
-	text.innerHTML = disp;
+	textElem.innerHTML = disp;
 	
 	// If enabled, play a sound.
 	playSound("endSound");
@@ -76,7 +76,7 @@ function openTopSite(disp) {
 	// Display the web icon.
 	icon.src = ICON_URLS.web;
 	// Display the main text.
-	text.innerHTML = disp;
+	textElem.innerHTML = disp;
 	
 	chrome.topSites.get(function(sites) {
 		if(sites.length === 0) {
@@ -85,7 +85,7 @@ function openTopSite(disp) {
 		}
 		
 		// Display the site title.
-		subtext.innerText = subtext.textContent = "Opening " + sites[0].title;
+		subTextElem.textContent = "Opening " + sites[0].title;
 		
 		// If enabled, play a sound.
 		playSound("endSound");
@@ -106,7 +106,7 @@ function imFeelingLucky(disp, query) {
 	// Display the web icon.
 	icon.src = ICON_URLS.web;
 	// Display the user's query.
-	text.innerHTML = disp;
+	textElem.innerHTML = disp;
 	
 	var IM_FEELING_LUCKY_URL = "https://www.google.com/search?btnI=745&q=%s";
 	
@@ -129,7 +129,7 @@ function launchApp(disp, query, errorCallback) {
 	// Display the web icon.
 	icon.src = ICON_URLS.web;
 	// Display the user's query.
-	text.innerHTML = disp;
+	textElem.innerHTML = disp;
 	
 	chrome.management.getAll(function(extensions) {
 		// Create a variable to hold the id of the best app.
@@ -192,7 +192,7 @@ function switchToTab(disp, query) {
 	// Display the tabs icon.
 	icon.src = ICON_URLS.tabs;
 	// Display the user's query.
-	text.innerHTML = disp;
+	textElem.innerHTML = disp;
 	
 	chrome.windows.getAll({populate: true}, function(windows) {
 		// Combine all the windows' tab arrays into one array.
