@@ -1,13 +1,9 @@
 /**
- * Performs an action after a delay (this basically saves a bunch of setting fetches and setTimeouts in the rest of the code)
+ * Show the indicator and then perform an action after the user's preferred delay
  * @param {Function} callback - The function to call after the delay
- * @param {Number} delay - A custom delay (if undefined, uses the user's set delay or the default setting)
  */
-function delayAction(callback, delay) {
+function delayAction(callback) {
 	var defaultSetting = {actionDelayTime: DEFAULT_SETTINGS.actionDelayTime};
-	if(delay && typeof delay === "number") {
-		defaultSetting.actionDelayTime = delay;
-	}
 	chrome.storage.sync.get(defaultSetting, function(settings) {
 		// Prepare the load indicator.
 		loadIndicator.style.transitionDuration = Math.floor(settings.actionDelayTime / 1000) + "s";
