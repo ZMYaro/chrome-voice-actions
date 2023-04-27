@@ -68,6 +68,7 @@ var BASE_URLS = {
 		"bing": "https://www.bing.com/maps/?q=%s",
 		"duckduckgo": "https://duckduckgo.com/?iaxm=maps&q=%s",
 		"google": "https://www.google.com/maps?q=%s",
+		"mapquest": "https://www.mapquest.com/search/%s",
 		"openstreetmap": "https://www.openstreetmap.org/search?query=%s",
 		"yahoo": "https://search.yahoo.com/local/s;?p=%s"
 	},
