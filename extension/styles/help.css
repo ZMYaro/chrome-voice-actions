@@ -33,6 +33,16 @@
 	font-weight: bold;
 }
 
+/* Copy these styles from options.css for use on the embedded options page without importing all of options.css. */
+section {
+	padding-left: 18px;
+	margin-top: 8px;
+	margin-bottom: 24px;
+}
+	section h3 {
+		margin-left: -18px;
+	}
+
 @media (prefers-color-scheme: dark) {
 	body {
 		background-color: #212121;
