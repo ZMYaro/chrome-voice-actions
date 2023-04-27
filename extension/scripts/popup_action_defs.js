@@ -48,7 +48,18 @@ var ACTIONS = {
 			});
 		}
 	},
-	// TODO: closeWindow
+	"closeWindow": {
+		"regex": /^(close( this|( the)? current)? window)$/i,
+		"icon": ICON_URLS.tabs,
+		"handler": function (query, disp) {
+			delayAction(function() {
+				chrome.windows.getCurrent(function (currentWindow) {
+					chrome.windows.remove(currentWindow.id);
+					closePopup();
+				});
+			});
+		}
+	},
 	"switchToTab": {
 		"regex": /^(switch to) .+$/i,
 		"icon": ICON_URLS.tabs,
