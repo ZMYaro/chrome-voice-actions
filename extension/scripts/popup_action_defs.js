@@ -19,9 +19,7 @@ var ACTIONS = {
 		"icon": ICON_URLS.food,
 		"handler": function (query, disp) {
 			disp.text = disp.text.replace('pseudo', 'sudo');
-			delayAction(function() {
-				openURL("http://xkcd.com/149");
-			});
+			delayAction(() => openURL("http://xkcd.com/149"));
 		}
 	},
 	"imFeelingLucky": {
@@ -87,6 +85,38 @@ var ACTIONS = {
 			query = query.replace(/dead mouse|dead mau 5/g, "deadmau5");
 			disp.text = disp.text.replace(/dead mouse|dead mau 5/g, "deadmau5");
 			handleSearchAction("music", query);
+		}
+	},
+	"browserSettings": {
+		"regex": /^((open |chrome |browser )?settings)$/i,
+		"icon": ICON_URLS.browser,
+		"handler": function (query, disp) {
+			delayAction(() => openURL("chrome://settings"));
+		}
+	},
+	"browserHelp": {
+		"regex": /^((open |chrome |browser )?help)$/i,
+		"icon": ICON_URLS.browser,
+		"handler": function (query, disp) {
+			delayAction(() => openURL("https://support.google.com/chrome"));
+		}
+	},
+	"browserHistory": {
+		"regex": /^((open |chrome |browser )?history)$/i,
+		"icon": ICON_URLS.browser,
+		"handler": function (query, disp) {
+			delayAction(() => openURL("chrome://history"));
+		}
+	},
+	"extensionOptions": {
+		"regex": /^((what can i say)|(open )?(extension |voice actions? )?(options|settings|help))$/i,
+		"icon": ICON_URLS.mic,
+		"handler": function (query, disp) {
+			if (chrome.runtime.openOptionsPage) {
+				delayAction(chrome.runtime.openOptionsPage);
+			} else {
+				delayAction(() => openURL(chrome.runtime.getURL("options_page.html")));
+			}
 		}
 	},
 	"launch": {

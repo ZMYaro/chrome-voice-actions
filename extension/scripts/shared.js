@@ -17,6 +17,7 @@ var DEFAULT_SETTINGS = {
 
 /** @constant {Object<String,String>} URLs for the different action icons */
 var ICON_URLS = {
+	"browser": "images/chrome.svg",
 	"calc": "images/calc.svg",
 	"directions": "images/directions.svg",
 	"error": "images/error.svg",
