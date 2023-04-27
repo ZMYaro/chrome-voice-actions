@@ -8,6 +8,7 @@ var DEFAULT_SETTINGS = {
 	"launch": "google",
 	"music": "spotify",
 	"calc": "wolframalpha",
+	"imFeelingLucky": "google",
 	
 	"actionDelayTime": 2050,
 	"openLocation": "smart",
@@ -91,7 +92,7 @@ var BASE_URLS = {
 		"yahoo": "https://search.yahoo.com/search?p=%s"
 	},
 	"imFeelingLucky": {
-		
+		"google": "https://www.google.com/search?btnI=745&q=%s"
 	}
 }
 
