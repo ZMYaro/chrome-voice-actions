@@ -247,22 +247,13 @@ async function playSound(audioID) {
 
 /**
  * Displays error text in the pop-up
- * @param {String} errText - The primary error text
- * @param {String} errSubtext - The secondary error text (this may not be necessary and should only contain supplementary information)
+ * @param {String} errText - The primary error text (may include HTML)
+ * @param {String} errSubText - The secondary error text (this may not be necessary and should only contain supplementary text)
  */
-function displayError(errText, errSubtext) {
+function displayError(errText, errSubText) {
 	iconElem.src = ICON_URLS.error;
-	if(!errText) {
-		textElem.innerHTML = "An error occurred";
-	} else {
-		textElem.innerHTML = errText;
-	}
-	if(!errSubtext) {
-		subTextElem.innerHTML = "";
-	} else {
-		subTextElem.textContent = errSubtext;
-	}
-	
+	textElem.innerHTML = errText || "An error occurred";
+	subTextElem.textContent = errSubText || "";
 	// If enabled, play a sound.
 	playSound("error");
 }
