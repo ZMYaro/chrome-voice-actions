@@ -13,7 +13,7 @@ var subTextElem;
 /** {Number} The id of the speech recognition tab */
 var speechRecTabId;
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
 	// Get references to DOM elements
 	loadIndicator = document.getElementById("loadIndicator");
 	iconElem = document.getElementById("icon");
@@ -22,8 +22,8 @@ window.addEventListener("load", function() {
 	
 	// Cancel event listeners.
 	document.getElementById("cancelBtn").addEventListener("click", cancel, false);
-	window.addEventListener("keydown", function(e) {
-		if(e.keyCode === 27) {
+	window.addEventListener("keydown", function (e) {
+		if (e.keyCode === 27) {
 			cancel();
 		}
 	}, false);
@@ -34,13 +34,13 @@ window.addEventListener("load", function() {
 		url: chrome.extension.getURL("speech_recognition.html"),
 		active: false,
 		index: 999999 // Big number to force the tab to the end of the row
-	}, function(newTab) {
+	}, function (newTab) {
 		speechRecTabId = newTab.id;
-		chrome.tabs.sendMessage(newTab.id, {type: "start"});
+		chrome.tabs.sendMessage(newTab.id, { type: "start" });
 	});
 }, false);
 
-chrome.extension.onMessage.addListener(function(message) {
+chrome.extension.onMessage.addListener(function (message) {
 	switch(message.type) {
 		case "ready":
 			promptSpeech();
@@ -69,7 +69,7 @@ function promptSpeech() {
 
 async function processQuery(query) {
 	// Close the speech recognition tab.
-	if(speechRecTabId) {
+	if (speechRecTabId) {
 		chrome.tabs.remove(speechRecTabId);
 	}
 	
@@ -123,7 +123,7 @@ async function processQuery(query) {
  */
 async function playSound(audioID) {
 	var soundsSetting = await getSetting('sounds');
-	if(soundsSetting) {
+	if (soundsSetting) {
 		document.getElementById(audioID + "Sound").play();
 	}
 }
@@ -154,7 +154,7 @@ function cancel() {
  * Closes the speech recognition tab, if any, and then closes the pop-up.
  */
 function closePopup() {
-	if(speechRecTabId) {
+	if (speechRecTabId) {
 		chrome.tabs.remove(speechRecTabId);
 	}
 	window.close();

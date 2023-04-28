@@ -35,22 +35,22 @@ async function openURL(url) {
 	var openLocationSetting = await getSetting('openLocation');
 	switch (openLocationSetting) {
 		case "current":
-			chrome.tabs.update(null, {"url": url});
+			chrome.tabs.update(null, { url: url });
 			closePopup();
 			break;
 		case "new":
-			chrome.tabs.create({"url": url});
+			chrome.tabs.create({ url: url });
 			closePopup();
 			break;
 		default:
 			// Open in the current tab if it is open to the new tab page;
 			// otherwise open in a new tab.
-			chrome.tabs.query({"currentWindow": true, "active": true}, function (tabs) {
+			chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
 				if (tabs[0].url.substring(0, 15) === "chrome://newtab") {
-					chrome.tabs.update(null, {"url": url});
+					chrome.tabs.update(null, { url: url });
 					closePopup();
 				} else {
-					chrome.tabs.create({"url": url});
+					chrome.tabs.create({ url: url });
 					closePopup();
 				}
 			});
@@ -63,14 +63,14 @@ async function openURL(url) {
  */
 function openTopSite() {
 	return new Promise(function (resolve, reject) {
-		chrome.topSites.get(function(sites) {
-			if(sites.length === 0) {
+		chrome.topSites.get(function (sites) {
+			if (sites.length === 0) {
 				reject("You have no top sites.");
 				return;
 			}
 			
 			// Open the site.
-			delayAction(function() {
+			delayAction(function () {
 				openURL(sites[0].url);
 			});
 			resolve(sites[0]);
@@ -108,7 +108,7 @@ function launchApp(query) {
 					
 					while (regEx.exec(extensions[i].name)) {
 						// Increase the match count.
-						if(matches++ === 0) {
+						if (matches++ === 0) {
 							// If this is the first match, store its index.
 							earliestMatch = regEx.lastIndex;
 						}
@@ -145,9 +145,9 @@ function launchApp(query) {
  */
 function switchToTab(query) {
 	return new Promise(function (resolve, reject) {
-		chrome.windows.getAll({populate: true}, function(windows) {
+		chrome.windows.getAll({ populate: true }, function (windows) {
 			// Combine all the windows' tab arrays into one array.
-			var tabs = windows.reduce(function(tabsArr, currentWin) {
+			var tabs = windows.reduce(function (tabsArr, currentWin) {
 				return tabsArr.concat(currentWin.tabs);
 			}, []);
 			// Create a variable to hold the id of the best tab.
@@ -158,7 +158,7 @@ function switchToTab(query) {
 			var topEarliestMatch = 9999;
 			// Create a regEx that checks for each word in the query.
 			var regEx = new RegExp("(" + query.split(/\s+/g).join(")|(") + ")", "ig");
-			for(var i = 0; i < tabs.length; i++) {
+			for (var i = 0; i < tabs.length; i++) {
 				// Create a variable to count the number of matches for this tab.
 				var matches = 0;
 				// Create a variable to hold the earliest index of a match for this tab.
@@ -167,12 +167,12 @@ function switchToTab(query) {
 				regEx.lastIndex = 0;
 				while(regEx.exec(tabs[i].title)) {
 					// Increase the match count.
-					if(matches++ === 0) {
+					if (matches++ === 0) {
 						// If this is the first match, store its index.
 						earliestMatch = regEx.lastIndex;
 					}
 				}
-				if(matches > 0 && (matches > topMatches ||
+				if (matches > 0 && (matches > topMatches ||
 						(matches === topMatches && earliestMatch < topEarliestMatch))) {
 					topMatches = matches;
 					topEarliestMatch = earliestMatch;
@@ -181,15 +181,15 @@ function switchToTab(query) {
 			}
 			
 			// If no match was found, return an error.
-			if(!topMatchTab) {
+			if (!topMatchTab) {
 				reject("No tab with that title could be found.");
 				return;
 			}
 			
 			// Open the tab.
-			delayAction(function() {
-				chrome.tabs.update(topMatchTab.id, {active: true});
-				chrome.windows.update(topMatchTab.windowId, {focused: true});
+			delayAction(function () {
+				chrome.tabs.update(topMatchTab.id, { active: true });
+				chrome.windows.update(topMatchTab.windowId, { focused: true });
 				closePopup();
 			});
 			resolve();

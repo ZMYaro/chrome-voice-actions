@@ -1,5 +1,5 @@
-/*chrome.runtime.onMessage.addListener(function(message, sender) {
-	if(!sender.tab && message.type === "start") {
+/*chrome.runtime.onMessage.addListener(function (message, sender) {
+	if (!sender.tab && message.type === "start") {
 		setUpRecognition();
 	}
 });*/
@@ -10,7 +10,7 @@ window.addEventListener("load", setUpRecognition, false);
  */
 function setUpRecognition() {
 	// Check if speech recognition is supported, and send an error if it is not.
-	if(!("webkitSpeechRecognition" in window)) {
+	if (!("webkitSpeechRecognition" in window)) {
 		chrome.extension.sendMessage({
 			type: "error",
 			text: "Speech input not available",
@@ -63,7 +63,7 @@ function recognitionFailed(e) {
  */
 function recognitionSucceeded(e) {
 	// If no result was returned, send an error and then exit.
-	if(e.results.length === 0) {
+	if (e.results.length === 0) {
 		chrome.extension.sendMessage({
 			type: "error",
 			text: "Nothing was heard."

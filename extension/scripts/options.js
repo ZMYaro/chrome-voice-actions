@@ -1,4 +1,4 @@
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
 	// Attempt to copy settings from localStorage to synced storage.
 	copySettings();
 	
@@ -8,14 +8,14 @@ window.addEventListener("load", function() {
 		chrome.runtime.getManifest().version;
 	
 	// Fetch all settings.
-	chrome.storage.sync.get(DEFAULT_SETTINGS, function(settings) {
+	chrome.storage.sync.get(DEFAULT_SETTINGS, function (settings) {
 		// For each setting,
-		for(setting in settings) {
+		for (setting in settings) {
 			// Get its form element.
 			var formElem = document.getElementById(setting + "Setting");
 			
 			// Set its form element.
-			if(formElem.tagName.toLowerCase() === "input" &&
+			if (formElem.tagName.toLowerCase() === "input" &&
 					formElem.type.toLowerCase() === "checkbox") {
 				formElem.checked = settings[setting];
 			} else {
@@ -23,9 +23,9 @@ window.addEventListener("load", function() {
 			}
 			
 			// Add an event listener to its form element.
-			formElem.addEventListener("change", function(e) {
+			formElem.addEventListener("change", function (e) {
 				// Set the corresponding setting based on
-				if(e.target.tagName.toLowerCase() === "input" &&
+				if (e.target.tagName.toLowerCase() === "input" &&
 						e.target.type.toLowerCase() === "checkbox") {
 					// Whether the element is checked (if it is a checkbox).
 					setSetting(e.target.id.replace("Setting", ""), e.target.checked);
@@ -54,13 +54,13 @@ window.addEventListener("load", function() {
 	});
 	
 	// Add reset button event listener.
-	document.getElementById("resetButton").addEventListener("click", function(e) {
+	document.getElementById("resetButton").addEventListener("click", function (e) {
 		// `confirm` cannot be called from the embedded options page.
 		var resetConfirmed =
 			chrome.extension.getBackgroundPage().confirm(
 				"Are you sure you want to reset all your settings?  This cannot be undone!");
 		
-		if(!resetConfirmed) {
+		if (!resetConfirmed) {
 			return;
 		}
 		
@@ -75,7 +75,7 @@ window.addEventListener("load", function() {
 	speechInput.continuous = false;
 	speechInput.interimResults = false;
 	// Add an event listener for when speech recognition starts successfully.
-	speechInput.onstart = function(e) {
+	speechInput.onstart = function (e) {
 		// At this point, the omnibox media icon should be displayed.  There is
 		// no need for speech recognition to continue, so abort it.
 		e.target.abort();
@@ -87,8 +87,8 @@ window.addEventListener("load", function() {
 function setSetting(setting, value) {
 	var newSettingObj = {};
 	newSettingObj[setting] = value;
-	chrome.storage.sync.set(newSettingObj, function() {
-		if(chrome.runtime.lastError) {
+	chrome.storage.sync.set(newSettingObj, function () {
+		if (chrome.runtime.lastError) {
 			alert("Something went wrong: " + chrome.runtime.lastError);
 		}
 	});

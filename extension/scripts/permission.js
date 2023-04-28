@@ -1,4 +1,4 @@
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
 	// Create a speech recognition instance.
 	var speechInput = new webkitSpeechRecognition();
 	speechInput.continuous = false;
@@ -18,6 +18,6 @@ function recognitionStarted() {
 	if (chrome.runtime && chrome.runtime.openOptionsPage) {
 		chrome.runtime.openOptionsPage();
 	} else {
-		chrome.tabs.update({url: chrome.extension.getURL("options_page.html")});
+		chrome.tabs.update({ url: chrome.extension.getURL("options_page.html") });
 	}
 }

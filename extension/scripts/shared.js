@@ -105,21 +105,21 @@ function copySettings() {
 	// Create an object to hold the settings.
 	var settingsToCopy = {};
 	// For each setting,
-	for(setting in DEFAULT_SETTINGS) {
+	for (setting in DEFAULT_SETTINGS) {
 		// If it is set in localStorage,
-		if(localStorage[setting + "Setting"]) {
+		if (localStorage[setting + "Setting"]) {
 			// Copy it to the temporary object.
 			settingsToCopy[setting] = localStorage[setting + "Setting"];
 		}
 	}
 	// If there were settings in localStorage,
-	if(Object.keys(settingsToCopy).length) {
+	if (Object.keys(settingsToCopy).length) {
 		// Attempt to save the settings to sync storage.
-		chrome.storage.sync.set(settingsToCopy, function() {
+		chrome.storage.sync.set(settingsToCopy, function () {
 			// If nothing went wrong,
-			if(!chrome.runtime.lastError) {
+			if (!chrome.runtime.lastError) {
 				// Delete each setting from localStorage.
-				for(setting in DEFAULT_SETTINGS) {
+				for (setting in DEFAULT_SETTINGS) {
 					delete localStorage[setting + "Setting"];
 				}
 			}
