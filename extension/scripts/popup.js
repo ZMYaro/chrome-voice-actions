@@ -10,9 +10,6 @@ var textElem;
 /** {HTMLParagraphElement} The secondary text in the pop-up */
 var subTextElem;
 
-/** {Number} The id of the speech recognition tab */
-var speechRecTabId;
-
 window.addEventListener("load", function () {
 	// Get references to DOM elements
 	loadIndicator = document.getElementById("loadIndicator");
@@ -29,13 +26,15 @@ window.addEventListener("load", function () {
 	}, false);
 	window.addEventListener("unload", cancel, false);
 	
+	// Close any orphaned past speech recognition tabs.
+	cleanUpSpeechRecTabs();
+	
 	// Create a tab in which to do speech recognition.
 	chrome.tabs.create({
 		url: chrome.extension.getURL("speech_recognition.html"),
 		active: false,
 		index: 999999 // Big number to force the tab to the end of the row
 	}, function (newTab) {
-		speechRecTabId = newTab.id;
 		chrome.tabs.sendMessage(newTab.id, { type: "start" });
 	});
 }, false);
@@ -69,9 +68,7 @@ function promptSpeech() {
 
 async function processQuery(query) {
 	// Close the speech recognition tab.
-	if (speechRecTabId) {
-		chrome.tabs.remove(speechRecTabId);
-	}
+	cleanUpSpeechRecTabs();
 	
 	textElem.innerHTML = "Processing...";
 	
@@ -154,8 +151,18 @@ function cancel() {
  * Closes the speech recognition tab, if any, and then closes the pop-up.
  */
 function closePopup() {
-	if (speechRecTabId) {
-		chrome.tabs.remove(speechRecTabId);
-	}
+	cleanUpSpeechRecTabs();
 	window.close();
+}
+
+/**
+ * Close any open speech recognition tabs.
+ */
+function cleanUpSpeechRecTabs() {
+	var speechRecPageURL = chrome.runtime.getURL("speech_recognition.html");
+	chrome.tabs.query({ url: speechRecPageURL }, function (tabs) {
+		tabs.forEach(function (tab) {
+			chrome.tabs.remove(tab.id);
+		});
+	});
 }
