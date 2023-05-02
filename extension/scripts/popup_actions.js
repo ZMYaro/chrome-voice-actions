@@ -196,3 +196,23 @@ function switchToTab(query) {
 		});
 	});
 }
+
+/**
+ * Share the current page if the web share API is available, or error if not
+ */
+function sharePage() {
+	if (!("share" in navigator)) {
+		throw "Your browser doesn't support the share function.";
+	}
+	delayAction(function () {
+		chrome.tabs.query({
+			active: true,
+			currentWindow: true
+		}, function (tabs) {
+			navigator.share({
+				title: tabs[0].title,
+				url: tabs[0].url
+			})
+		});
+	});
+}

@@ -28,6 +28,7 @@ var ICON_URLS = {
 	"mic": "images/actions/mic.svg",
 	"music": "images/actions/music.svg",
 	"search": "images/actions/search.svg",
+	"share": "images/actions/share.svg",
 	"tabs": "images/actions/tabs.svg",
 	"videos": "images/actions/videos.svg",
 	"web": "images/actions/web.svg"

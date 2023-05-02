@@ -63,6 +63,11 @@ var ACTIONS = {
 		"icon": ICON_URLS.tabs,
 		"handler": switchToTab
 	},
+	"share": {
+		"regex": /^(share( this|( the)? current)? page)$/i,
+		"icon": ICON_URLS.share,
+		"handler": sharePage
+	},
 	"calc": {
 		"regex": /^(calculate) .+$/i
 	},
