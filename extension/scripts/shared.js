@@ -145,10 +145,16 @@ function getSetting(settingName) {
 
 /**
  * Set the toolbar icon.
- * @param {String} color - "dark" or "light"
+ * @param {String} color - The color setting value ("dark", "light", "minimal-dark", or "minimal-light")
  */
-function setIcon(color) {
-	var colorSuffix = (color === "light" ? "_light" : "");
+function setToolbarIcon(color) {
+	// "dark" => "icon_xx"
+	// "light" => "icon_xx_light"
+	// "minimal-light" => "icon_xx_minimal_light"
+	var colorSuffix = color
+		.replace("minimal-", "_minimal")
+		.replace("light", "_light")
+		.replace("dark", "");
 	chrome.browserAction.setIcon({
 		path: {
 			16: "../images/logo/icon_16" + colorSuffix + ".png",

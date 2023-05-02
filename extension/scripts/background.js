@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 	// Attempt to copy settings from localStorage to synced storage.
 	copySettings();
 	// Set the icon color in case the user customized it on a synced account (or the extension was refreshed).
-	getSetting("toolbarIcon").then(setIcon);
+	getSetting("toolbarIcon").then(setToolbarIcon);
 });
 
 // Attempt to copy settings from localStorage to synced storage.

@@ -55,7 +55,7 @@ window.addEventListener("load", function () {
 	
 	// Set up icon inversion option.
 	document.getElementById("toolbarIconSetting").addEventListener("input", function (e) {
-		setIcon(e.target.value);
+		setToolbarIcon(e.target.value);
 	});
 	
 	// Add reset button event listener.
