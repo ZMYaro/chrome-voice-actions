@@ -18,19 +18,19 @@ var DEFAULT_SETTINGS = {
 
 /** @constant {Object<String,String>} URLs for the different action icons */
 var ICON_URLS = {
-	"browser": "images/chrome.svg",
-	"calc": "images/calc.svg",
-	"directions": "images/directions.svg",
-	"error": "images/error.svg",
-	"food": "images/food.svg",
-	"images": "images/images.svg",
-	"map": "images/map.svg",
-	"mic": "images/mic.svg",
-	"music": "images/music.svg",
-	"search": "images/search.svg",
-	"tabs": "images/tabs.svg",
-	"videos": "images/videos.svg",
-	"web": "images/web.svg"
+	"browser": "images/actions/chrome.svg",
+	"calc": "images/actions/calc.svg",
+	"directions": "images/actions/directions.svg",
+	"error": "images/actions/error.svg",
+	"food": "images/actions/food.svg",
+	"images": "images/actions/images.svg",
+	"map": "images/actions/map.svg",
+	"mic": "images/actions/mic.svg",
+	"music": "images/actions/music.svg",
+	"search": "images/actions/search.svg",
+	"tabs": "images/actions/tabs.svg",
+	"videos": "images/actions/videos.svg",
+	"web": "images/actions/web.svg"
 };
 
 /** @constant {Object<String,Object<String,String>>} Base URLs for the different web services */
@@ -151,10 +151,10 @@ function setIcon(color) {
 	var colorSuffix = (color === "light" ? "_light" : "");
 	chrome.browserAction.setIcon({
 		path: {
-			16: "../images/icon_16" + colorSuffix + ".png",
-			19: "../images/icon_19" + colorSuffix + ".png",
-			32: "../images/icon_32" + colorSuffix + ".png",
-			38: "../images/icon_38" + colorSuffix + ".png"
+			16: "../images/logo/icon_16" + colorSuffix + ".png",
+			19: "../images/logo/icon_19" + colorSuffix + ".png",
+			32: "../images/logo/icon_32" + colorSuffix + ".png",
+			38: "../images/logo/icon_38" + colorSuffix + ".png"
 		}
 	});
 }
