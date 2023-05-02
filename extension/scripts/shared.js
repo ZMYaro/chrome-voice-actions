@@ -12,6 +12,7 @@ var DEFAULT_SETTINGS = {
 	
 	"actionDelayTime": 2050,
 	"openLocation": "smart",
+	"toolbarIcon": "dark",
 	"sounds": true
 }
 
@@ -139,5 +140,21 @@ function getSetting(settingName) {
 		chrome.storage.sync.get(apiQuery, function (settings) {
 			resolve(settings[settingName]);
 		});
+	});
+}
+
+/**
+ * Set the toolbar icon.
+ * @param {String} color - "dark" or "light"
+ */
+function setIcon(color) {
+	var colorSuffix = (color === "light" ? "_light" : "");
+	chrome.browserAction.setIcon({
+		path: {
+			16: "../images/icon_16" + colorSuffix + ".png",
+			19: "../images/icon_19" + colorSuffix + ".png",
+			32: "../images/icon_32" + colorSuffix + ".png",
+			38: "../images/icon_38" + colorSuffix + ".png"
+		}
 	});
 }

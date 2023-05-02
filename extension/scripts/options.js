@@ -53,6 +53,11 @@ window.addEventListener("load", function () {
 		chrome.tabs.create({ url: e.target.href });
 	});
 	
+	// Set up icon inversion option.
+	document.getElementById("toolbarIconSetting").addEventListener("input", function (e) {
+		setIcon(e.target.value);
+	});
+	
 	// Add reset button event listener.
 	document.getElementById("resetButton").addEventListener("click", function (e) {
 		// `confirm` cannot be called from the embedded options page.
