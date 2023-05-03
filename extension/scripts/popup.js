@@ -29,14 +29,9 @@ window.addEventListener("load", function () {
 	// Close any orphaned past speech recognition tabs.
 	cleanUpSpeechRecTabs();
 	
-	// Create a tab in which to do speech recognition.
-	chrome.tabs.create({
-		url: chrome.extension.getURL("speech_recognition.html"),
-		active: false,
-		index: 999999 // Big number to force the tab to the end of the row
-	}, function (newTab) {
-		chrome.tabs.sendMessage(newTab.id, { type: "start" });
-	});
+	// Run the function that will set up speech recognition in the pop-up
+	// or fall back to a speech recognition tab if necessary.
+	setUpRecognition();
 }, false);
 
 chrome.extension.onMessage.addListener(function (message) {
@@ -54,6 +49,20 @@ chrome.extension.onMessage.addListener(function (message) {
 			break;
 	}
 });
+
+/**
+ * Create a new tab for handling speech recognition and send it a message to start.
+ */
+function createSpeechRecTab() {
+	// Create a tab in which to do speech recognition.
+	chrome.tabs.create({
+		url: chrome.extension.getURL("speech_recognition.html"),
+		active: false,
+		index: 999999 // Big number to force the tab to the end of the row
+	}, function (newTab) {
+		chrome.tabs.sendMessage(newTab.id, { type: "start" });
+	});
+}
 
 /**
  * Indicate that speech recognition is ready and listening
