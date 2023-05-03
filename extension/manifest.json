@@ -5,7 +5,7 @@
 	
 	"name": "Voice Actions for Chrome",
 	"description": "Control your browser just by talking to it.",
-	"version": "4.6.1",
+	"version": "5.0",
 	
 	"icons": {
 		"48": "images/logo/icon_48.png",
