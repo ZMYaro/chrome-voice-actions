@@ -1,3 +1,6 @@
+/** @constant {Number} The default window width, in ems */
+var WINDOW_WIDTH = 10;
+
 /** {HTMLDivElement} The background fill for the delay when the action can be cancelled */
 var loadIndicator;
 
@@ -70,7 +73,7 @@ function createSpeechRecTab() {
 function promptSpeech() {
 	// Prompt the user to speak.
 	iconElem.src = ICON_URLS.mic;
-	textElem.innerHTML = "Speak now";
+	displayText("Speak now");
 	// If enabled, play a sound.
 	playSound("start");
 }
@@ -79,7 +82,7 @@ async function processQuery(query) {
 	// Close the speech recognition tab.
 	cleanUpSpeechRecTabs();
 	
-	textElem.innerHTML = "Processing...";
+	displayText("Processing...");
 	
 	// Create variables for the displayed response, which can be modified by a custom handler.
 	var disp = {
@@ -116,8 +119,7 @@ async function processQuery(query) {
 		
 		// Show the action's icon, text, and sub-text, and play its sound if enabled.
 		iconElem.src = params.icon || ICON_URLS[actionID];
-		textElem.innerHTML = disp.text;
-		subTextElem.textContent = disp.subText;
+		displayText(disp.text, disp.subText);
 		playSound(params.sound || "end");
 		break;
 	}
@@ -135,14 +137,31 @@ async function playSound(audioID) {
 }
 
 /**
- * Displays error text in the pop-up
+ * Display text in the pop-up.
+ * @param {String} text - The primary text (may include HTML)
+ * @param {String} [subText] - The secondary text (generally unnecessary and should only contain supplementary text)
+ */
+function displayText(text, subText) {
+	textElem.innerHTML = text;
+	subTextElem.textContent = subText || "";
+	
+	// In case the popup is a resizable window, ensure it can fit the text.
+	var windowChromeWidth = (window.outerWidth - document.documentElement.clientWidth),
+		windowChromeHeight = (window.outerHeight - document.documentElement.clientHeight),
+		windowWidth = WINDOW_WIDTH * parseInt(getComputedStyle(document.body)['font-size']);
+	window.resizeTo(
+		windowWidth + windowChromeWidth,
+		document.body.offsetHeight + windowChromeHeight);
+}
+
+/**
+ * Display error text in the pop-up
  * @param {String} errText - The primary error text (may include HTML)
- * @param {String} errSubText - The secondary error text (this may not be necessary and should only contain supplementary text)
+ * @param {String} errSubText - The secondary error text (generally unnecessary and should only contain supplementary text)
  */
 function displayError(errText, errSubText) {
 	iconElem.src = ICON_URLS.error;
-	textElem.innerHTML = errText || "An error occurred";
-	subTextElem.textContent = errSubText || "";
+	displayText(errText || "An error occurred", errSubText);
 	// If enabled, play a sound.
 	playSound("error");
 }
