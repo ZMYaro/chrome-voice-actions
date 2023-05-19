@@ -1,3 +1,6 @@
+/** {Boolean} Whether a result (success or error) has been processed by a handler */
+var recognitionProcessed = false;
+
 /**
  * Checks if speech recognition is supported, creates an instance, and starts listening
  */
@@ -17,6 +20,7 @@ function setUpRecognition() {
 	speechInput.onstart = recognitionStarted;
 	speechInput.onerror = recognitionFailed;
 	speechInput.onresult = recognitionSucceeded;
+	speechInput.onend = recognitionEnded;
 	
 	// Start speech recognition.
 	speechInput.start();
@@ -42,6 +46,8 @@ function recognitionFailed(e) {
 	// Send error information.
 	displayError("An error occurred", e.error.replace(/-/g, " "));
 	delayAction(closePopup);
+	
+	recognitionProcessed = true;
 }
 
 /**
@@ -57,4 +63,19 @@ function recognitionSucceeded(e) {
 	
 	// Send the most accurate interpretation of the speech.
 	processQuery(e.results[e.resultIndex][0].transcript);
+	
+	recognitionProcessed = true;
+}
+
+/**
+ * Callback for speech recognition ending, regardless of result.
+ */
+function recognitionEnded(e) {
+	if (recognitionProcessed) {
+		// If a success or failure handler received the result, let it be processed there.
+		return;
+	}
+	// If it wasn't a success or defined error, treat it as a no speech error.
+	displayError("An error occurred", "no speech");
+	delayAction(closePopup);
 }

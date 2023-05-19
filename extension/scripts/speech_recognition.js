@@ -1,8 +1,6 @@
-/*chrome.runtime.onMessage.addListener(function (message, sender) {
-	if (!sender.tab && message.type === "start") {
-		setUpRecognition();
-	}
-});*/
+/** {Boolean} Whether a result (success or error) has been processed by a handler */
+var recognitionProcessed = false;
+
 window.addEventListener("load", setUpRecognition, false);
 
 /**
@@ -28,6 +26,7 @@ function setUpRecognition() {
 	speechInput.onstart = recognitionStarted;
 	speechInput.onerror = recognitionFailed;
 	speechInput.onresult = recognitionSucceeded;
+	speechInput.onend = recognitionEnded;
 	
 	//speechInput.lang = ;
 	
@@ -55,6 +54,8 @@ function recognitionFailed(e) {
 		text: "An error occurred",
 		subtext: e.error.replace(/-/g, " ")
 	});
+	
+	recognitionProcessed = true;
 }
 
 /**
@@ -75,5 +76,23 @@ function recognitionSucceeded(e) {
 	chrome.extension.sendMessage({
 		type: "result",
 		text: e.results[e.resultIndex][0].transcript
+	});
+	
+	recognitionProcessed = true;
+}
+
+/**
+ * Callback for speech recognition ending, regardless of result.
+ */
+function recognitionEnded(e) {
+	if (recognitionProcessed) {
+		// If a success or failure handler received the result, let it be processed there.
+		return;
+	}
+	// If it wasn't a success or defined error, treat it as a no speech error.
+	chrome.extension.sendMessage({
+		type: "error",
+		text: "An error occurred",
+		subtext: "no speech"
 	});
 }

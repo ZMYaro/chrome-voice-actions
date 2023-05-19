@@ -35,7 +35,7 @@ window.addEventListener("load", function () {
 }, false);
 
 chrome.extension.onMessage.addListener(function (message) {
-	switch(message.type) {
+	switch (message.type) {
 		case "ready":
 			promptSpeech();
 			break;
