@@ -23,10 +23,10 @@ function setUpRecognition() {
 	speechInput.interimResults = false;
 	
 	// Set speech API event listeners.
-	speechInput.onstart = recognitionStarted;
-	speechInput.onerror = recognitionFailed;
-	speechInput.onresult = recognitionSucceeded;
-	speechInput.onend = recognitionEnded;
+	speechInput.onstart = handleSpeechRecStart;
+	speechInput.onerror = handleSpeechRecError;
+	speechInput.onresult = handleSpeechRecResult;
+	speechInput.onend = handleSpeechRecEnd;
 	
 	//speechInput.lang = ;
 	
@@ -35,19 +35,19 @@ function setUpRecognition() {
 }
 
 /**
- * Called when speech recognition has begun
+ * Handle speech recognition having begun
  */
-function recognitionStarted() {
+function handleSpeechRecStart() {
 	chrome.extension.sendMessage({
 		type: "ready"
 	});
 }
 
 /**
- * Callback for unsuccessful speech recognition
+ * Handle unsuccessful speech recognition
  * @param {SpeechRecognitionError} e - The recognition error
  */
-function recognitionFailed(e) {
+function handleSpeechRecError(e) {
 	// Send error information.
 	chrome.extension.sendMessage({
 		type: "error",
@@ -59,10 +59,10 @@ function recognitionFailed(e) {
 }
 
 /**
- * Callback for successful speech recognition
+ * Handle successful speech recognition
  * @param {SpeechRecognitionEvent} e - The speech recognition result event
  */
-function recognitionSucceeded(e) {
+function handleSpeechRecResult(e) {
 	// If no result was returned, send an error and then exit.
 	if (e.results.length === 0) {
 		chrome.extension.sendMessage({
@@ -82,9 +82,9 @@ function recognitionSucceeded(e) {
 }
 
 /**
- * Callback for speech recognition ending, regardless of result.
+ * Handle speech recognition ending, regardless of result.
  */
-function recognitionEnded(e) {
+function handleSpeechRecEnd(e) {
 	if (recognitionProcessed) {
 		// If a success or failure handler received the result, let it be processed there.
 		return;

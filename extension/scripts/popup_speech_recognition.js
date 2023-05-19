@@ -17,27 +17,27 @@ function setUpRecognition() {
 	speechInput.interimResults = false;
 	
 	// Set speech API event listeners.
-	speechInput.onstart = recognitionStarted;
-	speechInput.onerror = recognitionFailed;
-	speechInput.onresult = recognitionSucceeded;
-	speechInput.onend = recognitionEnded;
+	speechInput.onstart = handleSpeechRecStart;
+	speechInput.onerror = handleSpeechRecError;
+	speechInput.onresult = handleSpeechRecResult;
+	speechInput.onend = handleSpeechRecEnd;
 	
 	// Start speech recognition.
 	speechInput.start();
 }
 
 /**
- * Called when speech recognition has begun
+ * Handle speech recognition having begun
  */
-function recognitionStarted() {
+function handleSpeechRecStart() {
 	promptSpeech();
 }
 
 /**
- * Callback for unsuccessful speech recognition
+ * Handle unsuccessful speech recognition
  * @param {SpeechRecognitionError} e - The recognition error
  */
-function recognitionFailed(e) {
+function handleSpeechRecError(e) {
 	if (e.error === "not-allowed" || e.error === "service-not-allowed") {
 		// If there was a potential permission error, create a speech recognition tab that can inform the user.
 		createSpeechRecTab();
@@ -51,10 +51,10 @@ function recognitionFailed(e) {
 }
 
 /**
- * Callback for successful speech recognition
+ * Handle successful speech recognition
  * @param {SpeechRecognitionEvent} e - The speech recognition result event
  */
-function recognitionSucceeded(e) {
+function handleSpeechRecResult(e) {
 	// If no result was returned, send an error and then exit.
 	if (e.results.length === 0) {
 		displayError("Nothing was heard.");
@@ -68,9 +68,9 @@ function recognitionSucceeded(e) {
 }
 
 /**
- * Callback for speech recognition ending, regardless of result.
+ * Handle speech recognition ending, regardless of result.
  */
-function recognitionEnded(e) {
+function handleSpeechRecEnd(e) {
 	if (recognitionProcessed) {
 		// If a success or failure handler received the result, let it be processed there.
 		return;
