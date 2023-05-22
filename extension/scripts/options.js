@@ -47,12 +47,6 @@ window.addEventListener("load", function () {
 		document.getElementById("currentKeyboardShortcut").textContent = shortcutText;
 	});
 	
-	// Set up link to keyboard shortcut settings.
-	document.querySelector("a[href=\"chrome://extensions/shortcuts\"]").addEventListener("click", function (e) {
-		e.preventDefault();
-		chrome.tabs.create({ url: e.target.href });
-	});
-	
 	// Set up icon inversion option.
 	document.getElementById("toolbarIconSetting").addEventListener("input", function (e) {
 		setToolbarIcon(e.target.value);
