@@ -177,6 +177,7 @@ function handleSpeechRecResult(e) {
 	
 	// First bring the last focused window to the front if it isn't already.
 	chrome.windows.update(lastFocusedWindowID, { focused: true }, function () {
+		// Open the voice actions pop-up, and inform it which window it should be tied to.
 		chrome.windows.create({
 			type: "popup",
 			focused: true,
@@ -184,7 +185,7 @@ function handleSpeechRecResult(e) {
 			top: POPUP_MARGIN,
 			width: POPUP_DIMENSIONS.width,
 			height: POPUP_DIMENSIONS.height,
-			url: VOICE_ACTIONS_POPUP_URL
+			url: VOICE_ACTIONS_POPUP_URL + "?last-focused-window-id=" + lastFocusedWindowID
 		}, function (popupWindow) {
 			// Save the pop-up window ID to detect when it is closed.
 			popupWindowID = popupWindow.id;
