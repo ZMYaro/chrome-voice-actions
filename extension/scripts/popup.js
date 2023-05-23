@@ -17,6 +17,17 @@ var subTextElem;
 var lastFocusedWindowID = chrome.windows.WINDOW_ID_CURRENT;
 
 window.addEventListener("load", function () {
+	// If Voice Actions was opened as a separate pop-up window and passed the ID of a window to act on, save that.
+	var lastFocusedWindowIDParam = (new URL(location.href)).searchParams.get("last-focused-window-id");
+	if (lastFocusedWindowIDParam) {
+		lastFocusedWindowID = parseInt(lastFocusedWindowIDParam);
+	} else {
+		// Otherwise, get whatever the windows API returns.
+		chrome.windows.getLastFocused(function (lastFocusedWindow) {
+			lastFocusedWindowID = lastFocusedWindow.id;
+		});
+	}
+	
 	// Get references to DOM elements
 	loadIndicator = document.getElementById("loadIndicator");
 	iconElem = document.getElementById("icon");
