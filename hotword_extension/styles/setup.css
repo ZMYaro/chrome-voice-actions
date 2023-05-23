@@ -1,0 +1,68 @@
+body {
+	font-family: Roboto, "Droid Sans", Helvetica, Arial, sans-serif;
+	padding: 1em 3em;
+	
+	background-color: white;
+	color: black;
+}
+
+h2,
+p {
+	margin-left: 3rem;
+	max-width: 600px;
+}
+
+.small-icon {
+	width: 16px;
+	height: 16px;
+	margin: -4px 2px;
+	opacity: 0.5;
+}
+.stepNumber {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	
+	position: absolute;
+	margin: -0.5em;
+	margin-left: -3rem;
+	width: 2em;
+	height: 2em;
+	border-radius: 50%;
+	
+	background-color: black;
+	color: white;
+}
+.done {
+	text-decoration: line-through;
+}
+	.done .stepNumber {
+		color: transparent;
+	}
+		.done .stepNumber::before {
+			content: "\2713"; /* Checkmark */
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%, -50%);
+			
+			color: white;
+		}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #212121;
+		color: white;
+	}
+	.stepNumber,
+	.done .stepNumber::before {
+		background-color: white;
+		color: #212121;
+	}
+	a {
+		color: #8ab4f8;
+	}
+	.small-icon {
+		filter: invert(1);
+	}
+}

@@ -1,0 +1,42 @@
+.small-icon {
+	width: 16px;
+	height: 16px;
+	margin: -3px 2px;
+	opacity: 0.5;
+}
+
+/* Copy these styles from options.css for use on the embedded options page without importing all of options.css. */
+section {
+	padding-left: 18px;
+	margin-top: 8px;
+	margin-bottom: 24px;
+}
+	section h3 {
+		margin-left: -18px;
+	}
+
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: #212121;
+		color: white;
+	}
+	header {
+		background: linear-gradient(#212121, #212121 40%, rgba(33, 33, 33, 0.92))
+	}
+	body,
+	h1,
+	h2,
+	h3 {
+		color: white;
+	}
+	a {
+		color: #8ab4f8;
+	}
+	button,
+	input,
+	select,
+	.small-icon,
+	#actionExamples > li img {
+		filter: invert(1);
+	}
+}
