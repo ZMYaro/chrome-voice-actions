@@ -37,6 +37,9 @@ var lastRecognitionStartTime = 0;
 /** {Boolean} Whether the last result (success or error) was processed by a handler */
 var recognitionProcessed = false;
 
+/** {Number} ID of the last focused regular browser window */
+var lastFocusedWindowID = chrome.windows.WINDOW_ID_CURRENT; // Necessary because of https://crbug.com/546696.
+
 /** {Number} ID of the last pop-up window opened */
 var popupWindowID;
 
@@ -171,18 +174,31 @@ function handleSpeechRecResult(e) {
 	// If the hotword WAS said, open the Voice Actions pop-up.
 	// (In a dialog window because extensions aren't allowed
 	// to programmatically open toolbar pop-ups.)
-	chrome.windows.create({
-		type: "popup",
-		left: window.screen.width - POPUP_DIMENSIONS.width - POPUP_MARGIN,
-		top: POPUP_MARGIN,
-		width: POPUP_DIMENSIONS.width,
-		height: POPUP_DIMENSIONS.height,
-		url: VOICE_ACTIONS_POPUP_URL
-	}, function (popupWindow) {
-		// Save the pop-up window ID to detect when it is closed.
-		popupWindowID = popupWindow.id;
+	
+	// First bring the last focused window to the front if it isn't already.
+	chrome.windows.update(lastFocusedWindowID, { focused: true }, function () {
+		chrome.windows.create({
+			type: "popup",
+			focused: true,
+			left: window.screen.width - POPUP_DIMENSIONS.width - POPUP_MARGIN,
+			top: POPUP_MARGIN,
+			width: POPUP_DIMENSIONS.width,
+			height: POPUP_DIMENSIONS.height,
+			url: VOICE_ACTIONS_POPUP_URL
+		}, function (popupWindow) {
+			// Save the pop-up window ID to detect when it is closed.
+			popupWindowID = popupWindow.id;
+		});
 	});
 }
+
+// Workaround for https://crbug.com/546696.
+chrome.windows.onFocusChanged.addListener(function (windowID) {
+	if (windowID === chrome.windows.WINDOW_ID_NONE) { return; }
+	lastFocusedWindowID = windowID;
+}, {
+	windowTypes: ['normal']
+});
 
 chrome.windows.onRemoved.addListener(function (windowID) {
 	// Restart listening when the pop-up is closed.
