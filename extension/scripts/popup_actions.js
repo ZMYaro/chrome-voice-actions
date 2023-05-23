@@ -35,7 +35,8 @@ async function openURL(url) {
 	var openLocationSetting = await getSetting('openLocation');
 	switch (openLocationSetting) {
 		case "current":
-			chrome.tabs.update(null, { url: url });
+			var activeTab = await getActiveTab();
+			chrome.tabs.update(activeTab.id, { url: url });
 			closePopup();
 			break;
 		case "new":
@@ -45,15 +46,13 @@ async function openURL(url) {
 		default:
 			// Open in the current tab if it is open to the new tab page;
 			// otherwise open in a new tab.
-			chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-				if (tabs[0].url.substring(0, 15) === "chrome://newtab") {
-					chrome.tabs.update(null, { url: url });
-					closePopup();
-				} else {
-					chrome.tabs.create({ url: url });
-					closePopup();
-				}
-			});
+			var activeTab = await getActiveTab();
+			if (activeTab.url.substring(0, 15) === "chrome://newtab") {
+				chrome.tabs.update(activeTab.id, { url: url });
+			} else {
+				chrome.tabs.create({ url: url });
+			}
+			closePopup();
 	}
 }
 
@@ -139,7 +138,7 @@ function launchApp(query) {
 }
 
 /**
- * Switche to a tab with a given title if there is one
+ * Switch to a tab with a given title if there is one
  * @param {String} query - The query to insert into the URL
  * @returns {Promise} Resolves when a matching tab is found and the action set up, or rejects if none is
  */
@@ -193,6 +192,18 @@ function switchToTab(query) {
 				closePopup();
 			});
 			resolve();
+		});
+	});
+}
+
+/**
+ * Get the active tab of the current/last focused window.
+ * @returns {Promise<Tab>}
+ */
+function getActiveTab() {
+	return new Promise(function (resolve, reject) {
+		chrome.tabs.query({ windowId: lastFocusedWindowID, active: true }, function (tabs) {
+			resolve(tabs[0]);
 		});
 	});
 }

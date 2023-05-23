@@ -13,6 +13,9 @@ var textElem;
 /** {HTMLParagraphElement} The secondary text in the pop-up */
 var subTextElem;
 
+/** {Number} ID of the last focused regular browser window */
+var lastFocusedWindowID = chrome.windows.WINDOW_ID_CURRENT;
+
 window.addEventListener("load", function () {
 	// Get references to DOM elements
 	loadIndicator = document.getElementById("loadIndicator");
