@@ -13,6 +13,12 @@ var HOTWORD_GRAMMAR =
 		"grammar hotwords;" +
 		"public <hotword> = ( ok chrome | okay chrome | hey chrome );";
 
+/** @constant {Number} Minimum time to wait between restart attempts, in milliseconds */
+var MIN_RESTART_ATTEMPT_DELAY = 1000;
+
+/** @constant {Number} Time to wait after speech recognition is aborted before restarting, in milliseconds */
+var POST_ABORT_RESTART_DELAY = 10000;
+
 /** @constant {Object<String,String>} Tooltip messages, including defaults for the 3 icon states */
 var TOOLTIPS = {
 	active: "Listening for \u201cOK Chrome\u201d",
@@ -86,10 +92,10 @@ function initHotwordListener() {
  * Start listening for the hotword if speech recognition is not already running.
  */
 function startListeningForHotword() {
-	// Don't restart more than once per second.
+	// Don't make multiple restart attempts too frequently.
 	var timeSinceLastStart = (new Date()).getTime() - lastRecognitionStartTime;
-	if (timeSinceLastStart < 1000) {
-		setTimeout(startListeningForHotword, 1000 - timeSinceLastStart);
+	if (timeSinceLastStart < MIN_RESTART_ATTEMPT_DELAY) {
+		setTimeout(startListeningForHotword, MIN_RESTART_ATTEMPT_DELAY - timeSinceLastStart);
 		return;
 	}
 	lastRecognitionStartTime = (new Date()).getTime();
@@ -117,15 +123,20 @@ function handleSpeechRecStart() {
  */
 function handleSpeechRecError(e) {
 	setToolbarIcon("inactive");
-	recognitionProcessed = true;
 	
 	switch (e.error) {
 		case "aborted":
-			// If speech recognition was aborted, don't immediately restart.
+			// If speech recognition was aborted by something other than this extension
+			// (often due to speech recognition happening elsewhere), wait and then restart.
+			if (!recognitionProcessed) {
+				setTimeout(startListeningForHotword, POST_ABORT_RESTART_DELAY);
+			}
+			recognitionProcessed = true;
 			return;
 		case "no-speech":
 			// If speech recognition gave up, restart.
 			startListeningForHotword();
+			recognitionProcessed = true;
 			return;
 		case "not-allowed":
 		case "service-not-allowed":
@@ -136,6 +147,7 @@ function handleSpeechRecError(e) {
 			if (!navigator.onLine) {
 				// If the device is offline, show a non-error inactive status.
 				setToolbarIcon("inactive", TOOLTIPS.offline);
+				recognitionProcessed = true;
 				return;
 			}
 			// If there was a different network-related error, try to restart, but
@@ -150,6 +162,8 @@ function handleSpeechRecError(e) {
 		errorText += ": " + e.error.replace(/-/g, " ");
 	}
 	setToolbarIcon("error", errorText);
+	
+	recognitionProcessed = true;
 }
 
 /**
@@ -158,11 +172,11 @@ function handleSpeechRecError(e) {
  */
 function handleSpeechRecResult(e) {
 	setToolbarIcon("inactive");
-	recognitionProcessed = true;
 	
 	// If the hotword wasn't said, start over.
 	if (e.results.length === 0 || !e.results[e.resultIndex][0].transcript.match(HOTWORD_REGEX)) {
 		startListeningForHotword();
+		recognitionProcessed = true;
 		return;
 	}
 	
@@ -191,6 +205,8 @@ function handleSpeechRecResult(e) {
 			popupWindowID = popupWindow.id;
 		});
 	});
+	
+	recognitionProcessed = true;
 }
 
 // Workaround for https://crbug.com/546696.
