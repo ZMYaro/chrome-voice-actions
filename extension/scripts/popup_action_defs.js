@@ -35,14 +35,10 @@ var ACTIONS = {
 		"regex": /^(close( this|( the)? current)? tab)$/i,
 		"icon": ICON_URLS.tabs,
 		"handler": function (query, disp) {
-			delayAction(function () {
-				chrome.tabs.query({
-					active: true,
-					currentWindow: true
-				}, function (tabs) {
-					chrome.tabs.remove(tabs[0].id);
-					closePopup();
-				});
+			delayAction(async function () {
+				var activeTab = await getActiveTab();
+				chrome.tabs.remove(activeTab.id);
+				closePopup();
 			});
 		}
 	},
@@ -51,10 +47,8 @@ var ACTIONS = {
 		"icon": ICON_URLS.tabs,
 		"handler": function (query, disp) {
 			delayAction(function () {
-				chrome.windows.getCurrent(function (currentWindow) {
-					chrome.windows.remove(currentWindow.id);
-					closePopup();
-				});
+				chrome.windows.remove(lastFocusedWindowID);
+				closePopup();
 			});
 		}
 	},
