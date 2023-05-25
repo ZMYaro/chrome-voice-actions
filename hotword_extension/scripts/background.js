@@ -217,24 +217,6 @@ function handleSpeechRecResult(e) {
 	speechRecStatus = SPEECH_REC_STATA.dontAutoRestart;
 }
 
-// Workaround for https://crbug.com/546696.
-chrome.windows.onFocusChanged.addListener(function (windowID) {
-	if (windowID === chrome.windows.WINDOW_ID_NONE) { return; }
-	lastFocusedWindowID = windowID;
-}, {
-	windowTypes: ['normal']
-});
-
-chrome.windows.onRemoved.addListener(function (windowID) {
-	// Restart listening when the pop-up is closed.
-	if (windowID === popupWindowID) {
-		popupWindowID = undefined;
-		startListeningForHotword();
-	}
-}, {
-	windowTypes: ["popup"]
-});
-
 /**
  * Handle speech recognition ending, regardless of result.
  */
@@ -251,6 +233,24 @@ function handleSpeechRecEnd(e) {
 			startListeningForHotword();
 	}
 }
+
+chrome.windows.onRemoved.addListener(function (windowID) {
+	// Restart listening when the pop-up is closed.
+	if (windowID === popupWindowID) {
+		popupWindowID = undefined;
+		startListeningForHotword();
+	}
+}, {
+	windowTypes: ["popup"]
+});
+
+// Workaround for https://crbug.com/546696.
+chrome.windows.onFocusChanged.addListener(function (windowID) {
+	if (windowID === chrome.windows.WINDOW_ID_NONE) { return; }
+	lastFocusedWindowID = windowID;
+}, {
+	windowTypes: ['normal']
+});
 
 /**
  * Set the toolbar icon.
