@@ -13,6 +13,14 @@ var HOTWORD_GRAMMAR =
 		"grammar hotwords;" +
 		"public <hotword> = ( ok chrome | okay chrome | hey chrome );";
 
+/** @constant {Object<String,Number>} Stata speech recognition can be in */
+var SPEECH_REC_STATA = {
+	notHandled: 0,
+	dontAutoRestart: 1,
+	restartASAP: 2,
+	restartAfterDelay: 3
+};
+
 /** @constant {Number} Minimum time to wait between restart attempts, in milliseconds */
 var MIN_RESTART_ATTEMPT_DELAY = 1000;
 
@@ -38,10 +46,10 @@ var POPUP_MARGIN = 16;
 var speechInput;
 
 /** {Number} Timestamp of the last attempt to start hotword speech recognition */
-var lastRecognitionStartTime = 0;
+var lastSpeechRecStartTime = 0;
 
-/** {Boolean} Whether the last result (success or error) was processed by a handler */
-var recognitionProcessed = false;
+/** {Boolean} The status of speech recognition being processed */
+var speechRecStatus = SPEECH_REC_STATA.notHandled;
 
 /** {Number} ID of the last focused regular browser window */
 var lastFocusedWindowID = chrome.windows.WINDOW_ID_CURRENT; // Necessary because of https://crbug.com/546696.
@@ -93,14 +101,14 @@ function initHotwordListener() {
  */
 function startListeningForHotword() {
 	// Don't make multiple restart attempts too frequently.
-	var timeSinceLastStart = (new Date()).getTime() - lastRecognitionStartTime;
+	var timeSinceLastStart = (new Date()).getTime() - lastSpeechRecStartTime;
 	if (timeSinceLastStart < MIN_RESTART_ATTEMPT_DELAY) {
 		setTimeout(startListeningForHotword, MIN_RESTART_ATTEMPT_DELAY - timeSinceLastStart);
 		return;
 	}
-	lastRecognitionStartTime = (new Date()).getTime();
+	lastSpeechRecStartTime = (new Date()).getTime();
 	
-	recognitionProcessed = false;
+	speechRecStatus = SPEECH_REC_STATA.notHandled;
 	
 	// Start speech recognition if not already running.
 	try {
@@ -128,32 +136,36 @@ function handleSpeechRecError(e) {
 		case "aborted":
 			// If speech recognition was aborted by something other than this extension
 			// (often due to speech recognition happening elsewhere), wait and then restart.
-			if (!recognitionProcessed) {
-				setTimeout(startListeningForHotword, POST_ABORT_RESTART_DELAY);
+			if (speechRecStatus === SPEECH_REC_STATA.notHandled) {
+				speechRecStatus = SPEECH_REC_STATA.restartAfterDelay;
+			} else {
+				speechRecStatus = SPEECH_REC_STATA.dontAutoRestart;
 			}
-			recognitionProcessed = true;
 			return;
 		case "no-speech":
-			// If speech recognition gave up, restart.
-			startListeningForHotword();
-			recognitionProcessed = true;
+			// If speech recognition gave up, restart without showing the error state.
+			speechRecStatus = SPEECH_REC_STATA.restartASAP;
 			return;
 		case "not-allowed":
 		case "service-not-allowed":
-			// If there was a potential permission error, show the set-up page.
+			// If there was a potential permission error, open the set-up page.
 			chrome.tabs.create({ url: chrome.extension.getURL("setup.html") });
+			speechRecStatus = SPEECH_REC_STATA.dontAutoRestart;
 			break;
 		case "network":
 			if (!navigator.onLine) {
 				// If the device is offline, show a non-error inactive status.
 				setToolbarIcon("inactive", TOOLTIPS.offline);
-				recognitionProcessed = true;
+				speechRecStatus = SPEECH_REC_STATA.dontAutoRestart;
 				return;
 			}
 			// If there was a different network-related error, try to restart, but
 			// still show the error in the meantime.
-			startListeningForHotword();
+			speechRecStatus = SPEECH_REC_STATA.restartASAP;
 			break;
+		default:
+			// If it was not a known error, attempt to restart after showing the error state.
+			speechRecStatus = SPEECH_REC_STATA.restartASAP;
 	}
 	
 	// If an error handler didn't return, show the error state on the toolbar icon.
@@ -162,8 +174,6 @@ function handleSpeechRecError(e) {
 		errorText += ": " + e.error.replace(/-/g, " ");
 	}
 	setToolbarIcon("error", errorText);
-	
-	recognitionProcessed = true;
 }
 
 /**
@@ -171,14 +181,12 @@ function handleSpeechRecError(e) {
  * @param {SpeechRecognitionEvent} e - The speech recognition result event
  */
 function handleSpeechRecResult(e) {
-	setToolbarIcon("inactive");
-	
-	// If the hotword wasn't said, start over.
+	// If the hotword wasn't said, don't do anything with this result.
 	if (e.results.length === 0 || !e.results[e.resultIndex][0].transcript.match(HOTWORD_REGEX)) {
-		startListeningForHotword();
-		recognitionProcessed = true;
 		return;
 	}
+	
+	setToolbarIcon("inactive");
 	
 	if (typeof popupWindowID !== "undefined") {
 		// If a previous pop-up might still be open, close it.
@@ -206,7 +214,7 @@ function handleSpeechRecResult(e) {
 		});
 	});
 	
-	recognitionProcessed = true;
+	speechRecStatus = SPEECH_REC_STATA.dontAutoRestart;
 }
 
 // Workaround for https://crbug.com/546696.
@@ -221,8 +229,8 @@ chrome.windows.onRemoved.addListener(function (windowID) {
 	// Restart listening when the pop-up is closed.
 	if (windowID === popupWindowID) {
 		popupWindowID = undefined;
+		startListeningForHotword();
 	}
-	startListeningForHotword();
 }, {
 	windowTypes: ["popup"]
 });
@@ -231,12 +239,17 @@ chrome.windows.onRemoved.addListener(function (windowID) {
  * Handle speech recognition ending, regardless of result.
  */
 function handleSpeechRecEnd(e) {
-	if (recognitionProcessed) {
-		// If a success or failure handler received the result, let it be processed there.
-		return;
+	switch (speechRecStatus) {
+		case SPEECH_REC_STATA.dontAutoRestart:
+			return;
+		case SPEECH_REC_STATA.restartAfterDelay:
+			setTimeout(startListeningForHotword, POST_ABORT_RESTART_DELAY);
+			return;
+		case SPEECH_REC_STATA.restartASAP:
+		default:
+			// If speech recognition ended in a way that wasn't handled by any other handler, restart.
+			startListeningForHotword();
 	}
-	// If speech recognition ended in a way that wasn't processed by any other handler, restart.
-	startListeningForHotword();
 }
 
 /**
