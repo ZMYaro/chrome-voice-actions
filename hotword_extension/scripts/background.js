@@ -62,9 +62,16 @@ chrome.runtime.onInstalled.addListener(function (details) {
 	if (details.reason === "install") {
 		chrome.tabs.create({ url: chrome.extension.getURL("setup.html") });
 	}
-	
-	initHotwordListener();
 });
+
+// If the extension has been set up, automatically start.
+chrome.storage.local.get({ setUp: false }, function (items) {
+	if (items.setUp) {
+		initHotwordListener();
+	} else {
+		setToolbarIcon("inactive", "Not set up");
+	}
+})
 
 function initHotwordListener() {
 	setToolbarIcon("inactive");
