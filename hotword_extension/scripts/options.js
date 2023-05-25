@@ -1,7 +1,4 @@
 window.addEventListener("load", function () {
-	// Attempt to copy settings from localStorage to synced storage.
-	copySettings();
-	
 	// Display the extension version number.
 	document.getElementById("versionNumber").textContent =
 		"Version " +
