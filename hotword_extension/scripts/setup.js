@@ -97,11 +97,19 @@ function handleStepUndone(stepElemID) {
  * Handle all set-up parts being done.
  */
 function handleAllDone() {
+	// Save that the user completed set-up.
+	chrome.storage.local.set({ setUp: true });
+	
 	// Go to the extension's options page now that permission has been granted.
 	if (chrome.runtime && chrome.runtime.openOptionsPage) {
 		chrome.runtime.openOptionsPage();
 	} else {
 		chrome.tabs.update({ url: chrome.extension.getURL("options_page.html") });
 	}
+	
+	// Start listening now that permission has been granted.
+	chrome.extension.getBackgroundPage().initHotwordListener();
+	
+	// Close the set-up page.
 	window.close();
 }
