@@ -18,6 +18,8 @@
 	
 	"background": {
 		"scripts": [
+			"scripts/shared.js",
+			"scripts/lib/extpay.js",
 			"scripts/background.js"
 		],
 		"persistent": true
@@ -38,5 +40,13 @@
 		"page": "options_embedded.html",
 		"open_in_tab": false,
 		"chrome_style": true
-	}
+	},
+	
+	"content_scripts": [
+		{
+			"matches": ["https://extensionpay.com/*"],
+			"js": ["scripts/lib/extpay.js"],
+			"run_at": "document_start"
+		}
+	]
 }
