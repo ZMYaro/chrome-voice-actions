@@ -111,7 +111,7 @@ a.buttonLink {
 		background-color: white;
 		color: #212121;
 	}
-	a,
+	a:not(:active),
 	a.buttonLink:visited,
 	button {
 		color: #8ab4f8;
