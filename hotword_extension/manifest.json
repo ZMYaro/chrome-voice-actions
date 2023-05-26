@@ -8,8 +8,8 @@
 	"version": "1.0",
 	
 	"icons": {
-		"48": "images/icon_48.png",
-		"128": "images/icon_128.png"
+		"48": "images/logo/icon_48.png",
+		"128": "images/logo/icon_128.png"
 	},
 	"permissions": [
 		"management",
@@ -27,10 +27,10 @@
 	
 	"browser_action": {
 		"default_icon": {
-			"16": "images/icon_inactive_16.png",
-			"19": "images/icon_inactive_19.png",
-			"32": "images/icon_inactive_32.png",
-			"38": "images/icon_inactive_38.png"
+			"16": "images/logo/icon_inactive_16.png",
+			"19": "images/logo/icon_inactive_19.png",
+			"32": "images/logo/icon_inactive_32.png",
+			"38": "images/logo/icon_inactive_38.png"
 		},
 		"default_title": "Not listening"
 	},
