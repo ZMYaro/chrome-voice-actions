@@ -1,5 +1,5 @@
 window.addEventListener('load', async function () {
-	// Make chrome:// links work when clicked.
+	// Make chrome:// permission page link work when clicked.
 	var permissionPageLink = document.querySelector("a[href^=\"chrome://settings/content/siteDetails\"]");
 	permissionPageLink.href = permissionPageLink.href.replace("{{id}}", chrome.runtime.id);
 	permissionPageLink.onclick = function (e) {

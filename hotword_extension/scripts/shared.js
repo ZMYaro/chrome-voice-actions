@@ -1,6 +1,9 @@
 /** @constant {String} The ID of the main Voice Actions for Chrome extension in the Chrome Web Store */
 var VOICE_ACTIONS_EXT_ID = "hhpjefokaphndbbidpehikcjhldaklje";
 
+/** @constant {String} The ID of the main Voice Actions extension with ExtensionPay */
+var EXTPAY_ID = "voice-actions";
+
 /** @constant {Object<String,*>} Setting IDs and their default values */
 var DEFAULT_SETTINGS = {
 	setUp: false
@@ -31,4 +34,20 @@ async function checkMicPermission() {
 	// Check whether the user has granted microphone access.
 	var permissionStatus = await navigator.permissions.query({ name: "microphone" });
 	return (permissionStatus.state === "granted");
+}
+
+/**
+ * Get a setting from the Chrome storage API.
+ * @param {String} settingName - The name of the setting
+ * @param {String} [storageArea] - "local" or "sync" (defaults to "sync")
+ * @returns {Promise<Boolean|Number|String>} The setting's value, once retrieved, if any
+ */
+function getSetting(settingName, storageArea) {
+	return new Promise(function (resolve, reject) {
+		var apiQuery = {};
+		apiQuery[settingName] = DEFAULT_SETTINGS[settingName];
+		chrome.storage[storageArea || "sync"].get(apiQuery, function (settings) {
+			resolve(settings[settingName]);
+		});
+	});
 }

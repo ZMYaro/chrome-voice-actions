@@ -4,6 +4,9 @@ var TOTAL_PARTS = 3;
 /** {Number} The number of set-up parts done so far */
 var partsDone = 0;
 
+/** {ExtPay} Reference to the background ExtensionPay instance */
+var extPay = chrome.extension.getBackgroundPage().extPay;
+
 window.addEventListener("load", function () {
 	checkMainExt();
 	document.getElementById("permissionTestButton").addEventListener("click", initMicTest);
@@ -39,6 +42,7 @@ function checkMainExt() {
 
 /**
  * Check whether the microphone permission was already granted.
+ * @returns {Promise}
  */
 async function checkPermission() {
 	var micActive = await checkMicActive(),
@@ -68,18 +72,30 @@ function initMicTest() {
 
 /**
  * Check whether the user already paid to activate the extension.
+ * @returns {Promise}
  */
-function checkPayment() {
-	// TODO
+async function checkPayment() {
+	var user = await extPay.getUser();
+	if (user.paid) {
+		handleStepDone("payment");
+	}
 }
 
 /**
  * Show the payment flow.
  */
 function initPayment() {
-	// TODO
-	alert("Not yet implemented.");
-	handleStepDone("payment");
+	if (!navigator.onLine) {
+		// Don't try to activate if offline.
+		alert("You must be online to activate \u201cOK Google\u201d for Voice Actions for Chrome.");
+		return;
+	}
+	
+	// This adds the listener here and doesn't remove it because ExtensionPay doesn't support
+	// removeListener yet, but it is unlikely someone would keep clicking the button enough times
+	// to add a problematic number of listeners (unless something has gone wrong somewhere else).
+	extPay.onPaid.addListener(checkPayment);
+	extPay.openPaymentPage();
 }
 
 /**

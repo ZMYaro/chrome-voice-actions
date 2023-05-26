@@ -61,11 +61,15 @@ a.buttonLink {
 	}
 
 .small-icon {
-	width: 16px;
-	height: 16px;
-	margin: -4px 2px;
+	width: 1em;
+	height: 1em;
+	margin: -0.25em 0.125em;
 	opacity: 0.5;
 }
+.stripeLogo {
+	height: 2em;
+}
+
 .stepNumber {
 	display: inline-flex;
 	justify-content: center;
@@ -116,7 +120,8 @@ a.buttonLink {
 	button {
 		color: #8ab4f8;
 	}
-	.small-icon {
+	.small-icon,
+	.stripeLogo {
 		filter: invert(1);
 	}
 }
