@@ -67,12 +67,43 @@ chrome.runtime.onInstalled.addListener(function (details) {
 	}
 });
 
+chrome.browserAction.onClicked.addListener(async function () {
+	if (!navigator.onLine) {
+		// If offline, don't try anything further.
+		setToolbarIcon("inactive", TOOLTIPS.offline);
+		return;
+	}
+	
+	var isSetUp = await checkSetUp();
+	if (!isSetUp) {
+		// If the toolbar button was clicked and the extension isn't set up,
+		// open the set-up page.
+		chrome.tabs.create({ url: chrome.extension.getURL("setup.html") });
+		return;
+	}
+	
+	// Otherwise, if the extension is running, attempt to restart speech recognition.
+	startListeningForHotword();
+});
+
 async function init() {
+	var isSetUp = await checkSetUp();
+	if (isSetUp) {
+		// If the extension has been set up and activated, automatically start.
+		initHotwordListener();
+	}
+}
+
+/**
+ * Check whether the extension is set up and authorized.
+ * @returns {Promise<Boolean>}
+ */
+async function checkSetUp() {
 	var isSetUp = await getSetting("setUp", "local");
 	if (!isSetUp) {
 		// If the extension hasn't been set up, show as inactive.
 		setToolbarIcon("inactive", "Not set up");
-		return;
+		return false;
 	}
 	
 	try {
@@ -80,17 +111,16 @@ async function init() {
 	} catch (err) {
 		// If unable to check the user status, show an error.
 		setToolbarIcon("error", TOOLTIPS.activationError);
-		return;
+		return false;
 	}
 	
 	if (!user || !user.paid) {
 		// If the extension was set up but isn't activated, show an error.
 		setToolbarIcon("error", TOOLTIPS.notActivated);
-		return;
+		return false;
 	}
 	
-	// If the extension has been set up and activated, automatically start.
-	initHotwordListener();
+	return true;
 }
 
 /**
@@ -113,9 +143,6 @@ function initHotwordListener() {
 	speechInput.onerror = handleSpeechRecError;
 	speechInput.onresult = handleSpeechRecResult;
 	speechInput.onend = handleSpeechRecEnd;
-	
-	// If the toolbar button is clicked, attempt to restart speech recognition.
-	chrome.browserAction.onClicked.addListener(startListeningForHotword);
 	
 	// If the device goes offline, attempt to restart speech recognition when it comes back online.
 	// (No offline listener because, if the browser doesn't support offline speech
