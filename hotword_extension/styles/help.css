@@ -29,7 +29,7 @@ section {
 	h3 {
 		color: white;
 	}
-	a {
+	a:not(:active) {
 		color: #8ab4f8;
 	}
 	button,
