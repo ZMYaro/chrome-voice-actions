@@ -317,10 +317,10 @@ chrome.windows.onFocusChanged.addListener(function (windowID) {
 function setToolbarIcon(status, text) {
 	chrome.browserAction.setIcon({
 		path: {
-			16: "../images/icon_" + status + "_16.png",
-			19: "../images/icon_" + status + "_19.png",
-			32: "../images/icon_" + status + "_32.png",
-			38: "../images/icon_" + status + "_38.png"
+			16: "../images/logo/icon_" + status + "_16.png",
+			19: "../images/logo/icon_" + status + "_19.png",
+			32: "../images/logo/icon_" + status + "_32.png",
+			38: "../images/logo/icon_" + status + "_38.png"
 		}
 	});
 	chrome.browserAction.setTitle({
