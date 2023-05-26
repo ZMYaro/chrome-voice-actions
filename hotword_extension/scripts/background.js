@@ -29,7 +29,9 @@ var TOOLTIPS = {
 	active: "Listening for \u201cOK Chrome\u201d",
 	inactive: "Listening paused",
 	error: "An error occurred",
-	offline: "Offline"
+	offline: "Offline",
+	notActivated: "Not yet activated",
+	activationError: "Couldn\'t check activation"
 };
 
 /** @constant {Object<String,Number>} The dimensions of the pop-up window to open with the hotword, in pixels */
@@ -54,22 +56,46 @@ var lastFocusedWindowID = chrome.windows.WINDOW_ID_CURRENT; // Necessary because
 /** {Number} ID of the last pop-up window opened */
 var popupWindowID;
 
+/** {ExtPay} ExtensionPay's background instance */
+var extPay = ExtPay(EXTPAY_ID);
+extPay.startBackground();
+
 chrome.runtime.onInstalled.addListener(function (details) {
-	// Show the set-up page on first install.
 	if (details.reason === "install") {
+		// Show the set-up page on first install.
 		chrome.tabs.create({ url: chrome.extension.getURL("setup.html") });
 	}
 });
 
-// If the extension has been set up, automatically start.
-chrome.storage.local.get({ setUp: false }, function (items) {
-	if (items.setUp) {
-		initHotwordListener();
-	} else {
+async function init() {
+	var isSetUp = await getSetting("setUp", "local");
+	if (!isSetUp) {
+		// If the extension hasn't been set up, show as inactive.
 		setToolbarIcon("inactive", "Not set up");
+		return;
 	}
-})
+	
+	try {
+		var user = await extPay.getUser();
+	} catch (err) {
+		// If unable to check the user status, show an error.
+		setToolbarIcon("error", TOOLTIPS.activationError);
+		return;
+	}
+	
+	if (!user || !user.paid) {
+		// If the extension was set up but isn't activated, show an error.
+		setToolbarIcon("error", TOOLTIPS.notActivated);
+		return;
+	}
+	
+	// If the extension has been set up and activated, automatically start.
+	initHotwordListener();
+}
 
+/**
+ * Set up the speech recognition object for hotword listening and begin listening.
+ */
 function initHotwordListener() {
 	setToolbarIcon("inactive");
 	
@@ -274,3 +300,5 @@ function setToolbarIcon(status, text) {
 		title: text || TOOLTIPS[status]
 	});
 }
+
+init();
