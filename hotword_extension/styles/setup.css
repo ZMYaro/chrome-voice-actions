@@ -9,8 +9,56 @@ body {
 h2,
 p {
 	margin-left: 3rem;
+	margin-bottom: 0.5em;
 	max-width: 600px;
 }
+
+/* Material button styles adapted from MaterialZ. */
+a.buttonLink,
+a.buttonLink:visited,
+button {
+	color: #0000ee;
+}
+
+button,
+a.buttonLink {
+	display: inline-block;
+	margin: 4px;
+	padding: 8px 16px;
+	border: 0 none;
+	background-color: transparent;
+	border-radius: 3px;
+	
+	text-transform: uppercase;
+	text-decoration: none;
+	font-family: inherit;
+	font-size: 87.5%;
+	font-size: 0.875rem;
+	font-weight: 500; /* Medium */
+	padding: 10px 16px 9px;
+	
+	cursor: pointer;
+	user-select: none;
+	
+	margin-left: 3em;
+}
+	button:enabled:hover,
+	button:enabled:focus,
+	a.buttonLink:not(.disabled):hover,
+	a.buttonLink:not(.disabled):focus {
+		background-color: #e2e3e3;
+		background-color: rgba(128, 128, 128, 0.2);
+	}
+	button:enabled:active,
+	a.buttonLink:not(.disabled):active {
+		background-color: #c4c5c5;
+		background-color: rgba(128, 128, 128, 0.4);
+	}
+	button:disabled,
+	.done a.buttonLink {
+		opacity: 0.3;
+		cursor: not-allowed;
+	}
 
 .small-icon {
 	width: 16px;
@@ -33,21 +81,25 @@ p {
 	background-color: black;
 	color: white;
 }
-.done {
+
+.done h2 {
 	text-decoration: line-through;
 }
-	.done .stepNumber {
-		color: transparent;
+.done .stepNumber {
+	color: transparent;
+}
+	.done .stepNumber::before {
+		content: "\2713"; /* Checkmark */
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		
+		color: white;
 	}
-		.done .stepNumber::before {
-			content: "\2713"; /* Checkmark */
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
-			
-			color: white;
-		}
+.done a.buttonLink {
+	pointer-events: none;
+}
 
 @media (prefers-color-scheme: dark) {
 	body {
@@ -59,7 +111,9 @@ p {
 		background-color: white;
 		color: #212121;
 	}
-	a {
+	a,
+	a.buttonLink:visited,
+	button {
 		color: #8ab4f8;
 	}
 	.small-icon {

@@ -3,6 +3,7 @@
 	<head>
 		<title>Set-up - &ldquo;OK Chrome&rdquo; for Voice Actions for Chrome</title>
 		<link rel="stylesheet" type="text/css" href="styles/setup.css" />
+		<script type="text/javascript" src="scripts/shared.js"></script>
 		<script type="text/javascript" src="scripts/mic_check.js"></script>
 		<script type="text/javascript" src="scripts/setup.js"></script>
 	</head>
@@ -11,28 +12,44 @@
 		
 		<br />
 		
-		<h2 id="mainExtStep">
-			<span class="stepNumber">1</span>
-			You must have Voice Actions for Chrome installed
-		</h2>
-		<p>This is an add-on for the <a href="https://chrome.google.com/webstore/detail/hhpjefokaphndbbidpehikcjhldaklje" target="_blank">Voice Actions for Chrome</a> extension.  You must have Voice Actions for Chrome installed and enabled for &ldquo;OK Chrome&rdquo; to activate it.</p>
+		<section id="mainExtStep" class="step">
+			<h2>
+				<span class="stepNumber">1</span>
+				Install Voice Actions for Chrome
+			</h2>
+			<p>
+				&ldquo;OK Chrome&rdquo; is an add-on for the <a href="https://chrome.google.com/webstore/detail/hhpjefokaphndbbidpehikcjhldaklje" target="_blank">Voice Actions for Chrome</a> extension.  You must have Voice Actions for Chrome installed and enabled for &ldquo;OK Chrome&rdquo; to activate it
+			</p>
+			<a class="buttonLink" href="https://chrome.google.com/webstore/detail/hhpjefokaphndbbidpehikcjhldaklje" target="_blank">Install Voice Actions</a>
+		</section>
 		
 		<br />
 		
-		<h2 id="permissionStep">
-			<span class="stepNumber">2</span>
-			The extension needs permission to access your microphone for speech recognition.
-		</h2>
-		<p>Select &ldquo;Allow&rdquo; in the dialog above.  If you don't see the permission dialog, you might need to <a href="chrome://settings/content/siteDetails?site=chrome-extension://{{id}}">allow microphone access in Chrome settings</a>.</p>
-		<p id="hardwareCheckMessage" style="display: none;">Also, make sure your microphone is connected and turned on.</p>
+		<section id="permissionStep" class="step">
+			<h2>
+				<span class="stepNumber">2</span>
+				Grant microphone access
+			</h2>
+			<p>
+				&ldquo;OK Chrome&rdquo; needs permission to access your microphone for speech recognition.  After you select the button to show the permission dialog, select &ldquo;Allow&rdquo; in the dialog that appears by the Chrome toolbar.  If you don't see the permission dialog, you might need to <a href="chrome://settings/content/siteDetails?site=chrome-extension://{{id}}">allow microphone access in Chrome settings</a>.
+			</p>
+			<p id="hardwareCheckMessage" style="display: none;">
+				Also, make sure your microphone is connected and turned on.
+			</p>
+			<button id="permissionTestButton">Show permission dialog</button>
+		</section>
 		
 		<br />
 		
-		<h2 id="donationStep">
-			<span class="stepNumber">3</span>
-			Sign in with Ko-fi or Patreon
-		</h2>
-		<p>&ldquo;OK Chrome&rdquo; activation is a premium feature for Voice Actions for Chrome for supporters.  Sign in with Ko-fi or Patreon to activate it.</p>
-		<p style="font-size:5em;font-style:italic;">TODO</p>
+		<section id="paymentStep">
+			<h2 id="paymentStep">
+				<span class="stepNumber">3</span>
+				Activate the extension
+			</h2>
+			<p>
+				&ldquo;OK Chrome&rdquo; is a premium feature for Voice Actions for Chrome.  Select the button to activate.  If you already activated &ldquo;OK Chrome&rdquo; on another device and are being charged again, make sure you are signed into Chrome with the same account.
+			</p>
+			<button id="paymentButton">Activate &ldquo;OK Chrome&rdquo;</button>
+		</section>
 	</body>
 </html>

@@ -1,6 +1,3 @@
-/** @constant {String} The ID of the main Voice Actions for Chrome extension */
-var VOICE_ACTIONS_EXT_ID = "hhpjefokaphndbbidpehikcjhldaklje";
-
 /** @constant {String} The URL of the Voice Actions for Chrome pop-up */
 var VOICE_ACTIONS_POPUP_URL = "chrome-extension://" + VOICE_ACTIONS_EXT_ID + "/popup.html";
 
