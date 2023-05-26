@@ -47,6 +47,30 @@ window.addEventListener("load", function () {
 		document.getElementById("currentKeyboardShortcut").textContent = shortcutText;
 	});
 	
+	// Show hotword extension status.
+	chrome.management.get(HOTWORD_EXT_ID, function (extInfo) {
+		if (!extInfo || !extInfo.enabled) {
+			// If the extension is not installed or enabled, keep the step open.
+			return;
+		}
+		document.getElementById("hotwordInstallHint").style.display = "none";
+		document.getElementById("hotwordInstalledHint").style.removeProperty("display");
+	});
+	chrome.management.onEnabled.addListener(function (extInfo) {
+		if (extInfo.id !== HOTWORD_EXT_ID) { return; }
+		// If the hotword extension was enabled (which also gets triggered
+		// on installation), mark the step as done.
+		document.getElementById("hotwordInstallHint").style.display = "none";
+		document.getElementById("hotwordInstalledHint").style.removeProperty("display");
+	});
+	chrome.management.onDisabled.addListener(function (extInfo) {
+		if (extInfo.id !== HOTWORD_EXT_ID) { return; }
+		// If the hotword extension was disabled (which also gets triggered
+		// on uninstallation), mark the step as done.
+		document.getElementById("hotwordInstalledHint").style.display = "none";
+		document.getElementById("hotwordInstallHint").style.removeProperty("display");
+	});
+	
 	// Set up icon inversion option.
 	document.getElementById("toolbarIconSetting").addEventListener("input", function (e) {
 		setToolbarIcon(e.target.value);
