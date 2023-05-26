@@ -1,3 +1,6 @@
+/** @constant {String} The ID of the hotword extension in the Chrome Web Store */
+var HOTWORD_EXT_ID = "gclpfolambnbjfeglhbjojolplnlpolg";
+
 /** @constant {Object<String,String>} Setting IDs and their default values */
 var DEFAULT_SETTINGS = {
 	"search": "google",

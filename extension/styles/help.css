@@ -29,10 +29,6 @@
 	line-height: 1.25;
 }
 
-#currentKeyboardShortcut {
-	font-weight: bold;
-}
-
 /* Copy these styles from options.css for use on the embedded options page without importing all of options.css. */
 section {
 	padding-left: 18px;
