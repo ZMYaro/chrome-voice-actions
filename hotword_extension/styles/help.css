@@ -35,8 +35,7 @@ section {
 	button,
 	input,
 	select,
-	.small-icon,
-	#actionExamples > li img {
+	.small-icon {
 		filter: invert(1);
 	}
 }
