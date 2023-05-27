@@ -20,4 +20,7 @@ function recognitionStarted() {
 	} else {
 		chrome.tabs.update({ url: chrome.extension.getURL("options_page.html") });
 	}
+	
+	// Close the permission prompt page.
+	window.close();
 }
