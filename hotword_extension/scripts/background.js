@@ -99,7 +99,7 @@ async function init() {
  * @returns {Promise<Boolean>}
  */
 async function checkSetUp() {
-	var isSetUp = await getSetting("setUp", "local");
+	var isSetUp = await getSetting("setUp", null, "local");
 	if (!isSetUp) {
 		// If the extension hasn't been set up, show as inactive.
 		setToolbarIcon("inactive", "Not set up");

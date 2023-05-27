@@ -134,13 +134,15 @@ function copySettings() {
 /**
  * Get a setting from synced storage.
  * @param {String} settingName - The name of the setting
+ * @param {String} [defaultValue] - The setting's default value
+ * @param {String} [storageArea] - "local" or "sync" (defaults to "sync")
  * @returns {Promise<Boolean|Number|String>} The setting's value, once retrieved, if any
  */
-function getSetting(settingName) {
+function getSetting(settingName, defaultValue, storageArea) {
 	return new Promise(function (resolve, reject) {
 		var apiQuery = {};
-		apiQuery[settingName] = DEFAULT_SETTINGS[settingName];
-		chrome.storage.sync.get(apiQuery, function (settings) {
+		apiQuery[settingName] = defaultValue || DEFAULT_SETTINGS[settingName];
+		chrome.storage[storageArea || "sync"].get(apiQuery, function (settings) {
 			resolve(settings[settingName]);
 		});
 	});
