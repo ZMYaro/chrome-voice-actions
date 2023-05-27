@@ -19,7 +19,7 @@ body {
 		background-color: #212121;
 		color: white;
 	}
-	a {
+	a:not(:active) {
 		color: #8ab4f8;
 	}
 	.small-icon {
