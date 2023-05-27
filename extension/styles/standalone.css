@@ -1,6 +1,8 @@
 body {
-	font-family: Roboto, "Droid Sans", Helvetica, Arial, sans-serif;
-	padding: 1em 3em;
+	font-family: Roboto, system-ui, "Segoe UI", "Droid Sans", Helvetica, Arial, sans-serif;
+	padding: 1.5em 3em;
+	max-width: 600px;
+	margin: auto;
 	
 	background-color: white;
 	color: black;
