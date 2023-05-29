@@ -47,7 +47,7 @@ async function openURL(url) {
 			// Open in the current tab if it is open to the new tab page;
 			// otherwise open in a new tab.
 			var activeTab = await getActiveTab();
-			if (activeTab.url.substring(0, 15) === "chrome://newtab") {
+			if (activeTab && activeTab.url.substring(0, 15) === "chrome://newtab") {
 				chrome.tabs.update(activeTab.id, { url: url });
 			} else {
 				chrome.tabs.create({ url: url });
