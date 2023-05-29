@@ -241,7 +241,7 @@ function handleSpeechRecError(e) {
  */
 function handleSpeechRecResult(e) {
 	// If the hotword wasn't said, don't do anything with this result.
-	if (e.results.length === 0 || !e.results[e.resultIndex][0].transcript.match(HOTWORD_REGEX)) {
+	if (e.results.length === 0 || !e.results[e.resultIndex][0].transcript.replace(/,|\.|\?|!/g, '').match(HOTWORD_REGEX)) {
 		return;
 	}
 	
