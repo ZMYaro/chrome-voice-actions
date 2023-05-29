@@ -34,9 +34,11 @@ var TOOLTIPS = {
 	activationError: "Couldn\'t check activation"
 };
 
-/** @constant {Object<String,Number>} The dimensions of the pop-up window to open with the hotword, in pixels */
-var POPUP_DIMENSIONS = { width: 160, height: 180 };
-// TODO: Make this adapt to non-default font sizes.
+/** @constant {Object<String,Number>} The default dimensions of the Voice Actions pop-up window
+ *                                    with Chrome OS window borders and default font size, in pixels */
+var POPUP_DIMENSIONS = { width: 160, height: 209 };
+// TODO: Make this adapt to non-default font sizes.  The window will correct
+// itself, but it will look better if it opens at the correct size to begin with.
 
 /** @constant {Number} How far from the edge of the screen to spawn the pop-up */
 var POPUP_MARGIN = 16;
