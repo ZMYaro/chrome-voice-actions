@@ -43,7 +43,8 @@ var BASE_URLS = {
 		"bing": "https://www.bing.com/search?q=%s",
 		"duckduckgo": "https://duckduckgo.com/?q=%s",
 		"google": "https://www.google.com/search?q=%s",
-		"yahoo": "https://search.yahoo.com/search?p=%s"
+		"yahoo": "https://search.yahoo.com/search?p=%s",
+		"yandex": "https://yandex.com/search/?text=%s"
 	},
 	"images": {
 		"ask": "https://www.ask.com/web?q=images%20of%20%s",
@@ -52,7 +53,8 @@ var BASE_URLS = {
 		"flickr": "https://www.flickr.com/search/?q=%s",
 		"google": "https://www.google.com/search?tbm=isch&q=%s",
 		"imgur": "https://imgur.com/gallery?q=%s",
-		"yahoo": "https://images.search.yahoo.com/search/images?p=%s"
+		"yahoo": "https://images.search.yahoo.com/search/images?p=%s",
+		"yandex": "https://yandex.com/images/search?text=%s"
 	},
 	"videos": {
 		"ask": "https://www.ask.com/youtube?q=%s",
@@ -66,6 +68,7 @@ var BASE_URLS = {
 		"netflix": "https://www.netflix.com/search?q=%s",
 		"twitch": "https://www.twitch.tv/search?term=%s",
 		"vimeo": "https://vimeo.com/search?q=%s",
+		"yandex": "https://yandex.com/video/search?text=%s",
 		"youtube": "https://www.youtube.com/results?search_query=%s"
 	},
 	"map": {
@@ -74,11 +77,13 @@ var BASE_URLS = {
 		"google": "https://www.google.com/maps?q=%s",
 		"mapquest": "https://www.mapquest.com/search/%s",
 		"openstreetmap": "https://www.openstreetmap.org/search?query=%s",
-		"yahoo": "https://search.yahoo.com/local/s;?p=%s"
+		"yahoo": "https://search.yahoo.com/local/s;?p=%s",
+		"yandex": "https://yandex.com/maps/?mode=search&text=%s"
 	},
 	"directions": {
 		"bing": "https://www.bing.com/maps?rtp=~adr.%s",
-		"google": "https://maps.google.com/maps?daddr=%s"
+		"google": "https://maps.google.com/maps?daddr=%s",
+		"yandex": "https://yandex.com/maps/?mode=routes&rtext=~%s"
 	},
 	"music": {
 		"amazon": "https://music.amazon.com/search/%s",
@@ -95,7 +100,8 @@ var BASE_URLS = {
 		"duckduckgo": "https://duckduckgo.com/?q=%s",
 		"google": "https://www.google.com/search?q=%s",
 		"wolframalpha": "https://www.wolframalpha.com/input/?i=%s",
-		"yahoo": "https://search.yahoo.com/search?p=%s"
+		"yahoo": "https://search.yahoo.com/search?p=%s",
+		"yandex": "https://yandex.com/search/?text=%s"
 	},
 	"imFeelingLucky": {
 		"google": "https://www.google.com/search?btnI=745&q=%s"
