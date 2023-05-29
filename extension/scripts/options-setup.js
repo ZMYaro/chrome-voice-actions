@@ -53,7 +53,11 @@
 	function goToPage(e) {
 		// Prevent the browser from following the link.
 		e.preventDefault();
-		chrome.tabs.update({ url: e.target.href });
+		if (e.target.target === "_blank") {
+			chrome.tabs.create({ url: e.target.href });
+		} else {
+			chrome.tabs.update({ url: e.target.href });
+		}
 	}
 	
 	/**

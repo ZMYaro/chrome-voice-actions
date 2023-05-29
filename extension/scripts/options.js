@@ -2,6 +2,9 @@ window.addEventListener("load", function () {
 	// Attempt to copy settings from localStorage to synced storage.
 	copySettings();
 	
+	// Run the Options Page Boilerplate link set-up function for the embedded options page.
+	setUpChromeLinks();
+	
 	// Display the extension version number.
 	document.getElementById("versionNumber").textContent =
 		"Version " +
@@ -115,4 +118,29 @@ function setSetting(setting, value) {
 			alert("Something went wrong: " + chrome.runtime.lastError);
 		}
 	});
+}
+
+// Copied from the Options Page Boilerplate for use on the embedded options page.
+/**
+ * Change any chrome:// link to use the goToPage function
+ */
+function setUpChromeLinks() {
+	// Get the list of <a>s whose links begin with “chrome://”.
+	var links = document.querySelectorAll('a[href^=\"chrome://');
+	for(var i = 0; i < links.length; i++) {
+		// Tell each Chrome page link to use the override function.
+		links[i].onclick = goToPage;
+	}
+}
+/**
+ * Use chrome.tabs.update to open a link Chrome will not open normally
+ */
+function goToPage(e) {
+	// Prevent the browser from following the link.
+	e.preventDefault();
+	if (e.target.target === "_blank") {
+		chrome.tabs.create({ url: e.target.href });
+	} else {
+		chrome.tabs.update({ url: e.target.href });
+	}
 }
