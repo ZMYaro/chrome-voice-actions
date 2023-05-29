@@ -107,7 +107,7 @@ var ACTIONS = {
 		"icon": ICON_URLS.mic,
 		"handler": function (query, disp) {
 			if (chrome.runtime.openOptionsPage) {
-				delayAction(chrome.runtime.openOptionsPage);
+				delayAction(() => chrome.runtime.openOptionsPage(closePopup));
 			} else {
 				delayAction(() => openURL(chrome.runtime.getURL("options_page.html")));
 			}
