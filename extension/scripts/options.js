@@ -110,13 +110,24 @@ window.addEventListener("load", function () {
 	speechInput.start();
 }, false);
 
+/**
+ * Save a new setting value to synced storage.
+ * @param {String} setting
+ * @param {Array|Boolean|Number|String} value
+ * @returns {Promise} Resolves when the setting has been saved
+ */
 function setSetting(setting, value) {
-	var newSettingObj = {};
-	newSettingObj[setting] = value;
-	chrome.storage.sync.set(newSettingObj, function () {
-		if (chrome.runtime.lastError) {
-			alert("Something went wrong: " + chrome.runtime.lastError);
-		}
+	return new Promise(function (resolve, reject) {
+		var newSettingObj = {};
+		newSettingObj[setting] = value;
+		chrome.storage.sync.set(newSettingObj, function () {
+			if (chrome.runtime.lastError) {
+				alert("Something went wrong: " + chrome.runtime.lastError);
+				reject(chrome.runtime.lastError);
+				return
+			}
+			resolve();
+		});
 	});
 }
 
