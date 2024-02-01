@@ -42,6 +42,8 @@ window.addEventListener("load", function () {
 			formElem.disabled = false;
 		}
 		
+		// Disabled I'm Feeling Lucky menu if applicable.
+		document.getElementById("imFeelingLuckySetting").disabled = (settings.launch === "chrome");
 		// Show system theme bug warning if applicable.
 		document.getElementById("systemThemeCrbugWarning").style.display =
 			(settings.toolbarColorScheme === "default") ? "block" : "none";
@@ -78,7 +80,12 @@ window.addEventListener("load", function () {
 		document.getElementById("hotwordInstallHint").style.removeProperty("display");
 	});
 	
-	// Set up system theme bug warning.
+	// Set up enabling/disabling I'm Feeling Lucky setting.
+	document.getElementById("launchSetting").addEventListener("input", function (e) {
+		document.getElementById("imFeelingLuckySetting").disabled = (e.target.value === "chrome");
+	});
+	
+	// Set up showing/hiding system theme bug warning.
 	document.getElementById("toolbarColorSchemeSetting").addEventListener("input", function (e) {
 		document.getElementById("systemThemeCrbugWarning").style.display =
 			(e.target.value === "default") ? "block" : "none";
