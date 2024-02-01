@@ -11,7 +11,7 @@ var DEFAULT_SETTINGS = {
 	"launch": "google",
 	"music": "spotify",
 	"calc": "wolframalpha",
-	"imFeelingLucky": "google",
+	"imFeelingLucky": "duckduckgo",
 	
 	"actionDelayTime": 2050,
 	"openLocation": "smart",
@@ -105,7 +105,8 @@ var BASE_URLS = {
 		"yandex": "https://yandex.com/search/?text=%s"
 	},
 	"imFeelingLucky": {
-		"google": "https://www.google.com/search?btnI=745&q=%s"
+		"google": "https://www.google.com/search?btnI=745&q=%s",
+		"duckduckgo": "https://duckduckgo.com/?q=!ducky+%s"
 	}
 }
 
