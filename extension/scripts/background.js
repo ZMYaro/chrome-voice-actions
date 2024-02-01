@@ -8,8 +8,17 @@ chrome.runtime.onInstalled.addListener(function (details) {
 	
 	// Attempt to copy settings from localStorage to synced storage.
 	copySettings();
-	// Set the icon color in case the user customized it on a synced account (or the extension was refreshed).
-	getSetting("toolbarIcon").then(setToolbarIcon);
+	// Set the icon color in case the user customized it on a synced account (or the
+	// extension was refreshed), and set it again when the setting changes.
+	updateToolbarIcon();
+	chrome.storage.onChanged.addListener(function (changes, storageArea) {
+		if (storageArea !== "sync" || !(changes.toolbarIcon || changes.toolbarColorScheme)) { return; }
+		updateToolbarIcon();
+	});
+	// These don't work right now, but leaving them in case crbug.com/968651 gets fixed.
+	window.matchMedia("(prefers-color-scheme: dark)").addListener(updateToolbarIcon);
+	window.matchMedia("(prefers-color-scheme: light)").addListener(updateToolbarIcon);
+	window.matchMedia("(prefers-color-scheme: no-preference)").addListener(updateToolbarIcon);
 });
 
 /**

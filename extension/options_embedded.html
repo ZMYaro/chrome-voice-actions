@@ -181,11 +181,17 @@
 			</select>
 			<p>Toolbar icon</p>
 			<select id="toolbarIconSetting" disabled="disabled">
-				<option value="dark">Dark (default)</option>
-				<option value="light">Light</option>
-				<option value="minimal-dark">Minimalist dark</option>
-				<option value="minimal-light">Minimalist light</option>
+				<option disabled="disabled">Style</option>
+				<option value="default">Default</option>
+				<option value="minimal">Minimalist</option>
 			</select>
+			<select id="toolbarColorSchemeSetting" disabled="disabled">
+				<option disabled="disabled">Color scheme</option>
+				<option value="default">System color scheme* (default)</option>
+				<option value="dark">Dark (best on a light theme)</option>
+				<option value="light">Light (best on a dark theme)</option>
+			</select>
+			<small id="systemThemeCrbugWarning" style="display: none;">*Due to <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=968651" target="_blank">a bug in Chrome</a>, if your system theme changes while Chrome is running, the icon won't change immediately.</small>
 			<p style="padding-top: 7px;">
 				<label for="soundsSetting">
 					<input type="checkbox" id="soundsSetting" disabled="disabled" />

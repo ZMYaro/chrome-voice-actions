@@ -41,6 +41,10 @@ window.addEventListener("load", function () {
 			// Enable its form element.
 			formElem.disabled = false;
 		}
+		
+		// Show system theme bug warning if applicable.
+		document.getElementById("systemThemeCrbugWarning").style.display =
+			(settings.toolbarColorScheme === "default") ? "block" : "none";
 	});
 	
 	// Show current keyboard shortcut.
@@ -74,9 +78,10 @@ window.addEventListener("load", function () {
 		document.getElementById("hotwordInstallHint").style.removeProperty("display");
 	});
 	
-	// Set up icon inversion option.
-	document.getElementById("toolbarIconSetting").addEventListener("input", function (e) {
-		setToolbarIcon(e.target.value);
+	// Set up system theme bug warning.
+	document.getElementById("toolbarColorSchemeSetting").addEventListener("input", function (e) {
+		document.getElementById("systemThemeCrbugWarning").style.display =
+			(e.target.value === "default") ? "block" : "none";
 	});
 	
 	// Add reset button event listener.

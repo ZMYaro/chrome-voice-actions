@@ -15,7 +15,8 @@ var DEFAULT_SETTINGS = {
 	
 	"actionDelayTime": 2050,
 	"openLocation": "smart",
-	"toolbarIcon": "dark",
+	"toolbarIcon": "default",
+	"toolbarColorScheme": "default",
 	"sounds": true
 }
 
@@ -155,17 +156,34 @@ function getSetting(settingName, defaultValue, storageArea) {
 }
 
 /**
- * Set the toolbar icon.
- * @param {String} color - The color setting value ("dark", "light", "minimal-dark", or "minimal-light")
+ * Set the toolbar icon to match the current settings.
  */
-function setToolbarIcon(color) {
-	// "dark" => "icon_xx"
-	// "light" => "icon_xx_light"
-	// "minimal-light" => "icon_xx_minimal_light"
-	var colorSuffix = color
-		.replace("minimal-", "_minimal")
-		.replace("light", "_light")
-		.replace("dark", "");
+async function updateToolbarIcon() {
+	var iconStyle = await getSetting("toolbarIcon"),
+		iconColorScheme = await getSetting("toolbarColorScheme");
+	
+	// Convert setting values from v5.1.
+	if (iconStyle.match(/dark|light/)) {
+		iconColorScheme =
+			iconStyle.includes("dark") ? "dark" : 
+			iconStyle.includes("light") ? "light" :
+			"default";
+		iconStyle = iconStyle.includes("minimal") ? "minimal" : "default";
+		chrome.storage.sync.set({ "toolbarIcon": iconStyle, "toolbarColorScheme": iconColorScheme });
+	}
+	
+	// If matching the system theme, get the system theme and put light on dark or vice versa.
+	if (iconColorScheme === "default") {
+		iconColorScheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark";
+	}
+	
+	var colorSuffix = "";
+	if (iconStyle === "minimal") {
+		colorSuffix += "_minimal";
+	}
+	if (iconColorScheme === "light") {
+		colorSuffix += "_light";
+	}
 	chrome.browserAction.setIcon({
 		path: {
 			16: "../images/logo/icon_16" + colorSuffix + ".png",
